@@ -3,6 +3,7 @@ package com.ecommerce.backend.domain.models;
 
 import com.ecommerce.backend.domain.enums.AuthProvider;
 import com.ecommerce.backend.domain.models.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -74,4 +75,8 @@ public class User extends DateAudit {
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference
+	@JoinColumn(name = "store_id")
+	private Store store;
 }
