@@ -16,4 +16,5 @@ public interface ProductService {
     void createImgProduct(Integer id, MultipartFile file);
     //sửa thông tin sản phẩm
     void changeProduct(Integer id, ProductRequest productRequest);
+    void deleteProduct(Integer id);
 }

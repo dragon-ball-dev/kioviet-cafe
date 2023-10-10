@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -80,6 +81,16 @@ public class ProductIml implements ProductService {
             productRepository.save(product1);
         } else {
             throw new BadRequestException("khoong tìm thấy sản phẩm");
+        }
+    }
+
+    @Override
+    public void deleteProduct(Integer id) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            
+        } else {
+            throw new BadRequestException("không tìm thấy sản phẩm");
         }
     }
 
