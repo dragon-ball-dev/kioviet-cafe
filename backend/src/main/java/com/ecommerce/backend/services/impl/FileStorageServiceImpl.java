@@ -41,6 +41,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
     }
 
+    //lưu trữ tệp tin
     @Override
     public String storeFile(MultipartFile file) {
         // Normalize file name
@@ -57,12 +58,13 @@ public class FileStorageServiceImpl implements FileStorageService {
             ((MultipartFile) file).transferTo(new File(filePath));
             //Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return fileName;
+            return fileName; //đưuòng dẫn.
         } catch (IOException ex) {
             throw new FileStorageException("Invalid!!!");
         }
     }
 
+    //đọc tệp đã lưu và trar dưới dạng resource
     @Override
     public Resource loadFileAsResource(String fileName) {
         try {
