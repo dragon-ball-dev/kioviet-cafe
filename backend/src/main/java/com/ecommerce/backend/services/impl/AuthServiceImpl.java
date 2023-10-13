@@ -4,11 +4,13 @@ package com.ecommerce.backend.services.impl;
 import com.ecommerce.backend.domain.enums.AuthProvider;
 import com.ecommerce.backend.domain.enums.RoleName;
 import com.ecommerce.backend.domain.models.Role;
+import com.ecommerce.backend.domain.models.Store;
 import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.domain.payload.response.MessageResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.RoleRepository;
+import com.ecommerce.backend.repository.StoreRepository;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.secruity.TokenProvider;
 import com.ecommerce.backend.services.AuthService;
@@ -62,6 +64,8 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    private StoreRepository storeRepository;
 
 
     @Override
@@ -93,6 +97,13 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setIsConfirmed(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
+
+        if (signUpRequest.getStoreId() == null) {
+            user.setStore(null);
+        } else {
+            Store store = storeRepository.findById(signUpRequest.getStoreId()).get();
+            user.setStore(store);
+        }
 
         if (RoleName.ROLE_USER.equals(signUpRequest.getRole())) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)

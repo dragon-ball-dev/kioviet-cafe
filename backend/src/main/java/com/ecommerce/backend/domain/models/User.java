@@ -3,10 +3,7 @@ package com.ecommerce.backend.domain.models;
 
 import com.ecommerce.backend.domain.enums.AuthProvider;
 import com.ecommerce.backend.domain.models.audit.DateAudit;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -79,4 +76,12 @@ public class User extends DateAudit {
 	@JsonBackReference
 	@JoinColumn(name = "store_id")
 	private Store store;
+
+	@OneToMany(mappedBy = "user")
+	@JsonManagedReference
+	List<Order> order;
+
+	@OneToMany(mappedBy = "user_employees")
+	@JsonManagedReference
+	List<Order> orderEmployees;
 }

@@ -2,6 +2,7 @@ package com.ecommerce.backend.domain.payload.request;
 
 
 import com.ecommerce.backend.domain.enums.RoleName;
+import com.ecommerce.backend.domain.models.Store;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +29,5 @@ public class SignUpRequest {
     private String confirmPassword;
 
     private RoleName role;
+    private Integer storeId;
 }

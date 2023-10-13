@@ -39,4 +39,9 @@ public class Order {
     @OneToMany(mappedBy = "order")
     @JsonManagedReference
     private List<Payment> payment;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    @JoinColumn(name = "employees_id")
+    private User user_employees;
 }
