@@ -1,13 +1,12 @@
 package com.ecommerce.backend.controller.base;
 
+import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
 import com.ecommerce.backend.services.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("orderitem")
@@ -18,5 +17,17 @@ public class OrderItemController extends BaseController{
     public ResponseEntity<?> createOrderItem(@RequestBody OrderItemRequest orderItemRequest) {
         orderItemService.createOrderItem(orderItemRequest);
         return createSuccessResponse("create OrderItem", "thêm giỏ hàng thành công");
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> changeOrderItem(@RequestParam Integer id, @RequestParam Integer quantity) {
+        orderItemService.changeOrderItem(id, quantity);
+        return createSuccessResponse("change OrderItem", "thay đổi thành công");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteOrderItem(@RequestParam Integer id) {
+        orderItemService.deleteOrderItem(id);
+        return createSuccessResponse("delete orderitem", "xóa thành công");
     }
 }

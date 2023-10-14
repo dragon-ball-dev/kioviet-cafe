@@ -2,6 +2,7 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
+import com.ecommerce.backend.domain.payload.request.OrderRequest;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
@@ -65,11 +66,86 @@ public class OrderItemIml implements OrderItemService {
         }
     }
 
+    @Override
+    public void changeOrderItem(Integer id, Integer quantity) {
+        OrderItem orderItem = orderItemRepository.findById(id).get();
+        if (orderItem == null) {
+            throw new BadRequestException("không tìm thấy sản phẩm");
+        }
+        if (orderItem.getQuantity() > quantity) {
+            int totalProduct = orderItem.getQuantity() - quantity;//số lượng chênh lệch
+            orderItem.setQuantity(quantity);
+            orderItemRepository.save(orderItem);
+
+            Product product = orderItem.getProduct();
+            product.setTotalQuantity(product.getTotalQuantity() + totalProduct);
+            Store store = orderItem.getStore();
+
+           Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
+           inventory.setQuantity(inventory.getQuantity() + totalProduct);
+
+           Order order = orderItem.getOrder();
+           int totalOrder = orderItem.getQuantity() * product.getPrice();
+           order.setTotalPrice(totalOrder);
+
+           productRepository.save(product);
+           inventoryRepository.save(inventory);
+           orderRepository.save(order);
+        } else {
+            int totalProduct = quantity - orderItem.getQuantity();//số lượng chênh lệch
+            orderItem.setQuantity(quantity);
+            orderItemRepository.save(orderItem);
+
+            Product product = orderItem.getProduct();
+            product.setTotalQuantity(product.getTotalQuantity() - totalProduct);
+            Store store = orderItem.getStore();
+
+            Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
+            inventory.setQuantity(inventory.getQuantity() - totalProduct);
+
+            Order order = orderItem.getOrder();
+            int totalOrder = orderItem.getQuantity() * product.getPrice();
+            order.setTotalPrice(totalOrder);
+
+            productRepository.save(product);
+            inventoryRepository.save(inventory);
+            orderRepository.save(order);
+        }
+     }
+
+    @Override
+    public void deleteOrderItem(Integer id) {
+        OrderItem orderItem = orderItemRepository.findById(id).get();
+        if (orderItem == null) {
+            throw new BadRequestException("không tìm thấy đơn hàng");
+        }
+
+        Product product = orderItem.getProduct();
+        Store store = orderItem.getStore();
+
+        product.setTotalQuantity(product.getTotalQuantity() + orderItem.getQuantity());
+        Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
+        inventory.setQuantity(inventory.getQuantity() + orderItem.getQuantity());
+
+        Order order = orderItem.getOrder();
+        int totalPrice = totalPrice(order);
+        order.setTotalPrice(totalPrice - orderItem.getQuantity()*product.getPrice());
+
+        productRepository.save(product);
+        inventoryRepository.save(inventory);
+        orderRepository.save(order);
+        orderItemRepository.delete(orderItem);
+    }
+
     public Integer totalPrice(Order order) {
         List<OrderItem> orderItemList = order.getOrderItem();
         int total = 0;
         for (OrderItem orderItem : orderItemList) {
             total += orderItem.getQuantity()*orderItem.getProduct().getPrice();
+        }
+        if (orderItemList.size() == 0) {
+            total = 0;
+            return total;
         }
         return total;
     }
