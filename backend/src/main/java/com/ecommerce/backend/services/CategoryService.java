@@ -9,4 +9,6 @@ import org.springframework.http.ResponseEntity;
 public interface CategoryService {
     void createCategory(CategoryRequest category);
     Page<CategoryRequest> getAll(Integer page, Integer pageSize);
+    void changeCategory(Integer id, CategoryRequest categoryRequest);
+    void deleteCategory(Integer id);
 }

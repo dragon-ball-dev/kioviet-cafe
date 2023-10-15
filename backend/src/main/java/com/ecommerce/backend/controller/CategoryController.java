@@ -29,4 +29,16 @@ public class CategoryController extends BaseController {
     public Page<CategoryRequest> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {
         return categoryService.getAll(page, pageSize);
     }
+    @PatchMapping
+    public ResponseEntity<?> changeCategory(@RequestParam Integer id, @RequestBody CategoryRequest categoryRequest) {
+        categoryService.changeCategory(id, categoryRequest);
+        return createSuccessResponse("change category", "chiỉnh sửa thanh công");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteCategory(@RequestParam Integer id) {
+        categoryService.deleteCategory(id);
+        return createSuccessResponse("delete category", "xóa thành công");
+    }
+
 }

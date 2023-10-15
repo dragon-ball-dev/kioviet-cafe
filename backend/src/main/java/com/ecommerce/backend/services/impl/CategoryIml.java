@@ -46,4 +46,23 @@ public class CategoryIml implements CategoryService  {
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         return mapperUtils.convertToResponsePage(categoryPage, CategoryRequest.class, pageable);
     }
+
+    @Override
+    public void changeCategory(Integer id, CategoryRequest categoryRequest) {
+        Category category = categoryRepository.findById(id).get();
+        if (category == null) {
+            throw new BadRequestException("không tim thấy loại sản phẩm");
+        }
+        category.setName(categoryRequest.getName());
+        categoryRepository.save(category);
+    }
+
+    @Override
+    public void deleteCategory(Integer id) {
+        Category category = categoryRepository.findById(id).get();
+        if (category == null) {
+            throw new BadRequestException("không tìm thấy loại sản phẩm");
+        }
+        categoryRepository.delete(category);
+    }
 }
