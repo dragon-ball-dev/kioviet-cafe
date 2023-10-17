@@ -2,9 +2,7 @@ package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.models.Product;
-import com.ecommerce.backend.domain.payload.request.InventoryRequest;
-import com.ecommerce.backend.domain.payload.request.ProductRequest;
-import com.ecommerce.backend.domain.payload.request.SupplyProductRequest;
+import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -63,4 +61,21 @@ public class ProductController extends BaseController {
         productService.importQuantityStore(inventoryRequest);
         return createSuccessResponse("add quantity inventory", "cập nhập số lượng thành công");
     }
-}
+    @GetMapping
+    public ResponseEntity<ProductRequest> findProductByName(@RequestParam String name) {
+        return productService.findProductByName(name);
+    }
+    @GetMapping("/bestproduct")
+    public ResponseEntity<BestSeller> getBestSeller() {
+        return productService.findBestSellerProduct();
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<CountEmployee> countEmployee() {
+        return productService.countEmployee();
+    }
+    @GetMapping("/count-product")
+    public ResponseEntity<CountEmployee> countProduct() {
+        return productService.countProduct();
+    }
+ }

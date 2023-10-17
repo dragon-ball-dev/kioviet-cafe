@@ -35,4 +35,8 @@ public class SupplyController extends BaseController {
         supplyService.deleteSupply(id);
         return createSuccessResponse("delete supply", "xóa nhà cung cấp thành công");
     }
+    @GetMapping
+    public ResponseEntity<SupplyRequest> findByName(@RequestParam String name) {
+        return supplyService.findByName(name);
+    }
 }

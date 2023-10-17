@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -66,5 +68,14 @@ public class StoreIml implements StoreService {
         } else {
             throw new BadRequestException("Không tìm thấy cửa hàng");
         }
+    }
+
+    @Override
+    public ResponseEntity<StoreRequest> findByName(String name) {
+        Store store = storeRepository.findByName(name);
+        if (store == null) {
+            throw new BadRequestException("không tìm thấy cửa hàng");
+        }
+        return new ResponseEntity<>(mapperUtils.convertToResponse(store, StoreRequest.class), HttpStatus.OK);
     }
 }

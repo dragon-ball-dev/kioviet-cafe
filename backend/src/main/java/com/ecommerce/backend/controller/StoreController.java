@@ -28,4 +28,9 @@ public class StoreController extends BaseController {
         storeService.deleteStore(id);
         return createSuccessResponse("delete store", null);
     }
+
+    @GetMapping
+    public ResponseEntity<StoreRequest> findByName(@RequestParam String name) {
+        return storeService.findByName(name);
+    }
 }

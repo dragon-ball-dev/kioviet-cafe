@@ -2,15 +2,13 @@ package com.ecommerce.backend.services;
 
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.models.Product;
-import com.ecommerce.backend.domain.payload.request.InventoryRequest;
-import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
-import com.ecommerce.backend.domain.payload.request.ProductRequest;
-import com.ecommerce.backend.domain.payload.request.SupplyProductRequest;
+import com.ecommerce.backend.domain.payload.request.*;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 public interface ProductService {
     void createProduct(String name, Integer price, String description,Integer categoryId,
@@ -31,5 +29,13 @@ public interface ProductService {
     void createInventory(Integer productId, Integer storeId, Integer quantity);
     //thêm số lượng sản phẩm cho store
     void importQuantityStore(InventoryRequest inventoryRequest);
+    //tìm kiếm tên sản phẩm
+    ResponseEntity<ProductRequest> findProductByName(String name);
+    // sản phẩm bán chạy nhất
+    ResponseEntity<BestSeller> findBestSellerProduct();
 
+    //đếm số nhân viên
+    ResponseEntity<CountEmployee> countEmployee();
+    //đếm số ản phẩm
+    ResponseEntity<CountEmployee> countProduct();
 }

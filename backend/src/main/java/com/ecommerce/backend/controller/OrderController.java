@@ -4,6 +4,9 @@ import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
 import com.ecommerce.backend.services.OrderService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -24,4 +27,9 @@ public class OrderController extends BaseController {
     private Page<OrderDTO> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {
         return orderService.getAll(page, pageSize);
     }
+    @GetMapping("pricemonth")
+    public Integer totalPriceMonth(@RequestParam Integer year, @RequestParam Integer month) {
+        return orderService.totalPriceInMonth(year, month);
+    }
 }
+

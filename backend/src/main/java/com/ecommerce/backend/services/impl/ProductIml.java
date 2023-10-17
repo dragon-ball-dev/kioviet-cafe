@@ -1,14 +1,12 @@
 package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.*;
-import com.ecommerce.backend.domain.payload.request.InventoryRequest;
-import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
-import com.ecommerce.backend.domain.payload.request.ProductRequest;
-import com.ecommerce.backend.domain.payload.request.SupplyProductRequest;
+import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
 import com.ecommerce.backend.services.ProductService;
+import com.ecommerce.backend.utils.MapperUtils;
 import org.apache.tomcat.jni.Proc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -22,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -48,6 +48,10 @@ public class ProductIml implements ProductService {
     OrderRepository orderRepository;
     @Autowired
     OrderItemRepository orderItemRepository;
+    @Autowired
+    MapperUtils mapperUtils;
+    @Autowired
+    UserRepository userRepository;
     @Override
     public void createProduct(String name, Integer price, String description,Integer categoryId,
                                            Integer totalQuantity, MultipartFile multipartFile) throws IOException {
@@ -189,6 +193,60 @@ public class ProductIml implements ProductService {
         } else {
             throw new BadRequestException("không tìm thấy sản phẩm or cửa hàng");
         }
+    }
+
+    @Override
+    public ResponseEntity<ProductRequest> findProductByName(String name) {
+        Product product = productRepository.findByName(name);
+        if (product == null) {
+            throw new BadRequestException("không tìm thấy sản phẩm");
+        }
+        return new ResponseEntity<>(mapperUtils.convertToResponse(product, ProductRequest.class), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<BestSeller> findBestSellerProduct() {
+        Object object = orderItemRepository.bestSellerProduct();
+        if (object instanceof Object[]) {
+            Object[] obj = (Object[]) object;
+            Integer[] result = new Integer[obj.length];
+            for (int i = 0; i < obj.length; i++) {
+                result[i] = Integer.parseInt(obj[i].toString());
+            }
+            BestSeller bestSeller = new BestSeller();
+            bestSeller.setQuantity(result[0]);
+            Product product = productRepository.findById(result[1]).get();
+            if (product == null) {
+                throw new BadRequestException("Error");
+            }
+            bestSeller.setName(product.getName());
+
+            return new ResponseEntity<>(bestSeller, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<CountEmployee> countEmployee() {
+        int count = 0;
+        List<User> userList = userRepository.findAll();
+        for (User user : userList) {
+            if (user.getStore() != null) {
+                count++;
+            }
+        }
+        CountEmployee countEmployee = new CountEmployee();
+        countEmployee.setCount(count);
+        return new ResponseEntity<>(countEmployee, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CountEmployee> countProduct() {
+        List<Product> products = productRepository.findAll();
+        int total = products.size();
+        CountEmployee countEmployee = new CountEmployee();
+        countEmployee.setCount(total);
+        return new ResponseEntity<>(countEmployee, HttpStatus.OK);
     }
 
 

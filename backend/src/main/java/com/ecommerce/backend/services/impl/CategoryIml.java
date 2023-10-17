@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +65,14 @@ public class CategoryIml implements CategoryService  {
             throw new BadRequestException("không tìm thấy loại sản phẩm");
         }
         categoryRepository.delete(category);
+    }
+
+    @Override
+    public ResponseEntity<CategoryRequest> findCategoryByName(String name) {
+        Category category = categoryRepository.findByName(name);
+        if (category == null) {
+            throw new BadRequestException("không tìm thấy loại sản phẩm");
+        }
+        return new ResponseEntity<>(mapperUtils.convertToResponse(category, CategoryRequest.class), HttpStatus.OK);
     }
 }

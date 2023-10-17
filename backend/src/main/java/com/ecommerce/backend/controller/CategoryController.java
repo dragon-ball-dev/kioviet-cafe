@@ -41,4 +41,9 @@ public class CategoryController extends BaseController {
         return createSuccessResponse("delete category", "xóa thành công");
     }
 
+    @GetMapping
+    public ResponseEntity<CategoryRequest> findByName(@RequestParam String name) {
+        return categoryService.findCategoryByName(name);
+    }
+
 }

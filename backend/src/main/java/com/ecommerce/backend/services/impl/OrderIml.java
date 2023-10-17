@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,6 +62,13 @@ public class OrderIml implements OrderService {
         return new PageImpl<>(orderDTOList, pageable, orderPage.getTotalElements());
     }
 
+    @Override
+    public Integer totalPriceInMonth(Integer year, Integer month) {
+        Integer total = orderRepository.totalPriceInMonth(year, month);
+        System.out.println(total);
+        return total;
+    }
+
     private OrderDTO convertToOrderDTO(Order order) {
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
         orderDTO.setStoreName(order.getStore().getName());
@@ -72,3 +81,5 @@ public class OrderIml implements OrderService {
         return orderDTO;
     }
 }
+
+

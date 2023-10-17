@@ -11,4 +11,6 @@ public interface CategoryService {
     Page<CategoryRequest> getAll(Integer page, Integer pageSize);
     void changeCategory(Integer id, CategoryRequest categoryRequest);
     void deleteCategory(Integer id);
+    // tìm kiếm category
+    ResponseEntity<CategoryRequest> findCategoryByName(String name);
 }
