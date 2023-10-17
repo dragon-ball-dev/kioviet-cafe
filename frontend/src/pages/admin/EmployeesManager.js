@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllCategory } from "../../services/fetch/ApiUtils";
+import { getAllCategory, getAllStore } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
 import useScript from "../../components/useScripts";
 
-function ProductManager(props){
+function EmployeeManager(props){
     const { authenticated, role, currentUser, location, onLogout } = props;
     const history = useNavigate();
 
@@ -24,7 +24,7 @@ function ProductManager(props){
     }, [currentPage, searchQuery]);
 
     const fetchData = () => {
-        getAllCategory(currentPage - 1, itemsPerPage, searchQuery).then(response => {
+        getAllStore(currentPage - 1, itemsPerPage, searchQuery).then(response => {
             setTableData(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -39,7 +39,7 @@ function ProductManager(props){
     };
 
     const handleRedirectAddCategory = () => {
-        history('/add-product')
+        history('/add-employee')
     }
 
     const handleEditCategory = (id) => {
@@ -90,12 +90,12 @@ function ProductManager(props){
                     <div className="container-fluid p-0"></div>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Quản lý sản phẩm</h5>
-                            <h6 className="card-subtitle text-muted"> Quản lý sản phẩm của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Quản lý cửa hàng</h5>
+                            <h6 className="card-subtitle text-muted"> Quản lý cửa hàng của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <div id="datatables-buttons_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dt-buttons btn-group flex-wrap">
-                                <button className="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatables-buttons" type="button"><a onClick={handleRedirectAddCategory}>Thêm Danh Mục</a></button>
+                                <button className="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatables-buttons" type="button"><a onClick={handleRedirectAddCategory}>Thêm Cửa Hàng</a></button>
                             </div></div>
                                 <div className="col-sm-12 col-md-6"><div id="datatables-buttons_filter" className="dataTables_filter">
                                     <label>Search:<input type="search" className="form-control form-control-sm" placeholder=""
@@ -105,13 +105,19 @@ function ProductManager(props){
                                 </div></div></div><div className="row dt-row"><div className="col-sm-12"><table id="datatables-buttons" className="table table-striped dataTable no-footer dtr-inline" style={{ width: "100%" }} aria-describedby="datatables-buttons_info">
                                     <thead>
                                         <tr>
-                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên danh mục</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên cửa hàng</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Địa chỉ</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Số điện thoại</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Email</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Chế độ</th></tr>
                                     </thead>
                                     <tbody>
                                         {tableData.map((item) => (
                                             <tr className="odd">
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.address}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.phone}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.email}</td>
                                                 <td>
                                                     <a href="#" onClick={() => handleEditCategory(item.id)} data-toggle="tooltip" tabindex="0" data-placement="bottom" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
                                                     &nbsp;&nbsp;&nbsp;
@@ -139,4 +145,4 @@ function ProductManager(props){
     )
 }
 
-export default ProductManager;
+export default EmployeeManager;

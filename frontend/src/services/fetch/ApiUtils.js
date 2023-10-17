@@ -113,6 +113,30 @@ export function addCategory(category) {
     });
 }
 
+export function addStore(store) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/store/create-store",
+        method: 'POST',
+        body: JSON.stringify(store)
+    });
+}
+
+export function addSupply(supply) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/supply/create",
+        method: 'POST',
+        body: JSON.stringify(supply)
+    });
+}
+
 export function getAllCategory(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -120,6 +144,28 @@ export function getAllCategory(pageNo, pageSize, name) {
 
     return request({
         url: API_BASE_URL + "/category/getAll?page="+pageNo+"&pageSize="+pageSize+"&name="+name,
+        method: 'GET'
+    });
+}
+
+export function getAllStore(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/store/get-all?page="+pageNo+"&pageSize="+pageSize+"&name="+name,
+        method: 'GET'
+    });
+}
+
+export function getAllSupply(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/supply/getall-supply?page="+pageNo+"&pageSize="+pageSize+"&name="+name,
         method: 'GET'
     });
 }

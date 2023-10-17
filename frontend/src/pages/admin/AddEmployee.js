@@ -5,7 +5,7 @@ import SidebarNav from './SidebarNav';
 import { addCategory, addSupply } from '../../services/fetch/ApiUtils';
 import Nav from './Nav';
 
-const AddSupply = (props) => {
+const AddEmployee = (props) => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
@@ -79,17 +79,17 @@ const AddSupply = (props) => {
                 <main style={{ margin: "20px 20px 20px 20px" }}>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Thêm nhà sản xuất</h5>
-                            <h6 className="card-subtitle text-muted"> Thêm nhà sản xuất của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Thêm nhân viên</h5>
+                            <h6 className="card-subtitle text-muted"> Thêm nhân viên của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
-                                    <label className="form-label">Tên Nhà Sản Xuất</label>
+                                    <label className="form-label">Họ và Tên Nhân Viên</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Ex: Hoàng Thùy Linh"
                                         name="name"
                                         value={name}
                                         onChange={handleInputChange}
@@ -140,4 +140,4 @@ const AddSupply = (props) => {
     );
 };
 
-export default AddSupply;
+export default AddEmployee;

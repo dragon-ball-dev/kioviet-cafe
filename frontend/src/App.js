@@ -15,6 +15,13 @@ import CategoryManager from './pages/admin/CategoryManager';
 import AddCategory from './pages/admin/AddCategory';
 import './assets/css/app.css';
 import StoreManager from './pages/admin/StoreManager';
+import AddStore from './pages/admin/AddStore';
+import AddSupply from './pages/admin/AddSupply';
+import SupplyManager from './pages/admin/SupplyManager';
+import AddProduct from './pages/admin/AddProduct';
+import ProductManager from './pages/admin/ProductManager';
+import EmployeeManager from './pages/admin/EmployeesManager';
+import AddEmployee from './pages/admin/AddEmployee';
 
 
 function App() {
@@ -90,8 +97,16 @@ function App() {
           <Route exact path="/dashboard" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/category" element={<CategoryManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/store" element={<StoreManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-store" element={<CategoryManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/supply" element={<SupplyManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/product" element={<ProductManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/employee" element={<EmployeeManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+
+          <Route exact path="/add-store" element={<AddStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-category" element={<AddCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-supply" element={<AddSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-product" element={<AddProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-employee" element={<AddEmployee authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+
         </Routes>
       </Router>
 
