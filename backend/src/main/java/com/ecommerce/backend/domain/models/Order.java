@@ -19,7 +19,9 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "order_date")
     private Date orderDate;
+    @Column(name = "total_price")
     private Integer totalPrice;
 
     @OneToMany(mappedBy = "order")

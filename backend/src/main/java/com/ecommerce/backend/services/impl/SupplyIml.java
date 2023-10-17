@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,5 +74,14 @@ public class SupplyIml implements SupplyService {
         } else {
             throw new BadRequestException("Không tìm thấy nh cung cấp");
         }
+    }
+
+    @Override
+    public ResponseEntity<SupplyRequest> findByName(String name) {
+        Supply supply = supplyRepository.findByName(name);
+        if (supply == null) {
+            throw new BadRequestException("không tìm thấy nhà cung cấp");
+        }
+        return new ResponseEntity<>(mapperUtils.convertToResponse(supply, SupplyRequest.class), HttpStatus.OK);
     }
 }
