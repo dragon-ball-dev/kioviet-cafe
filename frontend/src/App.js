@@ -22,6 +22,9 @@ import AddProduct from './pages/admin/AddProduct';
 import ProductManager from './pages/admin/ProductManager';
 import EmployeeManager from './pages/admin/EmployeesManager';
 import AddEmployee from './pages/admin/AddEmployee';
+import SellProduct from './pages/admin/SellProduct';
+import Cart from './pages/admin/Cart.';
+import ReportManager from './pages/admin/ReportManager';
 
 
 function App() {
@@ -100,6 +103,9 @@ function App() {
           <Route exact path="/supply" element={<SupplyManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/product" element={<ProductManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/employee" element={<EmployeeManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/sell-product" element={<SellProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/cart" element={<Cart authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/report" element={<ReportManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
           <Route exact path="/add-store" element={<AddStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-category" element={<AddCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />

@@ -52,6 +52,7 @@ public class ProductIml implements ProductService {
     MapperUtils mapperUtils;
     @Autowired
     UserRepository userRepository;
+
     @Override
     public void createProduct(String name, Integer price, String description,Integer categoryId,
                                            Integer totalQuantity, MultipartFile multipartFile) throws IOException {

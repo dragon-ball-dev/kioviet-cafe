@@ -15,15 +15,13 @@ const Nav = (props) => {
             <a className="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
               <i className="align-middle" data-feather="settings"></i>
             </a>
-            <button type="button" class="btn btn-info">Bán Hàng</button>
+            <button type="button" className="btn btn-info"><a className="dropdown-item" href="/sell-product">Bán Hàng</a></button>&nbsp;
+            <button type="button" className="btn btn-info"><a className="dropdown-item" href="/cart">Giỏ Hàng</a></button>&nbsp;
+            <button type="button" className="btn btn-info"><a className="dropdown-item" href="#">Hồ sơ</a></button> &nbsp;
+            <button type="button" className="btn btn-info"><a className="dropdown-item" onClick={onLogout}>Đăng xuất</a></button>
 
-            <a className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+            <div className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
               <img src="../../assets/img/avatars/avatar-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span className="text-dark">{currentUser === null ? "" : currentUser.name}</span>
-            </a>
-            <div className="dropdown-menu dropdown-menu-end">
-              <a className="dropdown-item">Hồ sơ</a>
-              <div className="dropdown-divider"></div>
-              <a className="dropdown-item" onClick={onLogout}>Đăng xuất</a>
             </div>
           </li>
         </ul>

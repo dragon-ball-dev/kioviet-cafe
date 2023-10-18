@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -6,32 +7,46 @@ import { addCategory } from '../../services/fetch/ApiUtils';
 import Nav from './Nav';
 
 const AddProduct = (props) => {
-    const [name, setName] = useState('');
-    const { authenticated, role, currentUser, location, onLogout } = props;
-    const [roleName, setRoleName] = useState(props.roleName);
+    const [productData, setProductData] = useState({
+        name: '',
+        categoryId: 0,
+        price: '',
+        description: '',
+        totalQuantity: '',
+        files: []
+    });
+
+    const { authenticated, currentUser, location, onLogout } = props;
 
     const handleInputChange = (event) => {
         const target = event.target;
         const inputName = target.name;
-        const inputValue = target.value;
+        let inputValue = target.value;
 
-        if (inputName === 'name') {
-            setName(inputValue);
-        } else if (inputName === 'image') {
-            // Handle image input if needed
+        if (inputName === 'categoryId') {
+            inputValue = parseInt(inputValue); // Chuyển đổi giá trị thành số nguyên
         }
+
+        setProductData((prevData) => ({
+            ...prevData,
+            [inputName]: inputValue
+        }));
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const categoryRequest = { name };
+        const categoryRequest = { name: productData.name };
+        const formData = new FormData();
 
         addCategory(categoryRequest)
             .then((response) => {
                 console.log(response.data);
-                toast.success('Thêm danh mục thành công!!');
-                setName('');
+                toast.success('Thêm sản phẩm thành công!!');
+                setProductData((prevData) => ({
+                    ...prevData,
+                    name: '' // Reset trường tên sản phẩm
+                }));
             })
             .catch((error) => {
                 console.log(error);
@@ -49,7 +64,7 @@ const AddProduct = (props) => {
         );
     }
 
-    console.log(name);
+    const { name, categoryId, price, description, totalQuantity } = productData;
 
     return (
         <div className="wrapper">
@@ -86,13 +101,19 @@ const AddProduct = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="locationId">Danh Mục</label>
-                                    <select className="form-select" id="locationId" name="categoryId"  onChange={handleInputChange}>
+                                    <select
+                                        className="form-select"
+                                        id="locationId"
+                                        name="categoryId"
+                                        value={categoryId}
+                                        onChange={handleInputChange}
+                                    >
                                         <option value={0}>Chọn...</option>
                                         <option value={1}>Hà Nội</option>
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                <label className="form-label">Giá</label>
+                                    <label className="form-label">Giá</label>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -103,7 +124,7 @@ const AddProduct = (props) => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                <label className="form-label">Mô Tả</label>
+                                    <label className="form-label">Mô Tả</label>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -114,7 +135,7 @@ const AddProduct = (props) => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                <label className="form-label">Số lượng</label>
+                                    <label className="form-label">Số lượng</label>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -125,9 +146,14 @@ const AddProduct = (props) => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                            <label className="form-label">Tải Hình Ảnh</label>
-                                            <input className="form-control" type="file" name="files" multiple  />
-                                        </div>
+                                    <label className="form-label">Tải Hình Ảnh</label>
+                                    <input
+                                        className="form-control"
+                                        type="file"
+                                        name="files"
+                                        multiple
+                                    />
+                                </div>
                                 <button type="submit" className="btn btn-primary">
                                     Submit
                                 </button>

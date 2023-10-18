@@ -17,6 +17,8 @@ import java.io.IOException;
 public class ProductController extends BaseController {
     @Autowired
     ProductService productService;
+
+
     @PostMapping("/create-product")
     public ResponseEntity<?> createProduct( @RequestParam("name") String name,
                                             @RequestParam("price") Integer price,

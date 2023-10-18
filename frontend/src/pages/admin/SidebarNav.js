@@ -8,7 +8,7 @@ const SidebarNav = () => {
         Quản lí chức năng
       </li>
       <li className="sidebar-item">
-        <NavLink to="/kioviet/dashboard" className="sidebar-link">
+        <NavLink to="/dashboard" className="sidebar-link">
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Thống kê</span>
         </NavLink>
       </li>

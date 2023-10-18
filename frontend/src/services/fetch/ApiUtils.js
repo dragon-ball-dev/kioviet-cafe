@@ -169,3 +169,14 @@ export function getAllSupply(pageNo, pageSize, name) {
         method: 'GET'
     });
 }
+
+export function getAllProduct() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/product",
+        method: 'GET'
+    });
+}
