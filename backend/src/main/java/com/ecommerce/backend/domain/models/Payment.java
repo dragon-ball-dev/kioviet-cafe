@@ -19,6 +19,7 @@ public class Payment {
     private Date date;
     private String method;
     private Integer amount;
+    private Boolean isLock = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference

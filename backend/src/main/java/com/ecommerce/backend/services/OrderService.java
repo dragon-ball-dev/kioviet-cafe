@@ -12,4 +12,5 @@ public interface OrderService {
     Page<OrderDTO> getAll(Integer page, Integer pageSize);
     //tính tổng tiền trong tháng
     Integer totalPriceInMonth(Integer year, Integer month);
+
 }
