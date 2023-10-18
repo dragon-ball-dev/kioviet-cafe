@@ -10,6 +10,9 @@ import com.ecommerce.backend.utils.MapperUtils;
 import org.apache.tomcat.jni.Proc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -257,6 +260,13 @@ public class ProductIml implements ProductService {
             return new ResponseEntity<>(productRequest, HttpStatus.OK);
         }
         throw new BadRequestException("Error");
+    }
+
+    @Override
+    public Page<ProductRequest> getAll(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return mapperUtils.convertToResponsePage(productPage, ProductRequest.class, pageable);
     }
 
 
