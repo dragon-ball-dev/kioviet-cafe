@@ -38,4 +38,5 @@ public interface ProductService {
     ResponseEntity<CountEmployee> countEmployee();
     //đếm số ản phẩm
     ResponseEntity<CountEmployee> countProduct();
+    ResponseEntity<ProductRequest> getById(Integer id);
 }

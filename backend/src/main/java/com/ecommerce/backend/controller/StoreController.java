@@ -33,4 +33,9 @@ public class StoreController extends BaseController {
     public ResponseEntity<StoreRequest> findByName(@RequestParam String name) {
         return storeService.findByName(name);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StoreRequest> getById(@PathVariable Integer id) {
+        return storeService.getById(id);
+    }
 }

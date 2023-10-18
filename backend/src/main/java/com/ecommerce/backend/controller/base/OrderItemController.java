@@ -30,4 +30,8 @@ public class OrderItemController extends BaseController{
         orderItemService.deleteOrderItem(id);
         return createSuccessResponse("delete orderitem", "xóa thành công");
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderItemRequest> getById(@PathVariable Integer id) {
+        return orderItemService.getById(id);
+    }
 }

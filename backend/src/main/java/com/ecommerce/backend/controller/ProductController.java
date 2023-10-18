@@ -78,4 +78,8 @@ public class ProductController extends BaseController {
     public ResponseEntity<CountEmployee> countProduct() {
         return productService.countProduct();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductRequest> findProduct(@PathVariable Integer id) {
+        return productService.getById(id);
+    }
  }

@@ -84,4 +84,14 @@ public class SupplyIml implements SupplyService {
         }
         return new ResponseEntity<>(mapperUtils.convertToResponse(supply, SupplyRequest.class), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<SupplyRequest> getById(Integer id) {
+        Supply supply = supplyRepository.findById(id).get();
+        if (supply == null) {
+            throw new BadRequestException("không tìm thấy nhà cung cấp");
+        }
+        SupplyRequest supplyRequest = mapperUtils.convertToEntity(supply, SupplyRequest.class);
+        return new ResponseEntity<>(supplyRequest, HttpStatus.OK);
+    }
 }

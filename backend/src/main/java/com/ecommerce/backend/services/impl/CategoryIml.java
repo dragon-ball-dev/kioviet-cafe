@@ -75,4 +75,14 @@ public class CategoryIml implements CategoryService  {
         }
         return new ResponseEntity<>(mapperUtils.convertToResponse(category, CategoryRequest.class), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<CategoryRequest> getById(Integer id) {
+        Category category = categoryRepository.findById(id).get();
+        if (category == null) {
+            throw new BadRequestException("khong tìm thấy loại sản phẩm");
+        }
+        CategoryRequest categoryRequest = mapperUtils.convertToEntity(category, CategoryRequest.class);
+        return new ResponseEntity<>(categoryRequest, HttpStatus.OK);
+    }
 }
