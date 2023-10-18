@@ -4,6 +4,7 @@ import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.models.Product;
 import com.ecommerce.backend.domain.payload.request.*;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,4 +41,5 @@ public interface ProductService {
     //đếm số ản phẩm
     ResponseEntity<CountEmployee> countProduct();
     ResponseEntity<ProductRequest> getById(Integer id);
+    Page<ProductRequest> getAll(Integer page, Integer pageSize);
 }
