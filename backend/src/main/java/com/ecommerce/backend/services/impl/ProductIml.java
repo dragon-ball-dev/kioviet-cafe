@@ -71,8 +71,9 @@ public class ProductIml implements ProductService {
             String image = fileStorageService.storeFile(multipartFile);
             productMedia.setImage(image);
             productMediaRepository.save(productMedia);
+        } else {
+            throw new BadRequestException("Không tìm thấy loại sản phẩm");
         }
-        throw new BadRequestException("Không tìm thấy loại sản phẩm");
     }
 
     @Override

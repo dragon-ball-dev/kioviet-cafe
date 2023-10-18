@@ -4,8 +4,11 @@ package com.ecommerce.backend.services;
 
 
 
+import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.domain.payload.response.MessageResponse;
+import com.ecommerce.backend.domain.payload.response.UserResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -31,4 +34,6 @@ public interface AuthService {
     MessageResponse lockAccount(Long id);
 
     MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String address);
+
+    Page<User> getAllAccount(String keyword, Integer pageNo, Integer pageSize);
 }

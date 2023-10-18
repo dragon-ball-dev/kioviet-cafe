@@ -22,12 +22,12 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
-    private static final String FROM_USER = "from rental_home.users u ";
+    private static final String FROM_USER = "from users u ";
     @Override
     public Page<User> searchingAccount(String keyword, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();
         strQuery.append(FROM_USER);
-        strQuery.append(" where 1=1 AND u.email NOT IN ('master@gmail.com') ");
+        strQuery.append(" where 1=1 AND u.email NOT IN ('admin@gmail.com') ");
 
         Map<String, Object> params = new HashMap<>();
         if (Objects.nonNull(keyword) && !keyword.isEmpty()) {

@@ -30,6 +30,13 @@ public class AuthController extends BaseController {
         return ResponseEntity.ok(new AuthResponse(authService.login(loginRequest)));
     }
 
+    @GetMapping("/get-all-account")
+    public ResponseEntity<?> getAllAccount(@RequestParam(required = false) String keyword,
+                                           @RequestParam Integer pageNo,
+                                           @RequestParam Integer pageSize){
+        return ResponseEntity.ok(authService.getAllAccount(keyword,pageNo,pageSize));
+    }
+
     @PostMapping("/signup")
     @Operation(summary = "Đăng kí tài khoản")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws MessagingException, IOException {

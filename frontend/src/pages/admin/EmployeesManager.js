@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllCategory, getAllStore } from "../../services/fetch/ApiUtils";
+import { getAllAccountOfAdmin, getAllCategory, getAllStore, lockedAccount } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
 import useScript from "../../components/useScripts";
 
-function EmployeeManager(props){
+function EmployeeManager(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
     const history = useNavigate();
 
@@ -24,7 +24,7 @@ function EmployeeManager(props){
     }, [currentPage, searchQuery]);
 
     const fetchData = () => {
-        getAllStore(currentPage - 1, itemsPerPage, searchQuery).then(response => {
+        getAllAccountOfAdmin(currentPage, itemsPerPage, searchQuery).then(response => {
             setTableData(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -43,12 +43,24 @@ function EmployeeManager(props){
     }
 
     const handleEditCategory = (id) => {
-        history('/edit-category/' + id)
+        history('/edit-employee/' + id)
     }
 
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    const handleLockedAccount = (userId) => {
+        lockedAccount(userId).then(response => {
+            toast.success(response.message)
+            fetchData();
+        }).catch(
+            error => {
+                toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+            }
+        )
+
     };
 
     const handleDeleteCategory = (id) => {
@@ -119,9 +131,9 @@ function EmployeeManager(props){
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.phone}</td>
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.email}</td>
                                                 <td>
-                                                    <a href="#" onClick={() => handleEditCategory(item.id)} data-toggle="tooltip" tabindex="0" data-placement="bottom" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <a href="#" onClick={() => handleDeleteCategory(item.id)} data-toggle="tooltip" tabindex="0" data-placement="bottom" title="Xóa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
+                                                    <button type="button" class="btn btn-outline-success" onClick={() => handleLockedAccount(item.id)}>
+                                                        {item.isLocked === true ? "Mở" : "Khóa"}
+                                                    </button>
                                                 </td>
 
                                             </tr>

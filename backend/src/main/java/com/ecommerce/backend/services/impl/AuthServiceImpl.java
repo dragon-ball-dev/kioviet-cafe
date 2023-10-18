@@ -8,6 +8,7 @@ import com.ecommerce.backend.domain.models.Store;
 import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.domain.payload.response.MessageResponse;
+import com.ecommerce.backend.domain.payload.response.UserResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.RoleRepository;
 import com.ecommerce.backend.repository.StoreRepository;
@@ -18,6 +19,9 @@ import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.FileStorageService;
 import org.apache.activemq.kaha.impl.index.BadMagicException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -94,9 +98,9 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
         user.setIsLocked(false);
-        user.setIsConfirmed(false);
+        user.setIsConfirmed(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
+//        sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
 
         if (signUpRequest.getStoreId() == null) {
             user.setStore(null);
@@ -108,7 +112,8 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         if (RoleName.ROLE_USER.equals(signUpRequest.getRole())) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                     .orElseThrow(() -> new IllegalArgumentException("User Role not set."));
-
+            user.setAddress(signUpRequest.getAddress());
+            user.setPhone(signUpRequest.getPhone());
             user.setRoles(Collections.singleton(userRole));
             result = userRepository.save(user);
 
@@ -220,6 +225,14 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         }
         userRepository.save(user);
         return MessageResponse.builder().message("Thay thông tin cá nhân thành công.").build();
+    }
+
+
+    @Override
+    public Page<User> getAllAccount(String keyword, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return userRepository.searchingAccount(keyword,pageable);
     }
 
     public void sendEmailFromTemplate(String email) throws MessagingException, IOException {

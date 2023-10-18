@@ -88,6 +88,17 @@ export function signup(signupRequest) {
     });
 }
 
+export function lockedAccount(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/auth/"+ id + "/locked",
+        method: 'POST'
+    });
+}
+
 export function changePassword(changePasswordRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -137,6 +148,7 @@ export function addSupply(supply) {
     });
 }
 
+
 export function getAllCategory(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -180,3 +192,16 @@ export function getAllProduct() {
         method: 'GET'
     });
 }
+
+export function getAllAccountOfAdmin(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/auth/get-all-account?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        method: 'GET'
+    });
+}
+
+
