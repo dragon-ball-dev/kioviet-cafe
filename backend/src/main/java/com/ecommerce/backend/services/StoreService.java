@@ -9,4 +9,5 @@ public interface StoreService {
     Page<StoreRequest> getAll(Integer page, Integer pageSize);
     void deleteStore(Integer id);
     ResponseEntity<StoreRequest> findByName(String name);
+    ResponseEntity<StoreRequest> getById(Integer id);
 }

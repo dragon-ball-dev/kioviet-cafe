@@ -78,4 +78,14 @@ public class StoreIml implements StoreService {
         }
         return new ResponseEntity<>(mapperUtils.convertToResponse(store, StoreRequest.class), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<StoreRequest> getById(Integer id) {
+        Store store = storeRepository.findById(id).get();
+        if (store == null ) {
+            throw new BadRequestException("không tìm thấy cửa hàng");
+        }
+        StoreRequest storeRequest = mapperUtils.convertToResponse(store, StoreRequest.class);
+        return new ResponseEntity<>(storeRequest, HttpStatus.OK);
+    }
 }

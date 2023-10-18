@@ -7,7 +7,10 @@ import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
 import com.ecommerce.backend.services.OrderItemService;
+import com.ecommerce.backend.utils.MapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +38,8 @@ public class OrderItemIml implements OrderItemService {
     OrderRepository orderRepository;
     @Autowired
     OrderItemRepository orderItemRepository;
+    @Autowired
+    MapperUtils mapperUtils;
     @Override
     public void createOrderItem(OrderItemRequest orderItemRequest) {
         Order order = orderRepository.findById(orderItemRequest.getOrderId()).get();
@@ -135,6 +140,16 @@ public class OrderItemIml implements OrderItemService {
         inventoryRepository.save(inventory);
         orderRepository.save(order);
         orderItemRepository.delete(orderItem);
+    }
+
+    @Override
+    public ResponseEntity<OrderItemRequest> getById(Integer id) {
+        OrderItem orderItem = orderItemRepository.findById(id).get();
+        if (orderItem == null) {
+            throw new BadRequestException("không tìm thấy giỏ hàng");
+        }
+        OrderItemRequest orderItemRequest = mapperUtils.convertToResponse(orderItem, OrderItemRequest.class);
+        return new ResponseEntity<>(orderItemRequest, HttpStatus.OK);
     }
 
     public Integer totalPrice(Order order) {

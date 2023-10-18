@@ -13,4 +13,6 @@ public interface CategoryService {
     void deleteCategory(Integer id);
     // tìm kiếm category
     ResponseEntity<CategoryRequest> findCategoryByName(String name);
+    ResponseEntity<CategoryRequest> getById(Integer id);
+
 }

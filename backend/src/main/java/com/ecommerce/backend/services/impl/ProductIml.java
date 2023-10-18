@@ -250,6 +250,16 @@ public class ProductIml implements ProductService {
         return new ResponseEntity<>(countEmployee, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<ProductRequest> getById(Integer id) {
+        Product product = productRepository.findById(id).get();
+        if (product != null ) {
+            ProductRequest productRequest = mapperUtils.convertToEntity(product, ProductRequest.class);
+            return new ResponseEntity<>(productRequest, HttpStatus.OK);
+        }
+        throw new BadRequestException("Error");
+    }
+
 
     //tổng số lượng product trong inventory.
     public  Integer totalQuantity(Product product) {

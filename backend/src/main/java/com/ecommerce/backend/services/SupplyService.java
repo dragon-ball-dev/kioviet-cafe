@@ -10,4 +10,5 @@ public interface SupplyService {
     void changeSupply(Integer id, SupplyRequest supplyRequest);
     void deleteSupply(Integer id);
     ResponseEntity<SupplyRequest> findByName(String name);
+    ResponseEntity<SupplyRequest> getById(Integer id);
 }

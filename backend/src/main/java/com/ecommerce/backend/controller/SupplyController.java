@@ -39,4 +39,9 @@ public class SupplyController extends BaseController {
     public ResponseEntity<SupplyRequest> findByName(@RequestParam String name) {
         return supplyService.findByName(name);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SupplyRequest> getById(@PathVariable Integer id) {
+        return supplyService.getById(id);
+    }
 }

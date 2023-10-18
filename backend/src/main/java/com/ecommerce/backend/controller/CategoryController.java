@@ -45,5 +45,9 @@ public class CategoryController extends BaseController {
     public ResponseEntity<CategoryRequest> findByName(@RequestParam String name) {
         return categoryService.findCategoryByName(name);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryRequest> getById(@PathVariable Integer id) {
+        return categoryService.getById(id);
+    }
 
 }
