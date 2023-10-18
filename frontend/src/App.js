@@ -23,7 +23,7 @@ import ProductManager from './pages/admin/ProductManager';
 import EmployeeManager from './pages/admin/EmployeesManager';
 import AddEmployee from './pages/admin/AddEmployee';
 import SellProduct from './pages/admin/SellProduct';
-import Cart from './pages/admin/Cart.';
+import Cart from './pages/admin/Cart';
 import ReportManager from './pages/admin/ReportManager';
 
 

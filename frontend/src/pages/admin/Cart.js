@@ -112,7 +112,7 @@ function Cart(props) {
                                             <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
                                             <td className="dtr-control sorting_1" tabindex="0"><img src="../../assets/img/avatars/avatar-2.jpg" alt="Charles Hall" /></td>
                                             <td className="dtr-control sorting_1" tabindex="0">100.000 VND</td>
-                                            <td className="dtr-control sorting_1" tabindex="0"><input type="number" value={3} /></td>
+                                            <td className="dtr-control sorting_1" tabindex="0"><input type="number" class="form-control rounded shadow-sm" value={3} /></td>
                                             <td>
                                                 <button type="button" class="btn btn-primary">Cập nhật</button> &nbsp;
                                                 <button type="button" class="btn btn-danger">Xoá</button>
