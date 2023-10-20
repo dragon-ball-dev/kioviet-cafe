@@ -17,7 +17,6 @@ const Nav = (props) => {
             </a>
             <button type="button" className="btn btn-info"><a className="dropdown-item" href="/sell-product">Bán Hàng</a></button>&nbsp;
             <button type="button" className="btn btn-info"><a className="dropdown-item" href="/cart">Giỏ Hàng</a></button>&nbsp;
-            <button type="button" className="btn btn-info"><a className="dropdown-item" href="#">Hồ sơ</a></button> &nbsp;
             <button type="button" className="btn btn-info"><a className="dropdown-item" onClick={onLogout}>Đăng xuất</a></button>
 
             <div className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">

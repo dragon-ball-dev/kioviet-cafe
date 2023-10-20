@@ -63,7 +63,7 @@ const DashboardAdmin = (props) => {
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Sales</h5>
+                              <h5 class="card-title">Cửa Hàng</h5>
                             </div>
 
                             <div class="col-auto">
@@ -72,18 +72,14 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">2.382</h1>
-                          <div class="mb-0">
-                            <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                            <span class="text-muted">Since last week</span>
-                          </div>
+                          <h1 class="mt-1 mb-3">2</h1>
                         </div>
                       </div>
                       <div class="card">
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Visitors</h5>
+                              <h5 class="card-title">Nhân Viên</h5>
                             </div>
 
                             <div class="col-auto">
@@ -92,11 +88,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">14.212</h1>
-                          <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-                            <span class="text-muted">Since last week</span>
-                          </div>
+                          <h1 class="mt-1 mb-3">7</h1>
                         </div>
                       </div>
                     </div>
@@ -105,7 +97,7 @@ const DashboardAdmin = (props) => {
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Earnings</h5>
+                              <h5 class="card-title">Sản Phẩm</h5>
                             </div>
 
                             <div class="col-auto">
@@ -114,18 +106,14 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">$21.300</h1>
-                          <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-                            <span class="text-muted">Since last week</span>
-                          </div>
+                          <h1 class="mt-1 mb-3">8</h1>
                         </div>
                       </div>
                       <div class="card">
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Orders</h5>
+                              <h5 class="card-title">Doanh Thu</h5>
                             </div>
 
                             <div class="col-auto">
@@ -134,11 +122,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">64</h1>
-                          <div class="mb-0">
-                            <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-                            <span class="text-muted">Since last week</span>
-                          </div>
+                          <h1 class="mt-1 mb-3">64.000.000 VNĐ</h1>
                         </div>
                       </div>
                     </div>
@@ -150,7 +134,7 @@ const DashboardAdmin = (props) => {
                 <div class="card flex-fill w-100">
                   <div class="card-header">
 
-                    <h5 class="card-title mb-0">Recent Movement</h5>
+                    <h5 class="card-title mb-0">Doanh Thu (Tháng)</h5>
                   </div>
                   <div class="card-body py-3">
 
@@ -181,7 +165,7 @@ const DashboardAdmin = (props) => {
                 <div class="card">
                   <div class="card-header">
 
-                    <h5 class="card-title mb-0">Browser Usage</h5>
+                    <h5 class="card-title mb-0">Sản phẩm bán nhiều</h5>
                   </div>
                   <div class="card-body d-flex">
                     <div class="align-self-center">
@@ -189,9 +173,9 @@ const DashboardAdmin = (props) => {
                         series={[
                           {
                             data: [
-                              { id: 0, value: 10, label: 'series A' },
-                              { id: 1, value: 15, label: 'series B' },
-                              { id: 2, value: 20, label: 'series C' },
+                              { id: 0, value: 10, label: 'Cafe Nâu Đa' },
+                              { id: 1, value: 15, label: 'Cafe Đen' },
+                              { id: 2, value: 20, label: 'Cafe Sữa' },
                             ],
                           },
                         ]}
@@ -202,16 +186,16 @@ const DashboardAdmin = (props) => {
                       <table class="table mb-0">
                         <tbody>
                           <tr>
-                            <td>Chrome</td>
-                            <td class="text-end">4306</td>
+                            <td>Cafe Nâu Đa</td>
+                            <td class="text-end">10</td>
                           </tr>
                           <tr>
-                            <td>Firefox</td>
-                            <td class="text-end">3801</td>
+                            <td>Cafe Đen</td>
+                            <td class="text-end">15</td>
                           </tr>
                           <tr>
-                            <td>IE</td>
-                            <td class="text-end">1689</td>
+                            <td>Cafe Sữa</td>
+                            <td class="text-end">20</td>
                           </tr>
                         </tbody>
                       </table>
@@ -223,7 +207,7 @@ const DashboardAdmin = (props) => {
                 <div class="card flex-fill w-100">
                   <div class="card-header">
 
-                    <h5 class="card-title mb-0">Real-Time</h5>
+                    <h5 class="card-title mb-0">Tự Chọn</h5>
                   </div>
                   <div class="card-body px-4">
                     <LineChart

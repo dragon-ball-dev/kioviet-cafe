@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllCategory } from "../../services/fetch/ApiUtils";
+import { deleteCategory, getAllCategory } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
@@ -52,15 +52,15 @@ function CategoryManager(props){
     };
 
     const handleDeleteCategory = (id) => {
-        // deleteMaintenance(id).then(response => {
-        //     console.log(response.message)
-        //     toast.success("Xóa danh mục thành công")
-        //     fetchData();
-        // }).catch(
-        //     error => {
-        //         toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
-        //     }
-        // )
+        deleteCategory(id).then(response => {
+            console.log(response.message)
+            toast.success("Xóa danh mục thành công")
+            fetchData();
+        }).catch(
+            error => {
+                toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+            }
+        )
     }
 
     if (!props.authenticated) {

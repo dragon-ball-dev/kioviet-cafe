@@ -144,7 +144,6 @@ function ReportManager(props) {
                         </div>
                         <div className="card-body">
                             <div id="datatables-buttons_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dt-buttons btn-group flex-wrap">
-                                <button className="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatables-buttons" type="button"><a onClick={handleRedirectAddCategory}>Thêm Sản Phẩm</a></button>
                             </div></div>
                                 <div className="col-sm-12 col-md-6"><div id="datatables-buttons_filter" className="dataTables_filter">
                                     <label>Search:<input type="search" className="form-control form-control-sm" placeholder=""

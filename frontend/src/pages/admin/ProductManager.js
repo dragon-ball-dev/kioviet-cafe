@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllCategory } from "../../services/fetch/ApiUtils";
+import { getAllCategory, getAllProduct } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
@@ -24,7 +24,7 @@ function ProductManager(props){
     }, [currentPage, searchQuery]);
 
     const fetchData = () => {
-        getAllCategory(currentPage - 1, itemsPerPage, searchQuery).then(response => {
+        getAllProduct(currentPage - 1, itemsPerPage, searchQuery).then(response => {
             setTableData(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -43,7 +43,7 @@ function ProductManager(props){
     }
 
     const handleEditCategory = (id) => {
-        history('/edit-category/' + id)
+        history('/edit-product/' + id)
     }
 
 
@@ -117,10 +117,13 @@ function ProductManager(props){
                                         {tableData.map((item) => (
                                             <tr className="odd">
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
-                                                <td className="dtr-control sorting_1" tabindex="0"><img src="../../assets/img/avatars/avatar-2.jpg" alt="Charles Hall" /></td>
-                                                <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
-                                                <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
-                                                <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0" ><img src="../../assets/img/photos/unsplash-2.jpg" alt="Charles Hall"  style={{ width : "50%"}}/></td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.description}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.price && item.price.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                })}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.totalQuantity}</td>
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
                                                 <td>
                                                     <a href="#" onClick={() => handleEditCategory(item.id)} data-toggle="tooltip" tabindex="0" data-placement="bottom" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>

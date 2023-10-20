@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllCategory } from "../../services/fetch/ApiUtils";
+import { getAllCategory, getAllProduct } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
@@ -19,12 +19,13 @@ function SellProduct(props) {
     useScript("../../assets/js/app.js");
 
     // Fetch data from the API
+    // Fetch data from the API
     useEffect(() => {
         fetchData();
     }, [currentPage, searchQuery]);
 
     const fetchData = () => {
-        getAllCategory(currentPage - 1, itemsPerPage, searchQuery).then(response => {
+        getAllProduct(currentPage - 1, itemsPerPage, searchQuery).then(response => {
             setTableData(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -50,6 +51,10 @@ function SellProduct(props) {
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const handleAddCart = (item) => {
+        toast.success("Thêm sản phẩm thành công")
+    }
 
     const handleDeleteCategory = (id) => {
         // deleteMaintenance(id).then(response => {
@@ -90,18 +95,24 @@ function SellProduct(props) {
                     <div style={{ margin: "20px 20px 20px 20px" }} >
 
                         <div class="row">
+                        {tableData.map((item) => (
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="card">
                                     <img class="card-img-top" src="../../assets/img/photos/unsplash-2.jpg" alt="Unsplash" />
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">Card with image and button</h5>
+                                        <h5 class="card-title mb-0">{item.name}</h5>
                                     </div>
                                     <div class="card-body">
-                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                        <a href="#" class="btn btn-primary">Thêm vào giỏ +</a>
+                                        <p class="card-text">{item.description}</p>
+                                        <p class="card-text">Giá : {item.price && item.price.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                })}</p>
+                                        <a href="#" class="btn btn-primary" onClick={() => handleAddCart(item)}>Thêm vào giỏ +</a>
                                     </div>
                                 </div>
                             </div>
+                        ))}
                         </div>
                     </div>
                 </div>
