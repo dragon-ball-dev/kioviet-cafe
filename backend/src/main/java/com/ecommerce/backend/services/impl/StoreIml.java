@@ -2,6 +2,7 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.Inventory;
 import com.ecommerce.backend.domain.models.Store;
+import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.StoreRequest;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.InventoryRepository;
@@ -87,5 +88,14 @@ public class StoreIml implements StoreService {
         }
         StoreRequest storeRequest = mapperUtils.convertToResponse(store, StoreRequest.class);
         return new ResponseEntity<>(storeRequest, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CountEmployee> countStore() {
+        List<Store> storeList = storeRepository.findAll();
+        int total = storeList.size();
+        CountEmployee countEmployee = new CountEmployee();
+        countEmployee.setCount(total);
+        return new ResponseEntity<>(countEmployee, HttpStatus.OK);
     }
 }

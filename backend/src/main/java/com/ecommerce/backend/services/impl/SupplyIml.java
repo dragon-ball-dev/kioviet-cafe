@@ -1,6 +1,7 @@
 package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.Supply;
+import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.SupplyRequest;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.SupplyRepository;
@@ -93,5 +94,14 @@ public class SupplyIml implements SupplyService {
         }
         SupplyRequest supplyRequest = mapperUtils.convertToEntity(supply, SupplyRequest.class);
         return new ResponseEntity<>(supplyRequest, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CountEmployee> countSupply() {
+        List<Supply> supplyList = supplyRepository.findAll();
+        int total = supplyList.size();
+        CountEmployee countEmployee = new CountEmployee();
+        countEmployee.setCount(total);
+        return new ResponseEntity<>(countEmployee, HttpStatus.OK);
     }
 }
