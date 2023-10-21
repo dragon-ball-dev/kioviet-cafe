@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +33,6 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
-    @JsonManagedReference
     private List<ProductMedia> productMedia;
 
     @OneToMany(mappedBy = "product")

@@ -1,13 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SidebarNav from './SidebarNav';
-import { addCategory, getAllCategory } from '../../services/fetch/ApiUtils';
+import { addCategory, getAllCategory, getProductById } from '../../services/fetch/ApiUtils';
 import Nav from './Nav';
 import ProductService from '../../services/axios/ProductService';
 
 const EditProduct = (props) => {
+    const { id } = useParams();
     const [tableData, setTableData] = useState([]);
 
     const [productData, setProductData] = useState({
@@ -21,11 +22,24 @@ const EditProduct = (props) => {
 
     useEffect(() => {
         fetchData();
+        getByProductId();
     }, []);
 
     const fetchData = () => {
         getAllCategory(0, 100, '').then(response => {
             setTableData(response.content);
+
+        }).catch(
+            error => {
+                toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+            }
+        )
+
+    }
+
+    const getByProductId =  () => {
+        getProductById(id).then(response => {
+            setProductData(response)
 
         }).catch(
             error => {
@@ -113,8 +127,8 @@ const EditProduct = (props) => {
                 <main style={{ margin: "20px 20px 20px 20px" }}>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Thêm sản phẩm</h5>
-                            <h6 className="card-subtitle text-muted"> Thêm sản phẩm của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Sửa sản phẩm</h5>
+                            <h6 className="card-subtitle text-muted"> Sửa sản phẩm của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>

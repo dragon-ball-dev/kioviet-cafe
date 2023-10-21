@@ -251,6 +251,17 @@ export function getCategoryById(id) {
     });
 }
 
+export function getProductById(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/product/"+id,
+        method: 'GET'
+    });
+}
+
 export function getSupplyById(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

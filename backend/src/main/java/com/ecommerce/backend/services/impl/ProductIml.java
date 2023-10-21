@@ -2,6 +2,7 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.*;
+import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
@@ -72,7 +73,7 @@ public class ProductIml implements ProductService {
             ProductMedia productMedia = new ProductMedia();
             productMedia.setProduct(product1);
             String image = fileStorageService.storeFile(multipartFile);
-            productMedia.setImage(image);
+            productMedia.setImage("http://localhost:8080/image/"+image);
             productMediaRepository.save(productMedia);
         } else {
             throw new BadRequestException("Không tìm thấy loại sản phẩm");
@@ -160,7 +161,7 @@ public class ProductIml implements ProductService {
             int total = quantityInventory + quantity;
             if (total <= product.getTotalQuantity()) {
                 Inventory inventoryList = inventoryRepository.findByProductAndStore(product, store);
-                if (inventoryList != null) {
+                if (inventoryList == null) {
                     Inventory inventory = new Inventory();
                     inventory.setQuantity(quantity);
                     inventory.setProduct(product);
@@ -265,10 +266,10 @@ public class ProductIml implements ProductService {
     }
 
     @Override
-    public Page<ProductRequest> getAll(Integer page, Integer pageSize) {
+    public Page<ProductResponse> getAll(Integer page, Integer pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Product> productPage = productRepository.findAll(pageable);
-        return mapperUtils.convertToResponsePage(productPage, ProductRequest.class, pageable);
+        return mapperUtils.convertToResponsePage(productPage, ProductResponse.class, pageable);
     }
 
 

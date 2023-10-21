@@ -134,7 +134,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/request/customer",
                         "/view-file/**",
                         "/document/**",
-                        "/image/**")
+                        "/image/**","/product/get-img")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

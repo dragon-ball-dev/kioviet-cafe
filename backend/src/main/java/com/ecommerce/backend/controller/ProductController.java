@@ -3,6 +3,7 @@ package com.ecommerce.backend.controller;
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.models.Product;
 import com.ecommerce.backend.domain.payload.request.*;
+import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -86,7 +87,7 @@ public class ProductController extends BaseController {
         return productService.getById(id);
     }
     @GetMapping("/all")
-    public Page<ProductRequest> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {
+    public Page<ProductResponse> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {
         return productService.getAll(page, pageSize);
     }
  }
