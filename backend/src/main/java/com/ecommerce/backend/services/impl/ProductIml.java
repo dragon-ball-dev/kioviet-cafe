@@ -3,12 +3,12 @@ package com.ecommerce.backend.services.impl;
 import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.domain.payload.response.ProductResponse;
+import com.ecommerce.backend.domain.payload.response.StoreResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
 import com.ecommerce.backend.services.ProductService;
 import com.ecommerce.backend.utils.MapperUtils;
-import org.apache.tomcat.jni.Proc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -19,15 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductIml implements ProductService {
@@ -269,7 +264,11 @@ public class ProductIml implements ProductService {
     public Page<ProductResponse> getAll(Integer page, Integer pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Product> productPage = productRepository.findAll(pageable);
-        return mapperUtils.convertToResponsePage(productPage, ProductResponse.class, pageable);
+        Page<ProductResponse> productResponses = mapperUtils.convertToResponsePage(productPage, ProductResponse.class, pageable);
+        productResponses.getContent().forEach(productResponse -> {
+            productResponse.setStoreResponses(storeResponseList(productResponse));
+        });
+        return productResponses;
     }
 
 
@@ -281,6 +280,22 @@ public class ProductIml implements ProductService {
             total+=inventory.getQuantity();
         }
         return total;
+    }
+    public List<StoreResponse> storeResponseList(ProductResponse productResponse) {
+        List<StoreResponse> storeResponses = new ArrayList<>();
+        Product product = productRepository.findById(productResponse.getId()).get();
+        if (product == null) {
+            throw new BadRequestException("Error");
+        }
+        List<Inventory> inventoryList = product.getInventory();
+        for (Inventory inventory : inventoryList) {
+            StoreResponse storeDTO = new StoreResponse();
+            Store store = inventory.getStore();
+            storeDTO.setId(store.getId());
+            storeDTO.setName(store.getName());
+            storeResponses.add(storeDTO);
+        }
+        return storeResponses;
     }
 
 //    @Override
