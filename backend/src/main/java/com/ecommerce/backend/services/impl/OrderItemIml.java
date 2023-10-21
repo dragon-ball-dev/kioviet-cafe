@@ -3,6 +3,8 @@ package com.ecommerce.backend.services.impl;
 import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
+import com.ecommerce.backend.domain.payload.response.OrderItemResponse;
+import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
@@ -143,12 +145,14 @@ public class OrderItemIml implements OrderItemService {
     }
 
     @Override
-    public ResponseEntity<OrderItemRequest> getById(Integer id) {
+    public ResponseEntity<OrderItemResponse> getById(Integer id) {
         OrderItem orderItem = orderItemRepository.findById(id).get();
         if (orderItem == null) {
             throw new BadRequestException("không tìm thấy giỏ hàng");
         }
-        OrderItemRequest orderItemRequest = mapperUtils.convertToResponse(orderItem, OrderItemRequest.class);
+        OrderItemResponse orderItemRequest = mapperUtils.convertToResponse(orderItem, OrderItemResponse.class);
+        ProductResponse productResponse = mapperUtils.convertToResponse(orderItem.getProduct(), ProductResponse.class);
+        orderItemRequest.setProductResponse(productResponse);
         return new ResponseEntity<>(orderItemRequest, HttpStatus.OK);
     }
 

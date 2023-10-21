@@ -1,5 +1,6 @@
 package com.ecommerce.backend.services;
 
+import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.SupplyRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -11,4 +12,5 @@ public interface SupplyService {
     void deleteSupply(Integer id);
     ResponseEntity<SupplyRequest> findByName(String name);
     ResponseEntity<SupplyRequest> getById(Integer id);
+    ResponseEntity<CountEmployee> countSupply();
 }

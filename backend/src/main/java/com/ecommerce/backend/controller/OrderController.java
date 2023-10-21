@@ -3,6 +3,7 @@ package com.ecommerce.backend.controller;
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
+import com.ecommerce.backend.domain.payload.response.OrderResponse;
 import com.ecommerce.backend.services.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class OrderController extends BaseController {
     OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderResponse orderRequest) {
         orderService.createOrder(orderRequest);
         return createSuccessResponse("create Order", "thêm giỏ hàng thành công");
     }

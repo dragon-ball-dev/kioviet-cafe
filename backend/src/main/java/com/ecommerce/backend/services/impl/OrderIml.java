@@ -5,6 +5,7 @@ import com.ecommerce.backend.domain.models.Store;
 import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
+import com.ecommerce.backend.domain.payload.response.OrderResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.OrderRepository;
 import com.ecommerce.backend.repository.StoreRepository;
@@ -37,21 +38,25 @@ public class OrderIml implements OrderService {
     @Autowired
     private ModelMapper modelMapper;
     @Override
-    public void createOrder(OrderRequest orderRequest) {
-        User user = userRepository.findById(orderRequest.getUserId()).get();
-        User employee = userRepository.findById(orderRequest.getEmployeeId()).get();
-        Store store = storeRepository.findById(orderRequest.getStoreId()).get();
-        if (user != null && employee != null && store != null) {
+    public void createOrder(OrderResponse orderRequest) {
+//        User user = userRepository.findById(orderRequest.getUserId()).get();
+//        User employee = userRepository.findById(orderRequest.getEmployeeId()).get();
+//        Store store = storeRepository.findById(orderRequest.getStoreId()).get();
+//        if (user != null && employee != null && store != null) {
             Order order = new Order();
-            order.setOrderDate(orderRequest.getOrderDate());
+//            order.setOrderDate(orderRequest.getOrderDate());
             order.setTotalPrice(0);
-            order.setUser(user);
-            order.setUser_employees(employee);
+//            order.setUser(user);
+//            order.setUser_employees(employee);
+        Store store = storeRepository.findById(orderRequest.getStoreId()).get();
+        if (store == null) {
+            throw new BadRequestException("Error");
+        }
             order.setStore(store);
             orderRepository.save(order);
-        } else {
-            throw new BadRequestException("không tìm thấy tên khách hàng, nhân viên, cửa hàng");
-        }
+//        } else {
+//            throw new BadRequestException("không tìm thấy tên khách hàng, nhân viên, cửa hàng");
+//        }
     }
 
     @Override
@@ -72,12 +77,6 @@ public class OrderIml implements OrderService {
     private OrderDTO convertToOrderDTO(Order order) {
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
         orderDTO.setStoreName(order.getStore().getName());
-        if (order.getUser_employees().getStore() != null) {
-            orderDTO.setEmployeeName(order.getUser_employees().getName());
-        }
-        if (order.getUser().getStore() == null) {
-            orderDTO.setUserName(order.getUser().getName());
-        }
         return orderDTO;
     }
 }

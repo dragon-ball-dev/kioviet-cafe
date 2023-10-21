@@ -1,6 +1,7 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.controller.base.BaseController;
+import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.StoreRequest;
 import com.ecommerce.backend.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,9 @@ public class StoreController extends BaseController {
     @GetMapping("/{id}")
     public ResponseEntity<StoreRequest> getById(@PathVariable Integer id) {
         return storeService.getById(id);
+    }
+    @GetMapping("/count")
+    public ResponseEntity<CountEmployee> countStore() {
+        return storeService.countStore();
     }
 }

@@ -1,6 +1,7 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.controller.base.BaseController;
+import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.SupplyRequest;
 import com.ecommerce.backend.services.SupplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,10 @@ public class SupplyController extends BaseController {
     @GetMapping("/{id}")
     public ResponseEntity<SupplyRequest> getById(@PathVariable Integer id) {
         return supplyService.getById(id);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<CountEmployee> countSupply() {
+        return supplyService.countSupply();
     }
 }

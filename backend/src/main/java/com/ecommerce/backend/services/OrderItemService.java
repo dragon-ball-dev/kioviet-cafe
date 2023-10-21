@@ -2,6 +2,7 @@ package com.ecommerce.backend.services;
 
 import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
+import com.ecommerce.backend.domain.payload.response.OrderItemResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface OrderItemService {
@@ -12,5 +13,5 @@ public interface OrderItemService {
     // xóa đơn hàng orderitem
     void deleteOrderItem(Integer id);
     // lấy ra danh sách orderitem
-    ResponseEntity<OrderItemRequest> getById(Integer id);
+    ResponseEntity<OrderItemResponse> getById(Integer id);
 }

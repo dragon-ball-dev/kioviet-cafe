@@ -2,6 +2,7 @@ package com.ecommerce.backend.controller.base;
 
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderItemRequest;
+import com.ecommerce.backend.domain.payload.response.OrderItemResponse;
 import com.ecommerce.backend.services.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class OrderItemController extends BaseController{
         return createSuccessResponse("delete orderitem", "xóa thành công");
     }
     @GetMapping("/{id}")
-    public ResponseEntity<OrderItemRequest> getById(@PathVariable Integer id) {
+    public ResponseEntity<OrderItemResponse> getById(@PathVariable Integer id) {
         return orderItemService.getById(id);
     }
 }
