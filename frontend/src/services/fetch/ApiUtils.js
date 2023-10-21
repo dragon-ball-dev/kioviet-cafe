@@ -124,6 +124,17 @@ export function addCategory(category) {
     });
 }
 
+export function addInvertory(productId, storeId, quatity) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/product/inventory?productId="+productId+"&storeId="+storeId+"&quantity="+quatity,
+        method: 'POST',
+    });
+}
+
 export function editCategory(id,category) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

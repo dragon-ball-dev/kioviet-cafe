@@ -29,6 +29,7 @@ import EditCategory from './pages/admin/EditCategory';
 import EditSupply from './pages/admin/EditSupply';
 import EditStore from './pages/admin/EditStore';
 import EditProduct from './pages/admin/EditProduct';
+import AddInventory from './pages/admin/AddInventory';
 
 
 function App() {
@@ -116,6 +117,7 @@ function App() {
           <Route exact path="/add-supply" element={<AddSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-product" element={<AddProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-employee" element={<AddEmployee authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-inventory/:id" element={<AddInventory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
 
           <Route exact path="/edit-store/:id" element={<EditStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />

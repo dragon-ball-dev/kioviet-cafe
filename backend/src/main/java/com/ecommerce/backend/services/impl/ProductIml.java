@@ -73,7 +73,7 @@ public class ProductIml implements ProductService {
             ProductMedia productMedia = new ProductMedia();
             productMedia.setProduct(product1);
             String image = fileStorageService.storeFile(multipartFile);
-            productMedia.setImage("http://localhost:8080/image/"+image);
+            productMedia.setImage(image);
             productMediaRepository.save(productMedia);
         } else {
             throw new BadRequestException("Không tìm thấy loại sản phẩm");
@@ -112,15 +112,21 @@ public class ProductIml implements ProductService {
 
     @Override
     public ResponseEntity<Resource> getImageProductMedia(Integer id) {
-        ProductMedia productMedia = productMediaRepository.findById(id).get();
+        ProductMedia productMedia = productMediaRepository.findMediaById(id).get();
         if (productMedia == null && productMedia.getImage() == null) {
             return ResponseEntity.notFound().build();
         }
         String imgUrl = productMedia.getImage();
         Resource resource = fileStorageService.loadFileAsResource(imgUrl);
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"");
         return ResponseEntity.ok()
+                .headers(headers)
                 .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 
