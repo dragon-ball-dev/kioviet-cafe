@@ -95,13 +95,11 @@ public class OrderItemIml extends BaseService implements OrderItemService {
            Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
            inventory.setQuantity(inventory.getQuantity() + totalProduct);
 
-           Order order = orderItem.getOrder();
-           int totalOrder = orderItem.getQuantity() * product.getPrice();
-           order.setTotalPrice(totalOrder);
+     
 
            productRepository.save(product);
            inventoryRepository.save(inventory);
-           orderRepository.save(order);
+
         } else {
             int totalProduct = quantity - orderItem.getQuantity();//số lượng chênh lệch
             orderItem.setQuantity(quantity);
@@ -114,13 +112,11 @@ public class OrderItemIml extends BaseService implements OrderItemService {
             Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
             inventory.setQuantity(inventory.getQuantity() - totalProduct);
 
-            Order order = orderItem.getOrder();
-            int totalOrder = orderItem.getQuantity() * product.getPrice();
-            order.setTotalPrice(totalOrder);
+
 
             productRepository.save(product);
             inventoryRepository.save(inventory);
-            orderRepository.save(order);
+
         }
      }
 

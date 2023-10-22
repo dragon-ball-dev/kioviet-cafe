@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNav from './SidebarNav';
 import Nav from './Nav';
-import { addOrder, addOrderItem, deleteCartItem, getAllCategory, getAllOrderItem, getAllProduct } from '../../services/fetch/ApiUtils';
+import { addOrder, addOrderItem, deleteCartItem, getAllCategory, getAllOrderItem, getAllProduct, updateCartItemQuantity } from '../../services/fetch/ApiUtils';
 import { toast } from 'react-toastify';
 
 
@@ -12,7 +12,8 @@ function Cart(props) {
 
     const [tableData, setTableData] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
-    const [store, setStore] =useState(0);
+    const [store, setStore] = useState(0);
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         fetchData();
@@ -22,15 +23,15 @@ function Cart(props) {
         // Call your API to fetch data for the cart, e.g., getCartItems()
         // Replace the following code with your API call
         getAllOrderItem()
-          .then(response => {
-            console.log(response)
-            setTableData(response.data);
-            calculateTotalAmount(response.data);
-            setStore(response.storeId)
-          })
-          .catch(error => {
-            console.log(error);
-          });
+            .then(response => {
+                console.log(response)
+                setTableData(response.data);
+                calculateTotalAmount(response.data);
+                setStore(response.storeId)
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const calculateTotalAmount = (data) => {
@@ -41,36 +42,36 @@ function Cart(props) {
         setTotalAmount(total);
     };
 
-    const handleUpdateQuantity = (itemId, quantity) => {
-        // updateCartItemQuantity(itemId, quantity)
-        //   .then(response => {
-        //     console.log(response.message);
-        //     fetchData();
-        //   })
-        //   .catch(error => {
-        //     console.log(error);
-        //   });
+    const handleUpdateQuantity = (itemId, quantity, id) => {
+        updateCartItemQuantity(itemId, quantity)
+            .then(response => {
+                console.log(response.message);
+                fetchData();
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const handleDeleteItem = (itemId) => {
         deleteCartItem(itemId)
-          .then(response => {
-            console.log(response.message);
-            fetchData();
-          })
-          .catch(error => {
-            console.log(error);
-          });
+            .then(response => {
+                console.log(response.message);
+                fetchData();
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const handleRedirectCheckout = () => {
-        const orderRequest = { totalPrice: totalAmount , storeId: 1 };
+        const orderRequest = { totalPrice: totalAmount, storeId: 1 };
         addOrder(orderRequest).then((response) => {
-            console.log(response.data);   
+            console.log(response.data);
         })
-        .catch((error) => {
-            console.log(error.error);
-        });
+            .catch((error) => {
+                console.log(error.error);
+            });
         history('/checkout');
     };
 
@@ -174,7 +175,7 @@ function Cart(props) {
                                                         colspan="1"
                                                         style={{ width: "75px" }}
                                                     >
-                                                        
+
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -194,20 +195,20 @@ function Cart(props) {
                                                             <input
                                                                 type="number"
                                                                 className="form-control rounded shadow-sm"
-                                                                value={item.quantity}
-                                                                onChange={(e) =>
-                                                                    handleUpdateQuantity(
-                                                                        item.id,
-                                                                        e.target.value
-                                                                    )
-                                                                }
+                                                                name='quantity'
+                                                                value={quantity}
+                                                                onChange={(e) => {
+                                                                    const newQuantity = e.target.value;
+                                                                    setQuantity(newQuantity); // Cập nhật state quantity
+                                                                    handleUpdateQuantity(item.id, newQuantity); // Gọi hàm handleUpdateQuantity
+                                                                }}
                                                             />
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
-                                                        {(item.quantity * item.product.price).toLocaleString("en-US", {
-                                                                    style: "currency",
-                                                                    currency: "VND",
-                                                                })}
+                                                            {(item.quantity * item.product.price).toLocaleString("en-US", {
+                                                                style: "currency",
+                                                                currency: "VND",
+                                                            })}
                                                         </td>
                                                         <td>
                                                             &nbsp;

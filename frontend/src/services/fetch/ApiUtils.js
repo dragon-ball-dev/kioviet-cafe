@@ -147,6 +147,17 @@ export function editCategory(id,category) {
     });
 }
 
+export function  updateCartItemQuantity(id,quantity) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/orderitem?id="+id+"&quantity="+quantity,
+        method: 'PATCH',
+    });
+}
+
 export function addStore(store) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
