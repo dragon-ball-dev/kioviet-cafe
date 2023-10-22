@@ -159,6 +159,53 @@ export function addStore(store) {
     });
 }
 
+export function addOrderItem(store) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/orderitem",
+        method: 'POST',
+        body: JSON.stringify(store)
+    });
+}
+
+export function payment(store) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/payment",
+        method: 'POST',
+        body: JSON.stringify(store)
+    });
+}
+
+export function changeOrderItem(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/orderitem/"+id,
+        method: 'PUT',
+    });
+}
+
+export function addOrder(store) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/order",
+        method: 'POST',
+        body: JSON.stringify(store)
+    });
+}
+
 export function editStore(id, store) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -240,6 +287,17 @@ export function deleteSupply(id) {
     });
 }
 
+export function deleteCartItem(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/orderitem?id="+id,
+        method: 'DELETE'
+    });
+}
+
 export function getAllProduct(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -247,6 +305,16 @@ export function getAllProduct(pageNo, pageSize, name) {
 
     return request({
         url: API_BASE_URL + "/product/all?page="+pageNo+"&pageSize="+pageSize+"&name="+name,
+        method: 'GET'
+    });
+}
+export function getAllOrderItem() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/orderitem",
         method: 'GET'
     });
 }

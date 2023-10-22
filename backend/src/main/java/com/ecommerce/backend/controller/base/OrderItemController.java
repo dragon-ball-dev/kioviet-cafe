@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class OrderItemController extends BaseController{
     @Autowired
     OrderItemService orderItemService;
+
+    @GetMapping
+    public ResponseEntity<?> getAllOrderItem(){
+        return createSuccessResponse(orderItemService.getAllOrderItem());
+    }
     @PostMapping
     public ResponseEntity<?> createOrderItem(@RequestBody OrderItemRequest orderItemRequest) {
         orderItemService.createOrderItem(orderItemRequest);
@@ -34,5 +39,10 @@ public class OrderItemController extends BaseController{
     @GetMapping("/{id}")
     public ResponseEntity<OrderItemResponse> getById(@PathVariable Integer id) {
         return orderItemService.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> changeIsEnable(@PathVariable Integer id) {
+        return orderItemService.changeIsEnable(id);
     }
 }

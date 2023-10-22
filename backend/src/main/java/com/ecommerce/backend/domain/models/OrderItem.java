@@ -31,4 +31,10 @@ public class OrderItem {
     @JsonBackReference
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @Column(name = "is_enable")
+    private Boolean isEnable;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

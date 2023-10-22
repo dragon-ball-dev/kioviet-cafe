@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItemResponse {
+    private Integer id;
     private Integer quantity;
-    private ProductResponse productResponse;
-    private boolean flag = true;
+    private ProductResponse product;
+    private Boolean isEnable;
+    private Long userId;
+    private Long storeId;
 }

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,15 +26,11 @@ public class PaymentIml implements PaymentService {
     MapperUtils mapperUtils;
     @Override
     public void createPayment(PaymentRequest paymentRequest) {
-        Order order = orderRepository.findById(paymentRequest.getOrderId()).get();
-        if (order == null) {
-            throw new BadRequestException("khoong tìm thấy đơn hàng");
-        }
+
         Payment payment = new Payment();
-        payment.setDate(paymentRequest.getDate());
+        payment.setDate(new Date());
         payment.setMethod(paymentRequest.getMethod());
-        payment.setAmount(order.getTotalPrice());
-        payment.setOrder(order);
+        payment.setAmount(payment.getAmount());
         paymentRepository.save(payment);
     }
 

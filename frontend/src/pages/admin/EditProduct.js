@@ -82,10 +82,10 @@ const EditProduct = (props) => {
             formData.append(`file`, file);
         });
 
-        ProductService.addNeưProduct(formData)
+        ProductService.editProduct(id,formData)
             .then((response) => {
                 console.log(response.data);
-                toast.success('Thêm sản phẩm thành công!!');
+                toast.success('Sửa sản phẩm thành công!!');
                 setProductData((prevData) => ({
                     ...prevData,
                     name: '' 

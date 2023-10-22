@@ -30,6 +30,8 @@ import EditSupply from './pages/admin/EditSupply';
 import EditStore from './pages/admin/EditStore';
 import EditProduct from './pages/admin/EditProduct';
 import AddInventory from './pages/admin/AddInventory';
+import Checkout from './pages/admin/Checkout';
+import CheckoutOn from './pages/admin/CheckoutOnline';
 
 
 function App() {
@@ -124,6 +126,9 @@ function App() {
           <Route exact path="/edit-category/:id" element={<EditCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-supply/:id" element={<EditSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-product/:id" element={<EditProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+
+          <Route exact path="/checkout" element={<Checkout authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/checkout-on" element={<CheckoutOn authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
         </Routes>
       </Router>

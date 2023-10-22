@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllCategory, getAllProduct } from "../../services/fetch/ApiUtils";
+import { addOrderItem, getAllCategory, getAllProduct } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
@@ -11,7 +11,12 @@ function SellProduct(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
     const history = useNavigate();
 
+    const [productData, setProductData] = useState({
+        storeId: 0,
+    });
+
     const [tableData, setTableData] = useState([]);
+    const [tableData2, setTableData2] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
@@ -53,20 +58,27 @@ function SellProduct(props) {
     };
 
     const handleAddCart = (item) => {
-        toast.success("Thêm sản phẩm thành công")
+        const orderItemRequest = { quatity: 1, productId: item.id, storeId: productData.storeId };
+        addOrderItem(orderItemRequest).then((response) => {
+            console.log(response.data);
+            toast.success("Thêm sản phẩm vào giỏ thành công")
+           
+        })
+        .catch((error) => {
+            console.log(error.message);
+        });
+        
     }
 
-    const handleDeleteCategory = (id) => {
-        // deleteMaintenance(id).then(response => {
-        //     console.log(response.message)
-        //     toast.success("Xóa danh mục thành công")
-        //     fetchData();
-        // }).catch(
-        //     error => {
-        //         toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
-        //     }
-        // )
-    }
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setProductData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
 
     // if (!props.authenticated) {
     //     return <Navigate
@@ -75,6 +87,8 @@ function SellProduct(props) {
     //             state: { from: location }
     //         }} />;
     // }
+
+    const { storeId } = productData;
 
     return (
         <>
@@ -93,28 +107,40 @@ function SellProduct(props) {
 
                     <br />
                     <div style={{ margin: "20px 20px 20px 20px" }} >
-
-                        <div class="row">
-                        {tableData.map((item) => (
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <div class="card">
-                                    <img class="card-img-top" src="../../assets/img/photos/unsplash-2.jpg" alt="Unsplash" />
-                                    <div class="card-header">
-                                        <h5 class="card-title mb-0">{item.name}</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text">{item.description}</p>
-                                        <p class="card-text">Giá : {item.price && item.price.toLocaleString('vi-VN', {
+                            <div class="row">
+                                {tableData.map((item) => (
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="card">
+                                            <img class="card-img-top" src="../../assets/img/photos/unsplash-2.jpg" alt="Unsplash" />
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">{item.name}</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">{item.description}</p>
+                                                <p class="card-text">Giá : {item.price && item.price.toLocaleString('vi-VN', {
                                                     style: 'currency',
                                                     currency: 'VND',
                                                 })}</p>
-                                        <a href="#" class="btn btn-primary" onClick={() => handleAddCart(item)}>Thêm vào giỏ +</a>
+                                                <select
+                                                    className="form-select"
+                                                    name="storeId"
+                                                    value={storeId}
+                                                    onChange={handleInputChange}
+                                                >
+                                                    <option value={0}>Chọn Cửa Hàng</option>
+                                                    {item?.storeResponses?.map((item) => (
+                                                        <option value={item.id}>{item.name}</option>
+                                                    ))}
+                                                </select>
+                                                <br></br>
+                                                <a href="#" class="btn btn-primary" onClick={() => handleAddCart(item)}>Thêm vào giỏ +</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
-                        ))}
-                        </div>
                     </div>
+
                 </div>
             </div>
         </>

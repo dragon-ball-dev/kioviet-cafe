@@ -7,6 +7,7 @@ import com.ecommerce.backend.domain.payload.response.OrderItemResponse;
 import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
+import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.FileStorageService;
 import com.ecommerce.backend.services.OrderItemService;
 import com.ecommerce.backend.utils.MapperUtils;
@@ -16,9 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class OrderItemIml implements OrderItemService {
+public class OrderItemIml extends BaseService implements OrderItemService {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
@@ -49,16 +51,18 @@ public class OrderItemIml implements OrderItemService {
         Store store = storeRepository.findById(orderItemRequest.getStoreId()).get();
         if (product != null && store != null)  {
             Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
-            if (orderItemRequest.getQuantity() <= inventory.getQuantity()) {
+            if (1 <= inventory.getQuantity()) {
                 OrderItem orderItem = new OrderItem();
-                orderItem.setQuantity(orderItemRequest.getQuantity());
+                orderItem.setQuantity(1);
                 orderItem.setOrder(null);
                 orderItem.setProduct(product);
                 orderItem.setStore(store);
+                orderItem.setUserId(getUserId());
+                orderItem.setIsEnable(false);
                 orderItemRepository.save(orderItem);
 
-                product.setTotalQuantity(product.getTotalQuantity() - orderItemRequest.getQuantity());
-                inventory.setQuantity(inventory.getQuantity() - orderItemRequest.getQuantity());
+                product.setTotalQuantity(product.getTotalQuantity() - 1);
+                inventory.setQuantity(inventory.getQuantity() - 1);
 //                int totalPrice = totalPrice(order);
 //                order.setTotalPrice(totalPrice);
 
@@ -134,13 +138,10 @@ public class OrderItemIml implements OrderItemService {
         Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
         inventory.setQuantity(inventory.getQuantity() + orderItem.getQuantity());
 
-        Order order = orderItem.getOrder();
-        int totalPrice = totalPrice(order);
-        order.setTotalPrice(totalPrice - orderItem.getQuantity()*product.getPrice());
+
 
         productRepository.save(product);
         inventoryRepository.save(inventory);
-        orderRepository.save(order);
         orderItemRepository.delete(orderItem);
     }
 
@@ -152,8 +153,25 @@ public class OrderItemIml implements OrderItemService {
         }
         OrderItemResponse orderItemRequest = mapperUtils.convertToResponse(orderItem, OrderItemResponse.class);
         ProductResponse productResponse = mapperUtils.convertToResponse(orderItem.getProduct(), ProductResponse.class);
-        orderItemRequest.setProductResponse(productResponse);
+        orderItemRequest.setProduct(productResponse);
         return new ResponseEntity<>(orderItemRequest, HttpStatus.OK);
+    }
+
+    @Override
+    public List<OrderItemResponse> getAllOrderItem() {
+
+        return mapperUtils.convertToResponseList(orderItemRepository.findAll()
+                .stream()
+                .filter( i -> i.getUserId() == getUserId() && i.getIsEnable().equals(Boolean.FALSE))
+                .collect(Collectors.toList()), OrderItemResponse.class);
+    }
+
+    @Override
+    public ResponseEntity<?> changeIsEnable(Integer id) {
+        OrderItem orderItem = orderItemRepository.findById(id).get();
+        orderItem.setIsEnable(true);
+        orderItemRepository.save(orderItem);
+        return null;
     }
 
     public Integer totalPrice(Order order) {

@@ -5,6 +5,8 @@ import com.ecommerce.backend.domain.payload.request.OrderRequest;
 import com.ecommerce.backend.domain.payload.response.OrderItemResponse;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface OrderItemService {
     // mua sản phẩm order_item
     void createOrderItem(OrderItemRequest orderItemRequest);
@@ -14,4 +16,8 @@ public interface OrderItemService {
     void deleteOrderItem(Integer id);
     // lấy ra danh sách orderitem
     ResponseEntity<OrderItemResponse> getById(Integer id);
+
+    List<OrderItemResponse> getAllOrderItem();
+
+    ResponseEntity<?> changeIsEnable(Integer id);
 }

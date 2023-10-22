@@ -8,7 +8,7 @@ import Nav from './Nav';
 const AddInventory = (props) => {
     const { id } = useParams();
     const [productData, setProductData] = useState({
-        storeIdId: 0,
+        storeId: 0,
         totalQuantity: 0,
 
     });

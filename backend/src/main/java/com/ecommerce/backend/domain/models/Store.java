@@ -1,5 +1,6 @@
 package com.ecommerce.backend.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,18 +22,22 @@ public class Store {
     private String phone;
     private String email;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "store")
     @JsonManagedReference
     private List<Inventory> inventory;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "store")
     @JsonManagedReference
     List<OrderItem> orderItem;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "store")
     @JsonManagedReference
     List<Order> order;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "store")
     @JsonManagedReference
     private List<User> user;

@@ -16,8 +16,8 @@ class ProductService {
 
   }
 
-  updateRoom(id,formData) {
-    return axios.put(BASE_URL + 'room/'+id, formData,
+  editProduct(id,formData) {
+    return axios.patch(BASE_URL + 'product/change-product?id='+ id, formData,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`

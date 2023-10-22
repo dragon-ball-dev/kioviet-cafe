@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNav from './SidebarNav';
 import Nav from './Nav';
-import { getAllCategory, getAllProduct } from '../../services/fetch/ApiUtils';
+import { addOrder, addOrderItem, deleteCartItem, getAllCategory, getAllOrderItem, getAllProduct } from '../../services/fetch/ApiUtils';
+import { toast } from 'react-toastify';
 
 
 function Cart(props) {
@@ -11,6 +12,7 @@ function Cart(props) {
 
     const [tableData, setTableData] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [store, setStore] =useState(0);
 
     useEffect(() => {
         fetchData();
@@ -19,10 +21,12 @@ function Cart(props) {
     const fetchData = () => {
         // Call your API to fetch data for the cart, e.g., getCartItems()
         // Replace the following code with your API call
-        getAllProduct(0, 1000, '')
+        getAllOrderItem()
           .then(response => {
-            setTableData(response.content);
-            calculateTotalAmount(response.content);
+            console.log(response)
+            setTableData(response.data);
+            calculateTotalAmount(response.data);
+            setStore(response.storeId)
           })
           .catch(error => {
             console.log(error);
@@ -32,14 +36,12 @@ function Cart(props) {
     const calculateTotalAmount = (data) => {
         let total = 0;
         data.forEach((item) => {
-            total += item.price * item.totalQuantity;
+            total += item?.product?.price * item?.quantity;
         });
         setTotalAmount(total);
     };
 
     const handleUpdateQuantity = (itemId, quantity) => {
-        // Call your API to update the quantity of an item in the cart, e.g., updateCartItemQuantity(itemId, quantity)
-        // Replace the following code with your API call
         // updateCartItemQuantity(itemId, quantity)
         //   .then(response => {
         //     console.log(response.message);
@@ -51,19 +53,24 @@ function Cart(props) {
     };
 
     const handleDeleteItem = (itemId) => {
-        // Call your API to delete an item from the cart, e.g., deleteCartItem(itemId)
-        // Replace the following code with your API call
-        // deleteCartItem(itemId)
-        //   .then(response => {
-        //     console.log(response.message);
-        //     fetchData();
-        //   })
-        //   .catch(error => {
-        //     console.log(error);
-        //   });
+        deleteCartItem(itemId)
+          .then(response => {
+            console.log(response.message);
+            fetchData();
+          })
+          .catch(error => {
+            console.log(error);
+          });
     };
 
     const handleRedirectCheckout = () => {
+        const orderRequest = { totalPrice: totalAmount , storeId: 1 };
+        addOrder(orderRequest).then((response) => {
+            console.log(response.data);   
+        })
+        .catch((error) => {
+            console.log(error.error);
+        });
         history('/checkout');
     };
 
@@ -103,27 +110,7 @@ function Cart(props) {
                                                 type="button"
                                                 onClick={handleRedirectCheckout}
                                             >
-                                                Thành Toán Tiền Mặt
-                                            </button>
-                                            &nbsp;
-                                            <button
-                                                className="btn btn-secondary buttons-copy buttons-html5"
-                                                tabIndex="0"
-                                                aria-controls="datatables-buttons"
-                                                type="button"
-                                                onClick={handleRedirectCheckout}
-                                            >
-                                                Chuyển Khoản
-                                            </button>
-                                            &nbsp;
-                                            <button
-                                                className="btn btn-secondary buttons-copy buttons-html5"
-                                                tabIndex="0"
-                                                aria-controls="datatables-buttons"
-                                                type="button"
-                                                onClick={handleRedirectCheckout}
-                                            >
-                                                In Hóa Đơn
+                                                Tiếp Tục Thanh Toán
                                             </button>
                                         </div>
                                     </div>
@@ -148,16 +135,6 @@ function Cart(props) {
                                                         style={{ width: "224px" }}
                                                     >
                                                         Tên sản phẩm
-                                                    </th>
-                                                    <th
-                                                        className="sorting sorting_asc"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "224px" }}
-                                                    >
-                                                        Hình Ảnh
                                                     </th>
                                                     <th
                                                         className="sorting sorting_asc"
@@ -195,7 +172,7 @@ function Cart(props) {
                                                         aria-controls="datatables-buttons"
                                                         rowspan="1"
                                                         colspan="1"
-                                                        style={{ width: "175px" }}
+                                                        style={{ width: "75px" }}
                                                     >
                                                         
                                                     </th>
@@ -205,17 +182,10 @@ function Cart(props) {
                                                 {tableData?.map((item) => (
                                                     <tr className="odd">
                                                         <td className="dtr-control sorting_1" tabIndex="0">
-                                                            {item.name}
+                                                            {item?.product?.name}
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
-                                                            <img
-                                                                src="../../assets/img/photos/unsplash-2.jpg"
-                                                                alt="Charles Hall"
-                                                                style={{ width: "50%" }}
-                                                            />
-                                                        </td>
-                                                        <td className="dtr-control sorting_1" tabIndex="0">
-                                                            {item.price.toLocaleString("en-US", {
+                                                            {item?.product?.price.toLocaleString("en-US", {
                                                                 style: "currency",
                                                                 currency: "VND",
                                                             })}
@@ -224,7 +194,7 @@ function Cart(props) {
                                                             <input
                                                                 type="number"
                                                                 className="form-control rounded shadow-sm"
-                                                                value={item.totalQuantity}
+                                                                value={item.quantity}
                                                                 onChange={(e) =>
                                                                     handleUpdateQuantity(
                                                                         item.id,
@@ -234,21 +204,12 @@ function Cart(props) {
                                                             />
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
-                                                        {(item.totalQuantity * item.price).toLocaleString("en-US", {
+                                                        {(item.quantity * item.product.price).toLocaleString("en-US", {
                                                                     style: "currency",
                                                                     currency: "VND",
                                                                 })}
                                                         </td>
                                                         <td>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-primary"
-                                                                onClick={() =>
-                                                                    handleUpdateQuantity(item.id, item.quantity)
-                                                                }
-                                                            >
-                                                                Cập nhật
-                                                            </button>{" "}
                                                             &nbsp;
                                                             <button
                                                                 type="button"
