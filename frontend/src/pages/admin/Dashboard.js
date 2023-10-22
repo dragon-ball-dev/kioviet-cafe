@@ -5,17 +5,44 @@ import SidebarNav from './SidebarNav';
 import '../../assets/css/app.css';
 import useScript from '../../components/useScripts';
 import { BarChart, LineChart, PieChart } from '@mui/x-charts';
+import { getAllCategory, getCountProduct, getPriceMonth } from '../../services/fetch/ApiUtils';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const DashboardAdmin = (props) => {
   const { authenticated, roleName, location, currentUser, onLogout } = props;
 
 
-  const [number, setNumber] = useState({
-    numberOfAccount: '',
-    numberOfApprove: '',
-    numberOfApproving: '',
-    numberOfAccountLocked: '',
-  });
+  const [number, setNumber] = useState();
+  const [price, setPrice] = useState();
+
+  useEffect(() => {
+    fetchData();
+    priceMonth();
+}, []);
+
+const fetchData = () => {
+    getCountProduct().then(response => {
+        setNumber(response.count)
+
+    }).catch(
+        error => {
+            toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+        }
+    )
+
+}
+
+const priceMonth = () => {
+  getPriceMonth().then(response => {
+    setPrice(response)
+
+}).catch(
+    error => {
+        toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+    }
+)
+}
 
   useScript("../../assets/js/app.js");
     if (!authenticated) {
@@ -26,15 +53,20 @@ const DashboardAdmin = (props) => {
         }} />;
     }
 
-  const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
+  const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490,1890, 2390, 3490];
   const xLabels = [
-    'Page A',
-    'Page B',
-    'Page C',
-    'Page D',
-    'Page E',
-    'Page F',
-    'Page G',
+    'Tháng 1',
+    'Tháng 2',
+    'Tháng 3',
+    'Tháng 4',
+    'Tháng 5',
+    'Tháng 6',
+    'Tháng 7',
+    'Tháng 8',
+    'Tháng 9',
+    'Tháng 10',
+    'Tháng 11',
+    'Tháng 12',
   ];
   return (
     <div className="wrapper">
@@ -106,7 +138,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">8</h1>
+                          <h1 class="mt-1 mb-3">{number}</h1>
                         </div>
                       </div>
                       <div class="card">
@@ -122,7 +154,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">64.000.000 VNĐ</h1>
+                          <h1 class="mt-1 mb-3">{price} VNĐ</h1>
                         </div>
                       </div>
                     </div>
@@ -142,16 +174,16 @@ const DashboardAdmin = (props) => {
                       xAxis={[
                         {
                           id: 'barCategories',
-                          data: ['bar A', 'bar B', 'bar C', 'bar D'],
+                          data: xLabels,
                           scaleType: 'band',
                         },
                       ]}
                       series={[
                         {
-                          data: [2, 5, 3, 5],
+                          data:  uData,
                         },
                       ]}
-                      width={500}
+                      width={800}
                       height={300}
                     />
 
@@ -200,27 +232,6 @@ const DashboardAdmin = (props) => {
                         </tbody>
                       </table>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
-                <div class="card flex-fill w-100">
-                  <div class="card-header">
-
-                    <h5 class="card-title mb-0">Tự Chọn</h5>
-                  </div>
-                  <div class="card-body px-4">
-                    <LineChart
-                      width={500}
-                      height={300}
-                      series={[{ data: uData, label: 'uv', area: true, showMark: false }]}
-                      xAxis={[{ scaleType: 'point', data: xLabels }]}
-                      sx={{
-                        '.MuiLineElement-root': {
-                          display: 'none',
-                        },
-                      }}
-                    />
                   </div>
                 </div>
               </div>

@@ -265,6 +265,28 @@ export function getAllCategory(pageNo, pageSize, name) {
     });
 }
 
+export function getCountProduct() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/product/count-product",
+        method: 'GET'
+    });
+}
+
+export function getPriceMonth() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/order/pricemonth?year=2023&month=9",
+        method: 'GET'
+    });
+}
+
 export function deleteCategory(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
