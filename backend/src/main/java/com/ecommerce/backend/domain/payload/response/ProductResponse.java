@@ -4,6 +4,8 @@ import com.ecommerce.backend.domain.models.ProductMedia;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ProductResponse {
@@ -14,4 +16,5 @@ public class ProductResponse {
     private Integer totalQuantity;
     private CategoryResponse category;
     private ProductMedia productMedia;
+    private List<StoreResponse> storeResponses;
 }

@@ -44,27 +44,27 @@ public class OrderItemIml implements OrderItemService {
     MapperUtils mapperUtils;
     @Override
     public void createOrderItem(OrderItemRequest orderItemRequest) {
-        Order order = orderRepository.findById(orderItemRequest.getOrderId()).get();
+//        Order order = orderRepository.findById(orderItemRequest.getOrderId()).get();
         Product product = productRepository.findById(orderItemRequest.getProductId()).get();
         Store store = storeRepository.findById(orderItemRequest.getStoreId()).get();
-        if (order != null && product != null && store != null)  {
+        if (product != null && store != null)  {
             Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
             if (orderItemRequest.getQuantity() <= inventory.getQuantity()) {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setQuantity(orderItemRequest.getQuantity());
-                orderItem.setOrder(order);
+                orderItem.setOrder(null);
                 orderItem.setProduct(product);
                 orderItem.setStore(store);
                 orderItemRepository.save(orderItem);
 
                 product.setTotalQuantity(product.getTotalQuantity() - orderItemRequest.getQuantity());
                 inventory.setQuantity(inventory.getQuantity() - orderItemRequest.getQuantity());
-                int totalPrice = totalPrice(order);
-                order.setTotalPrice(totalPrice);
+//                int totalPrice = totalPrice(order);
+//                order.setTotalPrice(totalPrice);
 
                 productRepository.save(product);
                 inventoryRepository.save(inventory);
-                orderRepository.save(order);
+//                orderRepository.save(order);
             } else {
                 throw new BadRequestException("số lượng sản phầm trong kho không đủ để bán");
             }
