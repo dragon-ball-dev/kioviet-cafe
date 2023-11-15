@@ -3,6 +3,8 @@ package com.ecommerce.backend.services;
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.models.Product;
 import com.ecommerce.backend.domain.payload.request.*;
+import com.ecommerce.backend.domain.payload.response.InventoryResponse;
+import com.ecommerce.backend.domain.payload.response.NotificationRs;
 import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -24,7 +26,7 @@ public interface ProductService {
 //    void deleteProduct(Integer id);
     //lấy hình ảnh
     ResponseEntity<Resource> getImageProductMedia(Integer id);
-    //nhập thêm số lượng sản phẩm
+    //nhập thêm số lượng sản phẩm và thơi gian nhập xuất sản phẩm
     void importProduct(SupplyProductRequest supplyProductRequest);
     // thêm kho hàng
     void importInventory(InventoryRequest inventoryRequest);
@@ -32,6 +34,8 @@ public interface ProductService {
     void createInventory(Integer productId, Integer storeId, Integer quantity);
     //thêm số lượng sản phẩm cho store
     void importQuantityStore(InventoryRequest inventoryRequest);
+    // lấy ra danh sách đơn nhập hàng
+    Page<InventoryResponse> getAllInventory(Integer page, Integer pageSize);
     //tìm kiếm tên sản phẩm
     ResponseEntity<ProductRequest> findProductByName(String name);
     // sản phẩm bán chạy nhất
@@ -43,4 +47,6 @@ public interface ProductService {
     ResponseEntity<CountEmployee> countProduct();
     ResponseEntity<ProductRequest> getById(Integer id);
     Page<ProductResponse> getAll(Integer page, Integer pageSize);
+    //chuyển sản phẩm
+    ResponseEntity<NotificationRs> transferProduct(Integer productId, Integer quantity, Integer sourceStoreId, Integer destinationStoreId);
 }

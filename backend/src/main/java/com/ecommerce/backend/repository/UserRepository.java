@@ -2,6 +2,8 @@ package com.ecommerce.backend.repository;
 
 
 import com.ecommerce.backend.domain.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -18,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> , UserReposito
     List<User> findByName(String name);
 
     long count();
+
+    Page<User> findAllByStoreIsNotNull(Pageable pageable);
 
 }

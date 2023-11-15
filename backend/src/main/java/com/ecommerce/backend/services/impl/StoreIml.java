@@ -1,16 +1,23 @@
 package com.ecommerce.backend.services.impl;
 
-import com.ecommerce.backend.domain.models.Inventory;
-import com.ecommerce.backend.domain.models.Store;
+import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.StoreRequest;
+import com.ecommerce.backend.domain.payload.response.EmployeesResponse;
+import com.ecommerce.backend.domain.payload.response.StoreProductRatio;
+import com.ecommerce.backend.domain.payload.response.StoreWithEmployeesRes;
+import com.ecommerce.backend.domain.payload.response.TimeWorkResponse;
 import com.ecommerce.backend.exception.BadRequestException;
+import com.ecommerce.backend.exception.MyFileNotFoundException;
 import com.ecommerce.backend.repository.InventoryRepository;
+import com.ecommerce.backend.repository.OrderItemRepository;
 import com.ecommerce.backend.repository.StoreRepository;
+import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.services.StoreService;
 import com.ecommerce.backend.utils.MapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,8 +25,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StoreIml implements StoreService {
@@ -27,6 +37,10 @@ public class StoreIml implements StoreService {
     StoreRepository storeRepository;
     @Autowired
     InventoryRepository inventoryRepository;
+    @Autowired
+    OrderItemRepository orderItemRepository;
+    @Autowired
+    UserRepository userRepository;
     private final MapperUtils mapperUtils;
 
     public StoreIml(MapperUtils mapperUtils) {
@@ -83,7 +97,7 @@ public class StoreIml implements StoreService {
     @Override
     public ResponseEntity<StoreRequest> getById(Integer id) {
         Store store = storeRepository.findById(id).get();
-        if (store == null ) {
+        if (store == null) {
             throw new BadRequestException("không tìm thấy cửa hàng");
         }
         StoreRequest storeRequest = mapperUtils.convertToResponse(store, StoreRequest.class);
@@ -97,5 +111,80 @@ public class StoreIml implements StoreService {
         CountEmployee countEmployee = new CountEmployee();
         countEmployee.setCount(total);
         return new ResponseEntity<>(countEmployee, HttpStatus.OK);
+    }
+
+    @Override
+    public Page<StoreWithEmployeesRes> getALlEmployeesStore(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<Store> stores = storeRepository.findAll(pageable);
+
+        List<StoreWithEmployeesRes> result = stores.stream()
+                .map(store -> {
+                    List<User> userList = store.getUser();
+                    List<EmployeesResponse> employeesResponseList = userList.stream()
+                            .map(user -> new EmployeesResponse(user.getName(), user.getEmail(), user.getAddress()))
+                            .collect(Collectors.toList());
+
+                    return new StoreWithEmployeesRes(store.getId(), store.getName(), employeesResponseList);
+                }).collect(Collectors.toList());
+        return new PageImpl<>(result, pageable, stores.getTotalElements());
+    }
+
+    @Override
+    public Page<StoreProductRatio> getStoreProductRatio(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<Store> storePage = storeRepository.findAll(pageable);
+        return storePage.map(store -> {
+            StoreProductRatio storeProductRatio = new StoreProductRatio();
+            storeProductRatio.setStoreName(store.getName());
+            List<OrderItem> orderItems = findByStoreId(store.getId());
+            Map<String, Double> productRatio =calculateProductRatios(orderItems);
+            storeProductRatio.setProductRatio(productRatio);
+
+            return storeProductRatio;
+        });
+    }
+
+    @Override
+    public ResponseEntity<Page<TimeWorkResponse>> getTimeWorkEmployees(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<User> userPage = userRepository.findAllByStoreIsNotNull(pageable);
+
+        if (userPage.hasContent()) {
+            List<TimeWorkResponse> timeWorkResponses = userPage.map(user ->
+                    new TimeWorkResponse(user.getId(), user.getName(), user.getTimeWorkStart())).getContent();
+            return new ResponseEntity<>(new PageImpl<>(timeWorkResponses, pageable, userPage.getTotalElements()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public Map<String, Double> calculateProductRatios(List<OrderItem> orderItems) {
+        Map<String, Integer> productQuantities = new HashMap<>();
+        int totalProducts = 0;
+
+        for (OrderItem orderItem : orderItems) {
+            Product product = orderItem.getProduct();
+            int quantity = orderItem.getQuantity();
+
+            productQuantities.put(product.getName(), productQuantities.getOrDefault(product.getName(), 0) + quantity);
+            totalProducts += quantity;
+        }
+        Map<String, Double> productRatios = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : productQuantities.entrySet()) {
+            double ratio = (double) entry.getValue() / totalProducts;
+            double ratioPercent = ratio * 100;
+            productRatios.put(entry.getKey(), ratioPercent);
+        }
+
+        return productRatios;
+
+    }
+
+    public List<OrderItem> findByStoreId(Integer storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new MyFileNotFoundException("khong tim thay cua hang"));
+        return store.getOrderItem();
     }
 }

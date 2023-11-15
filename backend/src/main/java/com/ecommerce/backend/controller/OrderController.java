@@ -4,6 +4,7 @@ import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
 import com.ecommerce.backend.domain.payload.response.OrderResponse;
+import com.ecommerce.backend.domain.payload.response.TotalStoreResponse;
 import com.ecommerce.backend.services.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,12 @@ public class OrderController extends BaseController {
     @GetMapping("pricemonth")
     public Integer totalPriceMonth(@RequestParam Integer year, @RequestParam Integer month) {
         return orderService.totalPriceInMonth(year, month);
+    }
+
+    @GetMapping("/price-store")
+    public Page<TotalStoreResponse> getTotalPriceStore(@RequestParam Integer page,
+                                                       @RequestParam Integer pageSize) {
+        return orderService.calculateTotalPriceStore(page, pageSize);
     }
 }
 

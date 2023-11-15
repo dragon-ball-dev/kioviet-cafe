@@ -3,6 +3,8 @@ package com.ecommerce.backend.controller;
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.models.Product;
 import com.ecommerce.backend.domain.payload.request.*;
+import com.ecommerce.backend.domain.payload.response.InventoryResponse;
+import com.ecommerce.backend.domain.payload.response.NotificationRs;
 import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,5 +91,16 @@ public class ProductController extends BaseController {
     @GetMapping("/all")
     public Page<ProductResponse> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {
         return productService.getAll(page, pageSize);
+    }
+    @GetMapping("/all-inventory")
+    public Page<InventoryResponse> getAllInventory(@RequestParam Integer page, @RequestParam Integer pageSize) {
+        return productService.getAllInventory(page, pageSize);
+    }
+    @PostMapping("/transfer")
+    public ResponseEntity<NotificationRs> transferInventory(@RequestParam Integer productId,
+                                                            @RequestParam Integer quantity,
+                                                            @RequestParam Integer sourceStoreId,
+                                                            @RequestParam Integer destinationStoreId) {
+        return productService.transferProduct(productId, quantity, sourceStoreId, destinationStoreId);
     }
  }
