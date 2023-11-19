@@ -3,6 +3,9 @@ package com.ecommerce.backend.controller;
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.payload.request.CountEmployee;
 import com.ecommerce.backend.domain.payload.request.StoreRequest;
+import com.ecommerce.backend.domain.payload.response.StoreProductRatio;
+import com.ecommerce.backend.domain.payload.response.StoreWithEmployeesRes;
+import com.ecommerce.backend.domain.payload.response.TimeWorkResponse;
 import com.ecommerce.backend.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,5 +45,22 @@ public class StoreController extends BaseController {
     @GetMapping("/count")
     public ResponseEntity<CountEmployee> countStore() {
         return storeService.countStore();
+    }
+
+    @GetMapping("/count-employees")
+    public Page<StoreWithEmployeesRes> getEmployeesWithStore(@RequestParam Integer page,
+                                                                       @RequestParam Integer pageSize) {
+        return storeService.getALlEmployeesStore(page, pageSize);
+    }
+    @GetMapping("/ratio-product")
+    public Page<StoreProductRatio> getRatioProductStore(@RequestParam Integer page,
+                                                        @RequestParam Integer pageSize) {
+        return storeService.getStoreProductRatio(page, pageSize);
+    }
+
+    @GetMapping("/work-time")
+    public ResponseEntity<Page<TimeWorkResponse>> getTimeToWork(@RequestParam Integer page,
+                                                                @RequestParam Integer pageSize) {
+        return storeService.getTimeWorkEmployees(page, pageSize);
     }
 }

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -17,6 +19,7 @@ public class SupplyProduct {
     private Integer id;
 
     private Integer quantity;
+    private LocalDate time = LocalDate.now();
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "supply_id")

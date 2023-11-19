@@ -6,6 +6,7 @@ import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
 import com.ecommerce.backend.domain.payload.response.OrderResponse;
+import com.ecommerce.backend.domain.payload.response.TotalStoreResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.OrderRepository;
 import com.ecommerce.backend.repository.StoreRepository;
@@ -72,6 +73,18 @@ public class OrderIml implements OrderService {
         Integer total = orderRepository.totalPriceInMonth(year, month);
         System.out.println(total);
         return total;
+    }
+
+    @Override
+    public Page<TotalStoreResponse> calculateTotalPriceStore(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<Store> stores = storeRepository.findAll(pageable);
+
+        return stores.map(store -> {
+            Integer total = orderRepository.calculateTotalPriceStore(store.getId());
+            return new TotalStoreResponse(store.getId(), store.getName(), total);
+        });
     }
 
     private OrderDTO convertToOrderDTO(Order order) {

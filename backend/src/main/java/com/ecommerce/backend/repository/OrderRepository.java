@@ -11,4 +11,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query(value = "select sum(o.total_price) from orderbill o " +
             "where YEAR(o.order_date) = :years and MONTH(o.order_date) = :months", nativeQuery = true)
     Integer totalPriceInMonth(@Param("years") int years, @Param("months") int months);
+
+    @Query(value = "select sum(o.total_price) from orderbill o where o.store_id = :storeId", nativeQuery = true)
+    Integer calculateTotalPriceStore(@Param("storeId") Integer storeId);
 }

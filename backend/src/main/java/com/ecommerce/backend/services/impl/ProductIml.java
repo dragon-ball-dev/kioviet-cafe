@@ -2,9 +2,13 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.*;
+import com.ecommerce.backend.domain.payload.response.InventoryResponse;
+import com.ecommerce.backend.domain.payload.response.NotificationRs;
 import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.domain.payload.response.StoreResponse;
 import com.ecommerce.backend.exception.BadRequestException;
+import com.ecommerce.backend.exception.MyFileNotFoundException;
+import com.ecommerce.backend.exception.NotEnoughProductsException;
 import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.FileStorageService;
 import com.ecommerce.backend.services.ProductService;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -167,6 +172,8 @@ public class ProductIml implements ProductService {
                     inventory.setQuantity(quantity);
                     inventory.setProduct(product);
                     inventory.setStore(store);
+                    inventory.setTimeToStart(LocalDate.now());// ngày nhập
+                    inventory.setTimeToEnd(LocalDate.now().plusDays(2)); // thời gian nhập hàng kết thúc
                     inventoryRepository.save(inventory);
                 } else {
                     throw new BadRequestException("sản phẩm của cửa hàng đã tồn tại");
@@ -190,6 +197,8 @@ public class ProductIml implements ProductService {
                 int total = totalQuantityProduct + inventoryRequest.getQuantity();
                 if (total <= product.getTotalQuantity()) {
                     inventory.setQuantity(inventory.getQuantity() + inventoryRequest.getQuantity());
+                    inventory.setTimeToStart(LocalDate.now());
+                    inventory.setTimeToEnd(LocalDate.now().plusDays(2));
                     inventoryRepository.save(inventory);
                 } else {
                     throw new BadRequestException("số lượng sản phẩm không đủ");
@@ -200,6 +209,21 @@ public class ProductIml implements ProductService {
         } else {
             throw new BadRequestException("không tìm thấy sản phẩm or cửa hàng");
         }
+    }
+
+    @Override
+    public Page<InventoryResponse> getAllInventory(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Inventory> inventoryPage = inventoryRepository.findAll(pageable);
+        Page<InventoryResponse> inventoryResponses = mapperUtils.convertToResponsePage(inventoryPage, InventoryResponse.class, pageable);
+        inventoryResponses.getContent().forEach(inventoryResponse -> {
+            Inventory inventory = inventoryRepository.findById(inventoryResponse.getId()).get();
+            Product product = productRepository.findById(inventory.getProduct().getId()).get();
+            Store store = storeRepository.findById(inventory.getStore().getId()).get();
+            inventoryResponse.setProductName(product.getName());
+            inventoryResponse.setStoreName(store.getName());
+        });
+        return inventoryResponses;
     }
 
     @Override
@@ -277,6 +301,37 @@ public class ProductIml implements ProductService {
         return productResponses;
     }
 
+    @Override
+    public ResponseEntity<NotificationRs> transferProduct(Integer productId, Integer quantity, Integer sourceStoreId, Integer destinationStoreId) {
+
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+            new MyFileNotFoundException("Khong tim thay san phẩm")
+        );
+        Store sourceStore = storeRepository.findById(sourceStoreId).orElseThrow(() ->
+                new MyFileNotFoundException("Khong tim thay cua hang source"));
+        Store destinationStore = storeRepository.findById(destinationStoreId).orElseThrow(() ->
+                new MyFileNotFoundException("khong tim thay cua hang destination"));
+
+        Inventory sourceInventory = inventoryRepository.findByProductAndStore(product, sourceStore);
+        Inventory destinationInventory = inventoryRepository.findByProductAndStore(product, destinationStore);
+        NotificationRs notificationRs= new NotificationRs();
+
+        if (sourceInventory.getQuantity() < quantity) {
+            throw new NotEnoughProductsException("Không đủ sản phẩm trong kho");
+        }
+
+        sourceInventory.setQuantity(sourceInventory.getQuantity() - quantity);
+        destinationInventory.setQuantity(sourceInventory.getQuantity() + quantity);
+
+        inventoryRepository.save(sourceInventory);
+        inventoryRepository.save(destinationInventory);
+
+        notificationRs.setNotification("chuyển sản phẩm thành công");
+        notificationRs.setDateTransfer(LocalDate.now());
+        return new ResponseEntity<>(notificationRs, HttpStatus.OK);
+
+    }
+
 
     //tổng số lượng product trong inventory.
     public  Integer totalQuantity(Product product) {
@@ -302,6 +357,11 @@ public class ProductIml implements ProductService {
             storeResponses.add(storeDTO);
         }
         return storeResponses;
+    }
+    public Inventory getInventory(Integer productId, Integer storeId) {
+        Product product = productRepository.findById(productId).get();
+        Store store = storeRepository.findById(storeId).get();
+        return inventoryRepository.findByProductAndStore(product, store);
     }
 
 //    @Override
