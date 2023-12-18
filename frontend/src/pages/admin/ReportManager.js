@@ -54,7 +54,7 @@ function ReportManager(props) {
     const handleDeleteCategory = (id) => {
         // deleteMaintenance(id).then(response => {
         //     console.log(response.message)
-        //     toast.success("Xóa danh mục thành công")
+        //     toast.success("Xóa thể loại thành công")
         //     fetchData();
         // }).catch(
         //     error => {
@@ -108,7 +108,7 @@ function ReportManager(props) {
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Mô Tả</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Giá</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Số Lượng</th>
-                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Danh Mục</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >thể loại</th>
                                         </tr>
                                     </thead>
                                     <tbody>

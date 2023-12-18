@@ -76,15 +76,16 @@ public class User extends DateAudit {
 	private Set<Role> roles = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonBackReference
 	@JoinColumn(name = "store_id")
 	private Store store;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	@JsonManagedReference
 	List<Order> order;
 
 	@OneToMany(mappedBy = "user_employees")
+	@JsonIgnore
 	@JsonManagedReference
 	List<Order> orderEmployees;
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SidebarNav from './SidebarNav';
-import { addCategory, addStore, getStoreById, getSupplyById } from '../../services/fetch/ApiUtils';
+import { addCategory, addStore, editStore, getStoreById, getSupplyById } from '../../services/fetch/ApiUtils';
 import Nav from './Nav';
 import { useEffect } from 'react';
 
@@ -54,7 +54,7 @@ const EditStore = (props) => {
 
         const storeRequest = { name, address, phone, email };
 
-        addStore(storeRequest)
+        editStore(id,storeRequest)
             .then((response) => {
                 console.log(response.data);
                 toast.success('Sửa cửa hàng thành công!!');
@@ -98,7 +98,7 @@ const EditStore = (props) => {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Tên thể loại"
                                         name="name"
                                         value={name}
                                         onChange={handleInputChange}

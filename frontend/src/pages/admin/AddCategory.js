@@ -30,7 +30,7 @@ const AddCategory = (props) => {
         addCategory(categoryRequest)
             .then((response) => {
                 console.log(response.data);
-                toast.success('Thêm danh mục thành công!!');
+                toast.success('Thêm thể loại thành công!!');
                 setName('');
             })
             .catch((error) => {
@@ -68,17 +68,17 @@ const AddCategory = (props) => {
                 <main style={{ margin: "20px 20px 20px 20px" }}>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Thêm danh mục</h5>
-                            <h6 className="card-subtitle text-muted"> Thêm danh mục của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Thêm thể loại</h5>
+                            <h6 className="card-subtitle text-muted"> Thêm thể loại của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
-                                    <label className="form-label">Tên Danh Mục</label>
+                                    <label className="form-label">Tên thể loại</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Tên thể loại"
                                         name="name"
                                         value={name}
                                         onChange={handleInputChange}

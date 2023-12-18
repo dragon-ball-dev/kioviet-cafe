@@ -54,7 +54,7 @@ function SupplyManager(props){
     const handleDeleteCategory = (id) => {
         deleteSupply(id).then(response => {
             console.log(response.message)
-            toast.success("Xóa nhà sản xuất thành công")
+            toast.success("Xóa nhà cung cấp thành công")
             fetchData();
         }).catch(
             error => {
@@ -90,12 +90,12 @@ function SupplyManager(props){
                     <div className="container-fluid p-0"></div>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Quản lý danh mục</h5>
-                            <h6 className="card-subtitle text-muted"> Quản lý danh mục của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Quản lý thể loại</h5>
+                            <h6 className="card-subtitle text-muted"> Quản lý thể loại của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <div id="datatables-buttons_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dt-buttons btn-group flex-wrap">
-                                <button className="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatables-buttons" type="button"><a onClick={handleRedirectAddCategory}>Thêm Nhà Sản Xuất</a></button>
+                                <button className="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatables-buttons" type="button"><a onClick={handleRedirectAddCategory}>Thêm Nhà cung cấp</a></button>
                             </div></div>
                                 <div className="col-sm-12 col-md-6"><div id="datatables-buttons_filter" className="dataTables_filter">
                                     <label>Search:<input type="search" className="form-control form-control-sm" placeholder=""
@@ -105,7 +105,7 @@ function SupplyManager(props){
                                 </div></div></div><div className="row dt-row"><div className="col-sm-12"><table id="datatables-buttons" className="table table-striped dataTable no-footer dtr-inline" style={{ width: "100%" }} aria-describedby="datatables-buttons_info">
                                     <thead>
                                         <tr>
-                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên nhà sản xuất</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên nhà cung cấp</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Địa chỉ</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Số điện thoại</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Email</th>

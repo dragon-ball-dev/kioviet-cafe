@@ -1,6 +1,7 @@
 package com.ecommerce.backend.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,10 +37,17 @@ public class Product {
     private List<ProductMedia> productMedia;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     @JsonManagedReference
     private List<Inventory> inventory;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     @JsonManagedReference
     private List<OrderItem> orderItem;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Cart> cart;
 }

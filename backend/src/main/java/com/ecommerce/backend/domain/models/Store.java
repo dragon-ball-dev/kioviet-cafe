@@ -21,6 +21,8 @@ public class Store {
     private String address;
     private String phone;
     private String email;
+    @Column(name = "is_stock")
+    private Boolean isStock;
 
     @JsonIgnore
     @OneToMany(mappedBy = "store")
@@ -41,4 +43,9 @@ public class Store {
     @OneToMany(mappedBy = "store")
     @JsonManagedReference
     private List<User> user;
+
+    @OneToMany(mappedBy = "store")
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Cart> cart;
 }

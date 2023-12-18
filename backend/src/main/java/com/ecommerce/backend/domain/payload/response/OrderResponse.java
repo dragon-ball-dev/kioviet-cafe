@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderResponse {
-    private Integer totalPrice;
+    private Integer productId;
+    private Integer quantity;
     private Integer storeId;
 }

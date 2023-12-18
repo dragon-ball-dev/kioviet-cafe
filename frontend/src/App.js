@@ -32,6 +32,11 @@ import EditProduct from './pages/admin/EditProduct';
 import AddInventory from './pages/admin/AddInventory';
 import Checkout from './pages/admin/Checkout';
 import CheckoutOn from './pages/admin/CheckoutOnline';
+import CustomerManager from './pages/admin/CustomerManager';
+import AddCustomer from './pages/admin/AddCustomer';
+import EditCustomer from './pages/admin/EditCustomer';
+import StockManager from './pages/admin/StockManager';
+import AddStock from './pages/admin/AddStock';
 
 
 function App() {
@@ -41,21 +46,21 @@ function App() {
   const [role, setRole] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // const loadCurrentlyLoggedInUser = () => {
-  //   getCurrentUser()
-  //     .then(response => {
-  //       setCurrentUser(response);
-  //       setUsername(response.name);
-  //       setRole(response.roles[0].name);
-  //       setAuthenticated(true);
-  //       setLoading(false);
-  //       console.log(response);
-  //       console.log({ authenticated, username, currentUser, role, loading });
-  //     })
-  //     .catch(error => {
-  //       setLoading(false);
-  //     });
-  // }
+  const loadCurrentlyLoggedInUser = () => {
+    getCurrentUser()
+      .then(response => {
+        setCurrentUser(response);
+        setUsername(response.name);
+        setRole(response.roles[0].name);
+        setAuthenticated(true);
+        setLoading(false);
+        console.log(response);
+        console.log({ authenticated, username, currentUser, role, loading });
+      })
+      .catch(error => {
+        setLoading(false);
+      });
+  }
 
   const loadCurrentlyLoggedInAdmin = () => {
     getCurrentAdmin()
@@ -86,7 +91,7 @@ function App() {
   }
 
   useEffect(() => {
-    // loadCurrentlyLoggedInUser();
+    loadCurrentlyLoggedInUser();
     loadCurrentlyLoggedInAdmin();
   }, []);
 
@@ -107,21 +112,25 @@ function App() {
           <Route exact path="/dashboard" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/category" element={<CategoryManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/store" element={<StoreManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/customer" element={<CustomerManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/supply" element={<SupplyManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/product" element={<ProductManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/stock" element={<StockManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/employee" element={<EmployeeManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/sell-product" element={<SellProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/cart" element={<Cart authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/report" element={<ReportManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
           <Route exact path="/add-store" element={<AddStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-customer" element={<AddCustomer authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-category" element={<AddCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-supply" element={<AddSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-product" element={<AddProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-employee" element={<AddEmployee authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-inventory/:id" element={<AddInventory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-stock" element={<AddStock authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
-
+          <Route exact path="/edit-customer/:id" element={<EditCustomer authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-store/:id" element={<EditStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-category/:id" element={<EditCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-supply/:id" element={<EditSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />

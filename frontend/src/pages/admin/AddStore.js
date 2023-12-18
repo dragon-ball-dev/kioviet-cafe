@@ -81,7 +81,7 @@ const AddStore = (props) => {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Tên thể loại"
                                         name="name"
                                         value={name}
                                         onChange={handleInputChange}

@@ -1,5 +1,6 @@
 package com.ecommerce.backend.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -25,4 +26,9 @@ public class Supply {
     @OneToMany(mappedBy = "supply")
     @JsonManagedReference(value = "supply")
     List<SupplyProduct> supplyProduct;
+
+    @OneToMany(mappedBy = "supply")
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Cart> cart;
 }

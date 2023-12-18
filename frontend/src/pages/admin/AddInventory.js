@@ -110,7 +110,7 @@ const AddInventory = (props) => {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Tên thể loại"
                                         name="totalQuantity"
                                         value={totalQuantity}
                                         onChange={handleInputChange}

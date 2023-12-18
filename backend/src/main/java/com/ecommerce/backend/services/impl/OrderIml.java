@@ -46,7 +46,7 @@ public class OrderIml implements OrderService {
 //        if (user != null && employee != null && store != null) {
             Order order = new Order();
 //            order.setOrderDate(orderRequest.getOrderDate());
-            order.setTotalPrice(orderRequest.getTotalPrice());
+            order.setTotalPrice(1);
 //            order.setUser(user);
 //            order.setUser_employees(employee);
         Store store = storeRepository.findById(orderRequest.getStoreId()).get();

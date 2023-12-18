@@ -161,6 +161,16 @@ public class StoreIml implements StoreService {
         }
     }
 
+    @Override
+    public void updateStore(Integer id, StoreRequest storeRequest) {
+        Store store = storeRepository.findById(id).orElseThrow(() -> new BadRequestException("Cửa hàng không tồn tại"));
+        store.setAddress(storeRequest.getAddress());
+        store.setEmail(storeRequest.getEmail());
+        store.setPhone(storeRequest.getPhone());
+        store.setName(storeRequest.getName());
+        storeRepository.save(store);
+    }
+
     public Map<String, Double> calculateProductRatios(List<OrderItem> orderItems) {
         Map<String, Integer> productQuantities = new HashMap<>();
         int totalProducts = 0;

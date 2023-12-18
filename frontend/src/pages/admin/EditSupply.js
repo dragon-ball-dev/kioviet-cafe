@@ -56,7 +56,7 @@ const EditSupply = (props) => {
         editSupply(id,supplyRequest)
             .then((response) => {
                 console.log(response.data);
-                toast.success('Sửa nhà sản xuất thành công!!');
+                toast.success('Sửa nhà cung cấp thành công!!');
             })
             .catch((error) => {
                 console.log(error);
@@ -95,17 +95,17 @@ const EditSupply = (props) => {
                 <main style={{ margin: "20px 20px 20px 20px" }}>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Sửa nhà sản xuất</h5>
-                            <h6 className="card-subtitle text-muted"> Sửa nhà sản xuất của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Sửa nhà cung cấp</h5>
+                            <h6 className="card-subtitle text-muted"> Sửa nhà cung cấp của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
-                                    <label className="form-label">Tên Nhà Sản Xuất</label>
+                                    <label className="form-label">Tên Nhà cung cấp</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Tên thể loại"
                                         name="name"
                                         value={name}
                                         onChange={handleInputChange}

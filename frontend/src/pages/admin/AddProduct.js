@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SidebarNav from './SidebarNav';
-import { addCategory, getAllCategory } from '../../services/fetch/ApiUtils';
+import { getAllCategory } from '../../services/fetch/ApiUtils';
 import Nav from './Nav';
 import ProductService from '../../services/axios/ProductService';
 
@@ -130,7 +130,7 @@ const AddProduct = (props) => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label className="form-label" htmlFor="locationId">Danh Mục</label>
+                                    <label className="form-label" htmlFor="locationId">Thể loại</label>
                                     <select
                                         className="form-select"
                                         name="categoryId"
@@ -166,7 +166,7 @@ const AddProduct = (props) => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label className="form-label">Số lượng</label>
+                                    <label className="form-label">Số lượng cảnh báo</label>
                                     <input
                                         type="text"
                                         className="form-control"

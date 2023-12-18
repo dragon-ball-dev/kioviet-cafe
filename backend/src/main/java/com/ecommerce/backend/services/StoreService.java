@@ -25,4 +25,5 @@ public interface StoreService {
     //thời gian làm việc của nhân viên
     ResponseEntity<Page<TimeWorkResponse>> getTimeWorkEmployees(Integer page, Integer pageSize);
 
+    void updateStore(Integer id, StoreRequest storeRequest);
 }

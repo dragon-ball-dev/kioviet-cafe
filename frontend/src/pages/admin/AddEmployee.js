@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SidebarNav from './SidebarNav';
-import { signup } from '../../services/fetch/ApiUtils';
+import { getAllStore, signup } from '../../services/fetch/ApiUtils';
 import Nav from './Nav';
+import { useEffect } from 'react';
 
 const AddEmployee = (props) => {
     const { authenticated, currentUser, location, onLogout } = props;
@@ -12,8 +13,10 @@ const AddEmployee = (props) => {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
+    const [storeId, setStoreId] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role] = useState('ROLE_USER');
+    const [tableData, setTableData] = useState([]);
 
     const validatePhone = (phone) => {
         const phoneRegex = /^\d{10}$/;
@@ -29,7 +32,7 @@ const AddEmployee = (props) => {
             signup(signUpRequest)
                 .then(response => {
                     toast.success("Thêm tài khoản nhân viên thành công.");
-                  
+
                 })
                 .catch(error => {
                     toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
@@ -47,6 +50,21 @@ const AddEmployee = (props) => {
         else {
             toast.error("Mật khẩu không trùng khớp. Vui lòng nhập lại.")
         }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        getAllStore(0, 100, '').then(response => {
+            setTableData(response.content);
+
+        }).catch(
+            error => {
+                toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+            }
+        )
     }
 
     if (!authenticated) {
@@ -138,6 +156,25 @@ const AddEmployee = (props) => {
                                         name="confirmPassword"
                                         value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
 
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="storeId">
+                                        Cửa hàng
+                                    </label>
+                                    <select
+                                        className="form-select"
+                                        id="storeId"
+                                        name="storeId"
+                                        value={storeId}
+                                        onChange={(e) => setStoreId(e.target.value)}
+                                    >
+                                        <option value={0}>Chọn...</option>
+                                        {tableData.map((item) => (
+                                            <option key={item.id} value={item.id}>
+                                                {item.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <button type="submit" className="btn btn-primary">
                                     Submit

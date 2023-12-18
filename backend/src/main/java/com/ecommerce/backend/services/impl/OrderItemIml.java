@@ -95,7 +95,7 @@ public class OrderItemIml extends BaseService implements OrderItemService {
            Inventory inventory = inventoryRepository.findByProductAndStore(product, store);
            inventory.setQuantity(inventory.getQuantity() + totalProduct);
 
-     
+
 
            productRepository.save(product);
            inventoryRepository.save(inventory);

@@ -1,6 +1,7 @@
 package com.ecommerce.backend.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,9 @@ public class OrderItem {
     private Integer id;
     private Integer quantity;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "product_id")
     private Product product;

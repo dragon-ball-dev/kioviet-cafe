@@ -23,10 +23,13 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     private EntityManager em;
 
     private static final String FROM_USER = "from users u ";
+
+    private static final String INNER_JOIN = "inner join store s on u.store_id = s.id ";
     @Override
     public Page<User> searchingAccount(String keyword, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();
         strQuery.append(FROM_USER);
+        strQuery.append(INNER_JOIN);
         strQuery.append(" where 1=1 AND u.email NOT IN ('admin@gmail.com') ");
 
         Map<String, Object> params = new HashMap<>();

@@ -18,6 +18,12 @@ public class StoreController extends BaseController {
     @Autowired
     StoreService storeService;
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateStore(@PathVariable Integer id ,@RequestBody StoreRequest storeRequest) {
+        storeService.updateStore(id, storeRequest);
+        return createSuccessResponse("Update store", "Cập nhật cửa hàng thành công");
+    }
+
     @PostMapping("create-store")
     public ResponseEntity<?> createStore(@RequestBody StoreRequest storeRequest) {
         storeService.createStore(storeRequest);

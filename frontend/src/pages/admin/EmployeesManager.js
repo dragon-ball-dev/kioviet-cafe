@@ -66,7 +66,7 @@ function EmployeeManager(props) {
     const handleDeleteCategory = (id) => {
         // deleteMaintenance(id).then(response => {
         //     console.log(response.message)
-        //     toast.success("Xóa danh mục thành công")
+        //     toast.success("Xóa thể loại thành công")
         //     fetchData();
         // }).catch(
         //     error => {
@@ -102,8 +102,8 @@ function EmployeeManager(props) {
                     <div className="container-fluid p-0"></div>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Quản lý cửa hàng</h5>
-                            <h6 className="card-subtitle text-muted"> Quản lý cửa hàng của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Quản lý nhân viên</h5>
+                            <h6 className="card-subtitle text-muted"> Quản lý nhân viên của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <div id="datatables-buttons_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dt-buttons btn-group flex-wrap">
@@ -121,6 +121,7 @@ function EmployeeManager(props) {
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Địa chỉ</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Số điện thoại</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Email</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1"  >Cửa hàng quản lý</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Chế độ</th></tr>
                                     </thead>
                                     <tbody>
@@ -130,6 +131,7 @@ function EmployeeManager(props) {
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.address}</td>
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.phone}</td>
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.email}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.store?.name}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-outline-success" onClick={() => handleLockedAccount(item.id)}>
                                                         {item.isLocked === true ? "Mở" : "Khóa"}

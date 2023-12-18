@@ -23,18 +23,28 @@ const SidebarNav = () => {
         </NavLink>
       </li>
       <li className="sidebar-item">
+        <NavLink to="/stock" className="sidebar-link">
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý kho hàng</span>
+        </NavLink>
+      </li>
+      <li className="sidebar-item">
         <NavLink to="/category" className="sidebar-link">
-          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý danh mục</span>
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý thể loại</span>
         </NavLink>
       </li>
       <li className="sidebar-item">
         <NavLink to="/supply" className="sidebar-link">
-          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý nhà sản xuất</span>
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý nhà cung cấp</span>
         </NavLink>
       </li>
       <li className="sidebar-item">
         <NavLink to="/store" className="sidebar-link">
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý cửa hàng</span>
+        </NavLink>
+      </li>
+      <li className="sidebar-item">
+        <NavLink to="/customer" className="sidebar-link">
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý khách hàng</span>
         </NavLink>
       </li>
     </ul>

@@ -23,7 +23,7 @@ public class OrderController extends BaseController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderResponse orderRequest) {
         orderService.createOrder(orderRequest);
-        return createSuccessResponse("create Order", "thêm giỏ hàng thành công");
+        return createSuccessResponse("create Order", "Thêm vào giỏ hàng");
     }
     @GetMapping
     private Page<OrderDTO> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {

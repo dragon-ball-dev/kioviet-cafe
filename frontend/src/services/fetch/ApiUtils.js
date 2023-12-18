@@ -124,6 +124,18 @@ export function addCategory(category) {
     });
 }
 
+export function addStock(category) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock",
+        method: 'POST',
+        body: JSON.stringify(category)
+    });
+}
+
 export function addInvertory(productId, storeId, quatity) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -170,6 +182,18 @@ export function addStore(store) {
     });
 }
 
+export function addCustomer(customer) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/customer",
+        method: 'POST',
+        body: JSON.stringify(customer)
+    });
+}
+
 export function addOrderItem(store) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -188,7 +212,7 @@ export function payment(store) {
     }
 
     return request({
-        url: API_BASE_URL + "/payment",
+        url: API_BASE_URL + "/create_payment",
         method: 'POST',
         body: JSON.stringify(store)
     });
@@ -223,8 +247,8 @@ export function editStore(id, store) {
     }
 
     return request({
-        url: API_BASE_URL + "/store?id="+id,
-        method: 'PATCH',
+        url: API_BASE_URL + "/store/update/"+id,
+        method: 'PUT',
         body: JSON.stringify(store)
     });
 }
@@ -309,6 +333,28 @@ export function deleteStore(id) {
     });
 }
 
+export function deleteStock(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock/"+id,
+        method: 'DELETE'
+    });
+}
+
+export function deleteCustomer(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/customer/"+id,
+        method: 'DELETE'
+    });
+}
+
 export function deleteSupply(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -341,6 +387,29 @@ export function getAllProduct(pageNo, pageSize, name) {
         method: 'GET'
     });
 }
+
+export function getAllStockByStoreName(pageNo, pageSize, storeId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock/search-product-by-store?pageNo="+pageNo+"&pageSize="+pageSize+"&storeId="+storeId,
+        method: 'GET'
+    });
+}
+
+export function getAllStock(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        method: 'GET'
+    });
+}
+
 export function getAllOrderItem() {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -396,6 +465,17 @@ export function getStoreById(id) {
     });
 }
 
+export function getCustomerById(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/customer/"+id,
+        method: 'GET'
+    });
+}
+
 export function getAllStore(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -403,6 +483,17 @@ export function getAllStore(pageNo, pageSize, name) {
 
     return request({
         url: API_BASE_URL + "/store/get-all?page="+pageNo+"&pageSize="+pageSize+"&name="+name,
+        method: 'GET'
+    });
+}
+
+export function getAllCustomer(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/customer?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
         method: 'GET'
     });
 }

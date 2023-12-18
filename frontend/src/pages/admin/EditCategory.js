@@ -47,7 +47,7 @@ const EditCategory = (props) => {
         editCategory(id,categoryRequest)
             .then((response) => {
                 console.log(response.data);
-                toast.success('Sửa danh mục thành công!!');
+                toast.success('Sửa thể loại thành công!!');
             })
             .catch((error) => {
                 console.log(error);
@@ -84,17 +84,17 @@ const EditCategory = (props) => {
                 <main style={{ margin: "20px 20px 20px 20px" }}>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Sửa danh mục</h5>
-                            <h6 className="card-subtitle text-muted"> Sửa danh mục của các chuỗi cửa hàng.</h6>
+                            <h5 className="card-title">Sửa thể loại</h5>
+                            <h6 className="card-subtitle text-muted"> Sửa thể loại của các chuỗi cửa hàng.</h6>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
-                                    <label className="form-label">Tên Danh Mục</label>
+                                    <label className="form-label">Tên thể loại</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Tên danh mục"
+                                        placeholder="Tên thể loại"
                                         name="name"
                                         value={name}
                                         onChange={handleInputChange}

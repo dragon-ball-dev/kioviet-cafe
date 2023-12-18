@@ -16,10 +16,10 @@ const DashboardAdmin = (props) => {
   const [number, setNumber] = useState();
   const [price, setPrice] = useState();
 
-  useEffect(() => {
-    fetchData();
-    priceMonth();
-}, []);
+//   useEffect(() => {
+//     fetchData();
+//     priceMonth();
+// }, []);
 
 const fetchData = () => {
     getCountProduct().then(response => {
@@ -82,7 +82,7 @@ const priceMonth = () => {
       <div className="main">
         <Nav onLogout={onLogout} currentUser={currentUser} />
 
-        <main style={{ margin: "20px 20px 20px 20px" }}>
+        {/* <main style={{ margin: "20px 20px 20px 20px" }}>
           <div className="container-fluid p-0">
             <h3><strong>✨</strong> Thông kê</h3>
 
@@ -237,7 +237,7 @@ const priceMonth = () => {
               </div>
             </div>
           </div>
-        </main>
+        </main> */}
       </div>
     </div>
   )

@@ -54,7 +54,7 @@ const EditProduct = (props) => {
     const handleFileChange = (event) => {
         setProductData(prevState => ({
             ...prevState,
-            files: [...prevState.files, ...event.target.files]
+            files: [...prevState?.files, ...event.target.files]
         }));
     };
 
@@ -144,7 +144,7 @@ const EditProduct = (props) => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label className="form-label" htmlFor="locationId">Danh Mục</label>
+                                    <label className="form-label" htmlFor="locationId">thể loại</label>
                                     <select
                                         className="form-select"
                                         name="categoryId"
