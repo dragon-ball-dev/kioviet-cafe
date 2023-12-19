@@ -14,7 +14,7 @@ public class StockResponse {
 
     private String name;
 
-    private Supply supply;
+    private SupplyResponse supply;
 
 
     private StoreResponse store;

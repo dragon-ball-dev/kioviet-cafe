@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addOrderItem, getAllCategory, getAllCustomer, getAllProduct, getAllStockByStoreName, getAllStore } from "../../services/fetch/ApiUtils";
+import { addOrderItem, addToCart, getAllCategory, getAllCustomer, getAllProduct, getAllStockByStoreName, getAllStore } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
@@ -16,7 +16,7 @@ function SellProduct(props) {
         productId: 0,
         storeId: '',
         supplyId: 0,
-        quantity: 0,
+        quantity: 1,
         address: '',
         customerId: null
     });
@@ -28,7 +28,7 @@ function SellProduct(props) {
     const [itemsPerPage] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const [searchQuery, setSearchQuery] = useState(null);
-    
+
 
     useScript("../../assets/js/app.js");
 
@@ -90,9 +90,19 @@ function SellProduct(props) {
         setCurrentPage(pageNumber);
     };
 
-    const handleAddCart = (item) => {
-        const orderItemRequest = { quatity: 1, productId: item.id, storeId: productData.storeId };
-        addOrderItem(orderItemRequest).then((response) => {
+    const handleAddCart = (productId, storeId, supplyId, customerId, quantity) => {
+        const cartRequest = { productId, storeId, supplyId, customerId, quantity };
+        if(storeId === ''){
+            toast.error("Vui lòng chọn cửa hàng bản đang quản lý")
+            return;
+        }
+
+        if(customerId === null){
+            toast.error("Vui lòng chọn khách hàng.")
+            return;
+        }
+
+        addToCart(cartRequest).then((response) => {
             console.log(response.data);
             toast.success("Thêm sản phẩm vào giỏ thành công")
 
@@ -121,7 +131,7 @@ function SellProduct(props) {
     //         }} />;
     // }
 
-    const { storeId , customerId} = productData;
+    const { storeId, customerId, quantity } = productData;
 
     return (
         <>
@@ -182,7 +192,7 @@ function SellProduct(props) {
                             {tableData?.map((item) => (
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <div class="card">
-                                        <img class="card-img-top" style={{ height : "400px"}} src={`http://localhost:8080/product/get-img?id=` + item?.product.id} alt="Unsplash" />
+                                        <img class="card-img-top" style={{ height: "400px" }} src={`http://localhost:8080/product/get-img?id=` + item?.product.id} alt="Unsplash" />
                                         <div class="card-header">
                                             <h5 class="card-title mb-0">{item?.product.name}</h5>
                                         </div>
@@ -194,7 +204,7 @@ function SellProduct(props) {
                                             })}</p>
                                             <p>Nhà cung cấp: {item?.supply.name}</p>
                                             <br></br>
-                                            <a href="#" class="btn btn-primary" onClick={() => handleAddCart(item?.product)}>Thêm vào giỏ +</a>
+                                            <a href="#" class="btn btn-primary" onClick={() => handleAddCart(item?.product?.id, storeId, item?.supply.id, customerId, quantity)}>Thêm vào giỏ +</a>
                                         </div>
                                     </div>
                                 </div>

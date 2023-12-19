@@ -206,6 +206,18 @@ export function addOrderItem(store) {
     });
 }
 
+export function addToCart(cartRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/cart",
+        method: 'POST',
+        body: JSON.stringify(cartRequest)
+    });
+}
+
 export function payment(store) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -417,6 +429,17 @@ export function getAllOrderItem() {
 
     return request({
         url: API_BASE_URL + "/orderitem",
+        method: 'GET'
+    });
+}
+
+export function getAllCartByUser(pageNo, pageSize) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/cart?pageNo="+pageNo+"&pageSize="+pageSize,
         method: 'GET'
     });
 }

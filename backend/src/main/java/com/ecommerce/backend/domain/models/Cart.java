@@ -15,6 +15,7 @@ import javax.persistence.*;
 @Setter
 public class Cart {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -38,4 +39,13 @@ public class Cart {
     private User user;
 
     private Integer quantity;
+
+    public Cart(Store store, Product product, Supply supply, Customer customer, User user, Integer quantity) {
+        this.store = store;
+        this.product = product;
+        this.supply = supply;
+        this.customer = customer;
+        this.user = user;
+        this.quantity = quantity;
+    }
 }
