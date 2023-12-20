@@ -2,6 +2,7 @@ package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.domain.payload.request.CartRequest;
+import com.ecommerce.backend.domain.payload.request.UpdateCartRequest;
 import com.ecommerce.backend.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,12 @@ public class CartController extends BaseController {
     @GetMapping
     public ResponseEntity<?> getAllCart(@RequestParam Integer pageNo, @RequestParam Integer pageSize){
         return createSuccessResponse("Get all cart", cartService.getAllCartByUserId(pageNo, pageSize));
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateCart(@RequestBody UpdateCartRequest updateCartRequest){
+        cartService.updateQuantityOfProductInCart(updateCartRequest);
+        return createSuccessResponse();
     }
 
     @DeleteMapping("/{id}")

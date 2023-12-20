@@ -2,6 +2,7 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.CartRequest;
+import com.ecommerce.backend.domain.payload.request.UpdateCartRequest;
 import com.ecommerce.backend.domain.payload.response.CartResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.*;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,5 +58,17 @@ public class CartServiceImpl extends BaseService implements CartService{
     public String deleteCartById(Long id) {
         cartRepository.findById(id);
         return "Xóa sản phẩm trong giỏ hàng thành công ";
+    }
+
+    @Override
+    public void updateQuantityOfProductInCart(UpdateCartRequest updateCartRequest) {
+        List<Long> idCart = updateCartRequest.getIdCart(); // Mảng của các cartId
+        List<Integer> quantity = updateCartRequest.getQuantity(); // và mảng của các thằng sản phẩm có số lượng
+
+        for (int i = 0; i < idCart.size(); i++) { // Sử dụng vòng lặp để kiểm tra sản phẩm được cập nhật s lượng để lưu vào
+            Cart cart = this.cartRepository.findById(idCart.get(i)).orElseThrow(() -> new BadRequestException("Sản phẩm không tồn tại"));
+            cart.setQuantity(quantity.get(i)); // Thay đổi số lượng sản phẩm
+            cartRepository.save(cart); // Lưu vô db
+        }
     }
 }

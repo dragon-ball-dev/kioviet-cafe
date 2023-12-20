@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNav from './SidebarNav';
 import Nav from './Nav';
-import { addOrder, addOrderItem, deleteCartItem, getAllCategory, getAllOrderItem, getAllProduct, updateCartItemQuantity } from '../../services/fetch/ApiUtils';
+import { addOrder, addOrderItem, deleteCartItem, getAllCartByUser, getAllCategory, getAllOrderItem, getAllProduct, updateCartItemQuantity } from '../../services/fetch/ApiUtils';
 import { toast } from 'react-toastify';
 
 
@@ -11,8 +11,11 @@ function Cart(props) {
     const history = useNavigate();
 
     const [tableData, setTableData] = useState([]);
+    const [customerName, setCustomerName] = useState("");
+    const [employeeName, setEmployeeName] = useState("");
     const [totalAmount, setTotalAmount] = useState(0);
     const [store, setStore] = useState(0);
+    const [storeName, setStoreName] = useState("");
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
@@ -22,12 +25,16 @@ function Cart(props) {
     const fetchData = () => {
         // Call your API to fetch data for the cart, e.g., getCartItems()
         // Replace the following code with your API call
-        getAllOrderItem()
+        getAllCartByUser(1, 10)
             .then(response => {
                 console.log(response)
-                setTableData(response.data);
-                calculateTotalAmount(response.data);
-                setStore(response.storeId)
+                setTableData(response.data.content);
+                calculateTotalAmount(response.data.content);
+                setStore(response.storeId);
+                setEmployeeName(response.data.content[0].user.name);
+                setCustomerName(response.data.content[0].customer.name)
+                setStoreName(response.data.content[0].store.name)
+                setQuantity(response.data.content[0].quantity); // Gán giá trị số lượng vào state quantity
             })
             .catch(error => {
                 console.log(error);
@@ -42,16 +49,6 @@ function Cart(props) {
         setTotalAmount(total);
     };
 
-    const handleUpdateQuantity = (itemId, quantity, id) => {
-        updateCartItemQuantity(itemId, quantity)
-            .then(response => {
-                console.log(response.message);
-                fetchData();
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
 
     const handleDeleteItem = (itemId) => {
         deleteCartItem(itemId)
@@ -102,18 +99,12 @@ function Cart(props) {
                                 className="dataTables_wrapper dt-bootstrap5 no-footer"
                             >
                                 <div className="row">
-                                    <div className="col-sm-12 col-md-6">
-                                        <div className="dt-buttons btn-group flex-wrap">
-                                            <button
-                                                className="btn btn-secondary buttons-copy buttons-html5"
-                                                tabIndex="0"
-                                                aria-controls="datatables-buttons"
-                                                type="button"
-                                                onClick={handleRedirectCheckout}
-                                            >
-                                                Tiếp Tục Thanh Toán
-                                            </button>
-                                        </div>
+                                    <div className="col-sm-12 col-md-4">
+                                        Khách hàng: <b>{customerName}</b>
+                                        <br></br>
+                                        Nhân viên: <b>{employeeName}</b>
+                                        <br></br>
+                                        Cửa hàng: <b>{storeName}</b>
                                     </div>
                                 </div>
                                 <br></br>
@@ -158,6 +149,16 @@ function Cart(props) {
                                                         Số Lượng
                                                     </th>
                                                     <th
+                                                        className="sorting sorting_asc"
+                                                        tabIndex="0"
+                                                        aria-controls="datatables-buttons"
+                                                        rowspan="1"
+                                                        colspan="1"
+                                                        style={{ width: "224px" }}
+                                                    >
+                                                        Nhà cung cấp
+                                                    </th>
+                                                    <th
                                                         className="sorting"
                                                         tabIndex="0"
                                                         aria-controls="datatables-buttons"
@@ -200,9 +201,11 @@ function Cart(props) {
                                                                 onChange={(e) => {
                                                                     const newQuantity = e.target.value;
                                                                     setQuantity(newQuantity); // Cập nhật state quantity
-                                                                    handleUpdateQuantity(item.id, newQuantity); // Gọi hàm handleUpdateQuantity
                                                                 }}
                                                             />
+                                                        </td>
+                                                        <td className="dtr-control sorting_1" tabIndex="0">
+                                                            {item?.supply.name}
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
                                                             {(item.quantity * item.product.price).toLocaleString("en-US", {
@@ -226,14 +229,21 @@ function Cart(props) {
                                         </table>
                                     </div>
                                 </div>
-                                <div style={{ textAlign: "right", paddingTop: "20px" }}>
-                                    <h3>
-                                        Tổng Tiền :{" "}
-                                        {totalAmount.toLocaleString("en-US", {
-                                            style: "currency",
-                                            currency: "VND",
-                                        })}
-                                    </h3>
+                                <br></br>
+                                <div className="row">
+                                    <div className="col-sm-12 col-md-8">
+                                        <button type="button" class="btn btn-primary">Cập nhật</button> &nbsp;
+                                        <button type="button" class="btn btn-success">Thanh toán</button>
+                                    </div>
+                                    <div className="col-sm-12 col-md-4" style={{ textAlign: 'right' }}>
+                                        <h3>
+                                            Tổng Tiền :{" "}
+                                            {totalAmount.toLocaleString("en-US", {
+                                                style: "currency",
+                                                currency: "VND",
+                                            })}
+                                        </h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
