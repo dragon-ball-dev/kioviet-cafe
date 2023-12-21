@@ -26,6 +26,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference
+    @JsonIgnore
     private List<SupplyProduct> supplyProduct;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -34,20 +35,18 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<ProductMedia> productMedia;
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    @JsonManagedReference
     private List<Inventory> inventory;
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    @JsonManagedReference
     private List<OrderItem> orderItem;
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    @JsonManagedReference
     private List<Cart> cart;
 }

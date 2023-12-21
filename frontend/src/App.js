@@ -37,6 +37,7 @@ import AddCustomer from './pages/admin/AddCustomer';
 import EditCustomer from './pages/admin/EditCustomer';
 import StockManager from './pages/admin/StockManager';
 import AddStock from './pages/admin/AddStock';
+import OrderManager from './pages/admin/OrderManagement';
 
 
 function App() {
@@ -120,6 +121,7 @@ function App() {
           <Route exact path="/sell-product" element={<SellProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/cart" element={<Cart authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/report" element={<ReportManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/order" element={<OrderManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
           <Route exact path="/add-store" element={<AddStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/add-customer" element={<AddCustomer authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />

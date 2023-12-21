@@ -81,13 +81,10 @@ public class OrderIml extends BaseService implements OrderService {
     }
 
     @Override
-    public Page<OrderResponse> getAllOrderByUserId(RoleName roleName,  Integer pageNo,  Integer pageSize) {
+    public Page<OrderResponse> getAllOrderByUserId(Long userId, Integer storeId, Integer supplyId,  Integer pageNo,  Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        if (roleName.equals(RoleName.ROLE_ADMIN)) {
-            return mapperUtils.convertToResponsePage(orderRepository.findAll(pageable), OrderResponse.class, pageable);
-        }
-        return mapperUtils.convertToResponsePage(orderRepository.findAllByUser(getUser(), pageable), OrderResponse.class, pageable);
+        return mapperUtils.convertToResponsePage(orderRepository.searchingByUserId(userId, storeId, supplyId, pageable), OrderResponse.class, pageable);
     }
 
 

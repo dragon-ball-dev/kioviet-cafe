@@ -22,16 +22,14 @@ public class Supply {
     private String address;
 
     @OneToMany(mappedBy = "supply")
-    @JsonManagedReference(value = "supply")
+    @JsonIgnore
     List<SupplyProduct> supplyProduct;
 
     @OneToMany(mappedBy = "supply")
     @JsonIgnore
-    @JsonManagedReference
     private List<Cart> cart;
 
     @OneToMany(mappedBy = "supply")
     @JsonIgnore
-    @JsonManagedReference
     private List<OrderItem> orderItems;
 }

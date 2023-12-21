@@ -25,7 +25,7 @@ public class OrderResponse {
 
     private Integer totalPrice;
 
-    private List<OrderItemResponse> orderItem;
+    private List<OrderItem> orderItem;
 
     private StoreResponse store;
 

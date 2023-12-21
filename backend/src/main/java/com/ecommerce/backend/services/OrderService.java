@@ -13,5 +13,5 @@ public interface OrderService {
 
     void createOrder(OrderRequest orderRequest);
 
-    Page<OrderResponse> getAllOrderByUserId(RoleName roleName,  Integer pageNo,  Integer pageSize);
+    Page<OrderResponse> getAllOrderByUserId(Long userId, Integer storeId, Integer supplyId,  Integer pageNo,  Integer pageSize);
 }

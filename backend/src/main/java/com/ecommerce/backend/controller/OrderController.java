@@ -18,14 +18,18 @@ public class OrderController extends BaseController {
     OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest){
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
         orderService.createOrder(orderRequest);
         return createSuccessResponse("Create order", orderRequest);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllOrderByUserId(@RequestParam RoleName roleName, @RequestParam Integer pageNo, @RequestParam Integer pageSize){
-        return createSuccessResponse("Get all order", orderService.getAllOrderByUserId(roleName,pageNo, pageSize));
+    public ResponseEntity<?> getAllOrderByUserId(@RequestParam(required = false) Long userId,
+                                                 @RequestParam(required = false) Integer storeId,
+                                                 @RequestParam(required = false) Integer supplyId,
+                                                 @RequestParam Integer pageNo,
+                                                 @RequestParam Integer pageSize) {
+        return createSuccessResponse("Get all order", orderService.getAllOrderByUserId(userId, storeId, supplyId, pageNo, pageSize));
     }
 }
 

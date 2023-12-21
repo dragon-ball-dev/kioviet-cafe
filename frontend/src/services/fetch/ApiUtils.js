@@ -414,6 +414,17 @@ export function getAllProduct(pageNo, pageSize, name) {
     });
 }
 
+export function getAllOrder(pageNo, pageSize, userId, storeId, supplyId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/order?pageNo="+pageNo+"&pageSize="+pageSize+"&userId="+userId+"&storeId="+storeId+"&supplyId="+supplyId,
+        method: 'GET'
+    });
+}
+
 export function getAllStockByStoreName(pageNo, pageSize, storeId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

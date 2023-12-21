@@ -74,7 +74,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     @Override
     public URI registerAccount(SignUpRequest signUpRequest) throws MessagingException, IOException {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email đã được sử dụng!!");
         }
 
@@ -85,9 +85,9 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
             throw new BadRequestException("Mật khẩu không khớp. Vui lòng thử lại.");
         }
-        
+
         if (!signUpRequest.getEmail().endsWith("@gmail.com")) {
-        	throw new BadRequestException("Định dạng email không hợp lệ. Vui lòng thử lại.");
+            throw new BadRequestException("Định dạng email không hợp lệ. Vui lòng thử lại.");
         }
 
         // Creating user's account
@@ -100,14 +100,9 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setIsLocked(false);
         user.setIsConfirmed(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
+        Store store = storeRepository.findById(signUpRequest.getStoreId()).get();
+        user.setStore(store);
 
-        if (signUpRequest.getStoreId() == null) {
-            user.setStore(null);
-        } else {
-            Store store = storeRepository.findById(signUpRequest.getStoreId()).get();
-            user.setStore(store);
-        }
 
         if (RoleName.ROLE_USER.equals(signUpRequest.getRole())) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -117,7 +112,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
             user.setRoles(Collections.singleton(userRole));
             result = userRepository.save(user);
 
-        } else if(RoleName.ROLE_RENTALER.equals(signUpRequest.getRole())){
+        } else if (RoleName.ROLE_RENTALER.equals(signUpRequest.getRole())) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_RENTALER)
                     .orElseThrow(() -> new IllegalArgumentException("User Role not set."));
             user.setAddress(signUpRequest.getAddress());
@@ -136,6 +131,10 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     @Override
     public String login(LoginRequest loginRequest) {
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new BadRequestException("Tài khoản không tồn tại"));
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new BadRequestException("Mật khẩu không chính xác");
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -232,7 +231,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
     public Page<User> getAllAccount(String keyword, Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        return userRepository.searchingAccount(keyword,pageable);
+        return userRepository.searchingAccount(keyword, pageable);
     }
 
     public void sendEmailFromTemplate(String email) throws MessagingException, IOException {
@@ -253,7 +252,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         mailSender.send(message);
     }
 
-    public void sendEmailConfirmed(String email,String name) throws MessagingException, IOException {
+    public void sendEmailConfirmed(String email, String name) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
         message.setFrom(new InternetAddress("khanhhn.hoang@gmail.com"));
         message.setRecipients(MimeMessage.RecipientType.TO, email);

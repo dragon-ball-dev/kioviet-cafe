@@ -24,7 +24,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
     private static final String FROM_USER = "from users u ";
 
-    private static final String INNER_JOIN = "inner join store s on u.store_id = s.id ";
+    private static final String INNER_JOIN = "left join store s on u.store_id = s.id ";
     @Override
     public Page<User> searchingAccount(String keyword, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();

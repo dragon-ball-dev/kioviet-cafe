@@ -24,7 +24,6 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    @JsonIgnore
     private Product product;
 
     @ManyToOne
@@ -34,7 +33,6 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "supply_id")
-    @JsonIgnore
     private Supply supply;
 
     public OrderItem(Integer quantity, Product product, Order order, Supply supply) {
