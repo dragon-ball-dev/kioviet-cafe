@@ -159,14 +159,15 @@ export function editCategory(id,category) {
     });
 }
 
-export function  updateCartItemQuantity(id,quantity) {
+export function  updateCartItemQuantity(cart) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/orderitem?id="+id+"&quantity="+quantity,
-        method: 'PATCH',
+        url: API_BASE_URL + "/cart",
+        method: 'PUT',
+        body: JSON.stringify(cart)
     });
 }
 
@@ -252,6 +253,19 @@ export function addOrder(store) {
         body: JSON.stringify(store)
     });
 }
+
+export function createPayment(store) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/create-payment",
+        method: 'POST',
+        body: JSON.stringify(store)
+    });
+}
+
 
 export function editStore(id, store) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {

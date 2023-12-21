@@ -29,4 +29,9 @@ public class Supply {
     @JsonIgnore
     @JsonManagedReference
     private List<Cart> cart;
+
+    @OneToMany(mappedBy = "supply")
+    @JsonIgnore
+    @JsonManagedReference
+    private List<OrderItem> orderItems;
 }

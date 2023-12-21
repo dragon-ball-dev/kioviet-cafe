@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CartServiceImpl extends BaseService implements CartService{
+public class CartServiceImpl extends BaseService implements CartService {
 
     private final CartRepository cartRepository;
     private final StoreRepository storeRepository;
@@ -29,6 +29,7 @@ public class CartServiceImpl extends BaseService implements CartService{
     private final SupplyRepository supplyRepository;
     private final UserRepository userRepository;
     private final MapperUtils mapper;
+
     @Override
     public CartRequest addToCart(CartRequest cartRequest) {
         Store store = storeRepository.findById(cartRequest.getStoreId()).orElseThrow(() -> new BadRequestException("Cửa hàng không tồn tại"));
@@ -36,12 +37,12 @@ public class CartServiceImpl extends BaseService implements CartService{
         Supply supply = supplyRepository.findById(cartRequest.getSupplyId()).orElseThrow(() -> new BadRequestException("Nhà cung cấp không tồn tại"));
         Customer customer = customerRepository.findById(cartRequest.getCustomerId()).orElseThrow(() -> new BadRequestException("Khách hàng không tồn tại"));
         User user = userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Tài khoản không tồn tại."));
-        Optional<Cart> cart = cartRepository.findByCustomerAndStoreAndUserAndSupply(customer,store,user,supply);
+        Optional<Cart> cart = cartRepository.findByCustomerAndStoreAndUserAndSupply(customer, store, user, supply);
         if (cart.isPresent()) {
             cart.get().setQuantity(cart.get().getQuantity() + 1);
             cartRepository.save(cart.get());
         } else {
-            Cart cartNew = new Cart(store,product,supply,customer,user, cartRequest.getQuantity());
+            Cart cartNew = new Cart(store, product, supply, customer, user, cartRequest.getQuantity());
             cartRepository.save(cartNew);
         }
         return cartRequest;
@@ -62,13 +63,9 @@ public class CartServiceImpl extends BaseService implements CartService{
 
     @Override
     public void updateQuantityOfProductInCart(UpdateCartRequest updateCartRequest) {
-        List<Long> idCart = updateCartRequest.getIdCart(); // Mảng của các cartId
-        List<Integer> quantity = updateCartRequest.getQuantity(); // và mảng của các thằng sản phẩm có số lượng
-
-        for (int i = 0; i < idCart.size(); i++) { // Sử dụng vòng lặp để kiểm tra sản phẩm được cập nhật s lượng để lưu vào
-            Cart cart = this.cartRepository.findById(idCart.get(i)).orElseThrow(() -> new BadRequestException("Sản phẩm không tồn tại"));
-            cart.setQuantity(quantity.get(i)); // Thay đổi số lượng sản phẩm
-            cartRepository.save(cart); // Lưu vô db
-        }
+        Cart cart = this.cartRepository.findById(updateCartRequest.getIdCart()).orElseThrow(() -> new BadRequestException("Sản phẩm không tồn tại"));
+        cart.setQuantity(updateCartRequest.getQuantity()); // Thay đổi số lượng sản phẩm
+        cartRepository.save(cart); // Lưu vô db
     }
+
 }

@@ -1,18 +1,20 @@
 package com.ecommerce.backend.services.impl;
 
-import com.ecommerce.backend.domain.models.Order;
-import com.ecommerce.backend.domain.models.Store;
-import com.ecommerce.backend.domain.models.User;
+import com.ecommerce.backend.domain.enums.RoleName;
+import com.ecommerce.backend.domain.models.*;
 import com.ecommerce.backend.domain.payload.request.OrderDTO;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
+import com.ecommerce.backend.domain.payload.response.CartResponse;
 import com.ecommerce.backend.domain.payload.response.OrderResponse;
+import com.ecommerce.backend.domain.payload.response.ProductResponse;
 import com.ecommerce.backend.domain.payload.response.TotalStoreResponse;
 import com.ecommerce.backend.exception.BadRequestException;
-import com.ecommerce.backend.repository.OrderRepository;
-import com.ecommerce.backend.repository.StoreRepository;
-import com.ecommerce.backend.repository.UserRepository;
+import com.ecommerce.backend.repository.*;
+import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.OrderService;
 import com.ecommerce.backend.utils.MapperUtils;
+import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,74 +25,74 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderIml implements OrderService {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    StoreRepository storeRepository;
-    @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    MapperUtils mapperUtils;
-    @Autowired
-    private ModelMapper modelMapper;
+@RequiredArgsConstructor
+public class OrderIml extends BaseService implements OrderService {
+
+    private final UserRepository userRepository;
+
+    private final CartRepository cartRepository;
+
+    private final ProductRepository productRepository;
+
+    private final CustomerRepository customerRepository;
+
+    private final SupplyRepository supplyRepository;
+
+    private final StockRepository stockRepository;
+
+    private final StoreRepository storeRepository;
+
+    private final OrderRepository orderRepository;
+
+    private final OrderItemRepository orderItemRepository;
+
+    private final MapperUtils mapperUtils;
+
     @Override
-    public void createOrder(OrderResponse orderRequest) {
-//        User user = userRepository.findById(orderRequest.getUserId()).get();
-//        User employee = userRepository.findById(orderRequest.getEmployeeId()).get();
-//        Store store = storeRepository.findById(orderRequest.getStoreId()).get();
-//        if (user != null && employee != null && store != null) {
-            Order order = new Order();
-//            order.setOrderDate(orderRequest.getOrderDate());
-            order.setTotalPrice(1);
-//            order.setUser(user);
-//            order.setUser_employees(employee);
-        Store store = storeRepository.findById(orderRequest.getStoreId()).get();
-        if (store == null) {
-            throw new BadRequestException("Error");
+    @Transactional
+    public void createOrder(OrderRequest orderRequest) {
+        Customer customer = customerRepository.findById(orderRequest.getCustomerId()).orElseThrow(() -> new BadRequestException("Khách hàng không tồn tại"));
+        Store store = storeRepository.findById(orderRequest.getStoreId()).orElseThrow(() -> new BadRequestException("Không tồn tại cửa hàng"));
+        Order order = new Order(LocalDateTime.now(),orderRequest.getTotalPrice(), store, getUser(), customer, orderRequest.getPaymentId());
+        orderRepository.save(order);
+
+        for (CartResponse cart : orderRequest.getCartResponses()) {
+            Product product = productRepository.findById(cart.getProduct().getId()).orElseThrow(() -> new BadRequestException("Sản phẩm không tồn tại"));
+            Supply supply = supplyRepository.findById(cart.getSupply().getId()).orElseThrow(() -> new BadRequestException("Nhà cung cấp không tồn tại"));
+            OrderItem orderItem = new OrderItem(cart.getQuantity(), product, order, supply);
+            orderItemRepository.save(orderItem);
+
+            Stock stock = stockRepository.findByProductAndSupply(product, supply);
+            if (stock.getQuantity() < product.getTotalQuantity()) {
+                throw new BadRequestException("Số lượng sản phẩm trong kho đang sắp hết");
+            } else {
+                stock.setQuantity(stock.getQuantity() - cart.getQuantity());
+                stockRepository.save(stock);
+            }
         }
-            order.setStore(store);
-            orderRepository.save(order);
-//        } else {
-//            throw new BadRequestException("không tìm thấy tên khách hàng, nhân viên, cửa hàng");
-//        }
+
+        cartRepository.deleteByUser(getUser());
     }
 
     @Override
-    public Page<OrderDTO> getAll(Integer page, Integer pageSize) {
+    public Page<OrderResponse> getAllOrderByUserId(RoleName roleName,  Integer pageNo,  Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Order> orderPage = orderRepository.findAll(pageable);
-        List<OrderDTO> orderDTOList = orderPage.getContent().stream().map(this::convertToOrderDTO).collect(Collectors.toList());
-        return new PageImpl<>(orderDTOList, pageable, orderPage.getTotalElements());
+        if (roleName.equals(RoleName.ROLE_ADMIN)) {
+            return mapperUtils.convertToResponsePage(orderRepository.findAll(pageable), OrderResponse.class, pageable);
+        }
+        return mapperUtils.convertToResponsePage(orderRepository.findAllByUser(getUser(), pageable), OrderResponse.class, pageable);
     }
 
-    @Override
-    public Integer totalPriceInMonth(Integer year, Integer month) {
-        Integer total = orderRepository.totalPriceInMonth(year, month);
-        System.out.println(total);
-        return total;
-    }
 
-    @Override
-    public Page<TotalStoreResponse> calculateTotalPriceStore(Integer page, Integer pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-
-        Page<Store> stores = storeRepository.findAll(pageable);
-
-        return stores.map(store -> {
-            Integer total = orderRepository.calculateTotalPriceStore(store.getId());
-            return new TotalStoreResponse(store.getId(), store.getName(), total);
-        });
-    }
-
-    private OrderDTO convertToOrderDTO(Order order) {
-        OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
-        orderDTO.setStoreName(order.getStore().getName());
-        return orderDTO;
+    private User getUser(){
+        return userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Người dùng không tồn tại."));
     }
 }
 

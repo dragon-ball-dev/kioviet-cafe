@@ -28,6 +28,12 @@ public class Customer {
     @JsonManagedReference
     private List<Cart> cart;
 
+
+    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Order> orders;
+
     public Customer(String name, String phone, String address, Integer discount) {
         this.name = name;
         this.phone = phone;

@@ -84,8 +84,4 @@ public class User extends DateAudit {
 	@JsonManagedReference
 	List<Order> order;
 
-	@OneToMany(mappedBy = "user_employees")
-	@JsonIgnore
-	@JsonManagedReference
-	List<Order> orderEmployees;
 }

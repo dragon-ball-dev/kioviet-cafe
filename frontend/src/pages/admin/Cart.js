@@ -2,74 +2,105 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNav from './SidebarNav';
 import Nav from './Nav';
-import { addOrder, addOrderItem, deleteCartItem, getAllCartByUser, getAllCategory, getAllOrderItem, getAllProduct, updateCartItemQuantity } from '../../services/fetch/ApiUtils';
+import { addOrder, addOrderItem, createPayment, deleteCartItem, getAllCartByUser, getAllCategory, getAllOrderItem, getAllProduct, updateCartItemQuantity } from '../../services/fetch/ApiUtils';
 import { toast } from 'react-toastify';
+
 
 
 function Cart(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
     const history = useNavigate();
-
-    const [tableData, setTableData] = useState([]);
     const [customerName, setCustomerName] = useState("");
+    const [customerId, setCustomerId] = useState("");
     const [employeeName, setEmployeeName] = useState("");
     const [totalAmount, setTotalAmount] = useState(0);
-    const [store, setStore] = useState(0);
     const [storeName, setStoreName] = useState("");
-    const [quantity, setQuantity] = useState(1);
+    const [storeId, setStoreId] = useState("");
+    const [supplyId, setSupplyId] = useState("");
+    const [tableData, setTableData] = useState([]);
+    const [paymentMethod, setPaymentMethod] = useState("");
 
     useEffect(() => {
         fetchData();
     }, []);
+    useEffect(() => {
+
+        calculateTotalPrice();
+    }, [tableData]);
 
     const fetchData = () => {
-        // Call your API to fetch data for the cart, e.g., getCartItems()
-        // Replace the following code with your API call
+        // Gọi API để lấy dữ liệu cho giỏ hàng, ví dụ: getCartItems()
+        // Thay thế đoạn mã dưới đây với cuộc gọi API của bạn
         getAllCartByUser(1, 10)
-            .then(response => {
-                console.log(response)
-                setTableData(response.data.content);
-                calculateTotalAmount(response.data.content);
-                setStore(response.storeId);
+            .then((response) => {
+                console.log(response);
                 setEmployeeName(response.data.content[0].user.name);
                 setCustomerName(response.data.content[0].customer.name)
+                setCustomerId(response.data.content[0].customer.id)
                 setStoreName(response.data.content[0].store.name)
-                setQuantity(response.data.content[0].quantity); // Gán giá trị số lượng vào state quantity
+                setStoreId(response.data.content[0].store.id)
+                setSupplyId(response.data.content[0].supply.id)
+                setTableData(response.data.content);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     };
 
-    const calculateTotalAmount = (data) => {
+    const calculateTotalPrice = () => {
         let total = 0;
-        data.forEach((item) => {
-            total += item?.product?.price * item?.quantity;
+        tableData.forEach((item) => {
+            total += item.product.price * item.quantity;
         });
         setTotalAmount(total);
     };
 
+    const handleUpdateQuantity = (itemId, newQuantity) => {
+        updateCartItemQuantity({ idCart: itemId, quantity: newQuantity })
+        const updatedTableData = tableData.map((item) => {
+            if (item.id === itemId) {
+                return {
+                    ...item,
+                    quantity: newQuantity,
+                };
+            }
+            return item;
+        });
+        setTableData(updatedTableData);
+    };
 
     const handleDeleteItem = (itemId) => {
-        deleteCartItem(itemId)
-            .then(response => {
-                console.log(response.message);
-                fetchData();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        // Xóa sản phẩm khỏi giỏ hàng
+        const updatedTableData = tableData.filter((item) => item.id !== itemId);
+        setTableData(updatedTableData);
     };
 
     const handleRedirectCheckout = () => {
-        const orderRequest = { totalPrice: totalAmount, storeId: 1 };
-        addOrder(orderRequest).then((response) => {
-            console.log(response.data);
-        })
-            .catch((error) => {
-                console.log(error.error);
+        // Chuyển hướng đến trang thanh toán
+        const orderRequest = { customerId, totalPrice: totalAmount, storeId, supplyId, paymentId: paymentMethod, cartResponses: tableData, userId: 1 };
+
+        if(paymentMethod === "" ) {
+            toast.error("Vui lòng chọn phương thức thanh toán")
+        }
+        if (paymentMethod === 1 || paymentMethod === 3) {
+            addOrder(orderRequest)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.log(error.error);
+                });
+            history('/sell-product');
+        } else {
+            createPayment(orderRequest)
+                .then((response) => {
+                    console.log(response.data);
+                    window.location.href = response.url; // Chuyển hướng đến URL nhận được từ phản hồi
+                })
+                .catch((error) => {
+                    console.log(error.error);
             });
-        history('/checkout');
+        }
     };
 
     return (
@@ -118,109 +149,56 @@ function Cart(props) {
                                         >
                                             <thead>
                                                 <tr>
-                                                    <th
-                                                        className="sorting sorting_asc"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "224px" }}
-                                                    >
+                                                    <th className="sorting sorting_asc" tabIndex="0" style={{ width: "224px" }}>
                                                         Tên sản phẩm
                                                     </th>
-                                                    <th
-                                                        className="sorting sorting_asc"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "224px" }}
-                                                    >
+                                                    <th className="sorting sorting_asc" tabIndex="0" style={{ width: "224px" }}>
                                                         Giá
                                                     </th>
-                                                    <th
-                                                        className="sorting sorting_asc"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "224px" }}
-                                                    >
+                                                    <th className="sorting sorting_asc" tabIndex="0" style={{ width: "224px" }}>
                                                         Số Lượng
                                                     </th>
-                                                    <th
-                                                        className="sorting sorting_asc"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "224px" }}
-                                                    >
+                                                    <th className="sorting sorting_asc" tabIndex="0" style={{ width: "224px" }}>
                                                         Nhà cung cấp
                                                     </th>
-                                                    <th
-                                                        className="sorting"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "175px" }}
-                                                    >
+                                                    <th className="sorting" tabIndex="0" style={{ width: "175px" }}>
                                                         Thành Tiền
                                                     </th>
-                                                    <th
-                                                        className="sorting"
-                                                        tabIndex="0"
-                                                        aria-controls="datatables-buttons"
-                                                        rowspan="1"
-                                                        colspan="1"
-                                                        style={{ width: "75px" }}
-                                                    >
-
-                                                    </th>
+                                                    <th className="sorting" tabIndex="0" style={{ width: "75px" }}></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {tableData?.map((item) => (
-                                                    <tr className="odd">
+                                                    <tr className="odd" key={item.id}>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
                                                             {item?.product?.name}
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
-                                                            {item?.product?.price.toLocaleString("en-US", {
+                                                            {item?.product?.price?.toLocaleString("en-US", {
                                                                 style: "currency",
-                                                                currency: "VND",
+                                                                currency: "USD",
                                                             })}
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
                                                             <input
                                                                 type="number"
-                                                                className="form-control rounded shadow-sm"
-                                                                name='quantity'
-                                                                value={quantity}
-                                                                onChange={(e) => {
-                                                                    const newQuantity = e.target.value;
-                                                                    setQuantity(newQuantity); // Cập nhật state quantity
-                                                                }}
+                                                                min="1"
+                                                                value={item.quantity}
+                                                                onChange={(e) => handleUpdateQuantity(item.id, parseInt(e.target.value))}
                                                             />
                                                         </td>
                                                         <td className="dtr-control sorting_1" tabIndex="0">
                                                             {item?.supply.name}
                                                         </td>
-                                                        <td className="dtr-control sorting_1" tabIndex="0">
-                                                            {(item.quantity * item.product.price).toLocaleString("en-US", {
+                                                        <td className="dtr-control" tabIndex="0">
+                                                            {(item.product.price * item.quantity).toLocaleString("en-US", {
                                                                 style: "currency",
-                                                                currency: "VND",
+                                                                currency: "USD",
                                                             })}
                                                         </td>
                                                         <td>
-                                                            &nbsp;
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-danger"
-                                                                onClick={() => handleDeleteItem(item.id)}
-                                                            >
-                                                                Xoá
+                                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteItem(item.id)}>
+                                                                Xóa
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -231,9 +209,24 @@ function Cart(props) {
                                 </div>
                                 <br></br>
                                 <div className="row">
+                                    <div className="col-sm-12 col-md-6">
+                                        <select
+                                            className="form-select form-select-sm"
+                                            aria-label=".form-select-sm example"
+                                            value={paymentMethod}
+                                            onChange={(e) => setPaymentMethod(e.target.value)}
+                                        >
+                                            <option value="">--Chọn phương thanh toán--</option>
+                                            <option value="1">Tiền mặt</option>
+                                            <option value="2">Thanh toán Vnpay</option>
+                                            <option value="3">Quẹt thẻ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <div className="row">
                                     <div className="col-sm-12 col-md-8">
-                                        <button type="button" class="btn btn-primary">Cập nhật</button> &nbsp;
-                                        <button type="button" class="btn btn-success">Thanh toán</button>
+                                        <button type="button" class="btn btn-success" onClick={handleRedirectCheckout}>Thanh toán</button>
                                     </div>
                                     <div className="col-sm-12 col-md-4" style={{ textAlign: 'right' }}>
                                         <h3>

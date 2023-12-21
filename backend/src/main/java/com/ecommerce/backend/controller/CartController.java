@@ -29,7 +29,7 @@ public class CartController extends BaseController {
     @PutMapping
     public ResponseEntity<?> updateCart(@RequestBody UpdateCartRequest updateCartRequest){
         cartService.updateQuantityOfProductInCart(updateCartRequest);
-        return createSuccessResponse();
+        return createSuccessResponse("Update quantity product", "Cập nhật số lượng sản phẩm thành công");
     }
 
     @DeleteMapping("/{id}")

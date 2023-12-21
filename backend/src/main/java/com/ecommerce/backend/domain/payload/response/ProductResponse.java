@@ -16,5 +16,6 @@ public class ProductResponse {
     private Integer totalQuantity;
     private CategoryResponse category;
     private ProductMedia productMedia;
+    private SupplyResponse supplyResponse;
     private List<StoreResponse> storeResponses;
 }

@@ -139,9 +139,7 @@ public class StoreIml implements StoreService {
         return storePage.map(store -> {
             StoreProductRatio storeProductRatio = new StoreProductRatio();
             storeProductRatio.setStoreName(store.getName());
-            List<OrderItem> orderItems = findByStoreId(store.getId());
-            Map<String, Double> productRatio =calculateProductRatios(orderItems);
-            storeProductRatio.setProductRatio(productRatio);
+
 
             return storeProductRatio;
         });
@@ -191,10 +189,5 @@ public class StoreIml implements StoreService {
 
         return productRatios;
 
-    }
-
-    public List<OrderItem> findByStoreId(Integer storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new MyFileNotFoundException("khong tim thay cua hang"));
-        return store.getOrderItem();
     }
 }

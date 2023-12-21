@@ -29,10 +29,6 @@ public class Store {
     @JsonManagedReference
     private List<Inventory> inventory;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "store")
-    @JsonManagedReference
-    List<OrderItem> orderItem;
 
     @JsonIgnore
     @OneToMany(mappedBy = "store")

@@ -2,19 +2,18 @@ package com.ecommerce.backend.controller;
 
 
 import com.ecommerce.backend.config.VnpayConfig;
-import com.ecommerce.backend.domain.payload.request.PaymentRequest;
+import com.ecommerce.backend.domain.payload.request.OrderRequest;
 import com.ecommerce.backend.domain.payload.request.PaymentRestDTO;
 import com.ecommerce.backend.services.BaseService;
+import com.ecommerce.backend.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -29,13 +28,15 @@ public class VNPAYController extends BaseService {
     @Autowired
     private JavaMailSender mailSender;
 
-	@PostMapping("/create_payment")
+    private final OrderService orderService;
+
+	@PostMapping("/create-payment")
 	@CrossOrigin
 	public ResponseEntity<?> createPayment(
-            @RequestBody PaymentRequest paymentRequest
+            @RequestBody OrderRequest orderRequest
                                           ) throws UnsupportedEncodingException {
 
-		String vnp_Version = "2.1.0";
+        String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
         String bankCode = "NCB";
@@ -46,16 +47,22 @@ public class VNPAYController extends BaseService {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(paymentRequest.getAmount()*100));
+        vnp_Params.put("vnp_Amount", String.valueOf(orderRequest.getTotalPrice()*100));
         vnp_Params.put("vnp_CurrCode", "VND");
 
-        vnp_Params.put("vnp_BankCode", bankCode);
+        if (bankCode != null && !bankCode.isEmpty()) {
+            vnp_Params.put("vnp_BankCode", bankCode);
+        }
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
         String locate = "vn";
-        vnp_Params.put("vnp_Locale", locate);
+        if (locate != null && !locate.isEmpty()) {
+            vnp_Params.put("vnp_Locale", locate);
+        } else {
+            vnp_Params.put("vnp_Locale", "vn");
+        }
         vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_Returnurl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
@@ -63,11 +70,11 @@ public class VNPAYController extends BaseService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        
+
         cld.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-        
+
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
@@ -75,16 +82,16 @@ public class VNPAYController extends BaseService {
         Iterator itr = fieldNames.iterator();
         while (itr.hasNext()) {
             String fieldName = (String) itr.next();
-            String fieldValue = vnp_Params.get(fieldName);
-            if ((fieldValue != null) && (!fieldValue.isEmpty())) {
+            String fieldValue = (String) vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 //Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
-                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
                 //Build query
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
                 query.append('=');
-                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
                 if (itr.hasNext()) {
                     query.append('&');
                     hashData.append('&');
@@ -97,7 +104,9 @@ public class VNPAYController extends BaseService {
 
 
 
-        String paymentUrl = VnpayConfig.vnp_PayUrl + "/"+  queryUrl;
+        String paymentUrl = VnpayConfig.vnp_PayUrl + "?"+  queryUrl;
+
+        orderService.createOrder(orderRequest);
 
 
         PaymentRestDTO paymentRestDTO = new PaymentRestDTO();

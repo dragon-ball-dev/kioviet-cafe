@@ -1,17 +1,21 @@
 package com.ecommerce.backend.domain.payload.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
+
+
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemResponse {
+
     private Integer id;
+
     private Integer quantity;
+
     private ProductResponse product;
-    private Boolean isEnable;
-    private Long userId;
-    private Long storeId;
 }

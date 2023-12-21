@@ -1,16 +1,13 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.controller.base.BaseController;
-import com.ecommerce.backend.domain.payload.request.OrderDTO;
+
+import com.ecommerce.backend.domain.enums.RoleName;
 import com.ecommerce.backend.domain.payload.request.OrderRequest;
-import com.ecommerce.backend.domain.payload.response.OrderResponse;
-import com.ecommerce.backend.domain.payload.response.TotalStoreResponse;
 import com.ecommerce.backend.services.OrderService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,23 +18,14 @@ public class OrderController extends BaseController {
     OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderResponse orderRequest) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest){
         orderService.createOrder(orderRequest);
-        return createSuccessResponse("create Order", "Thêm vào giỏ hàng");
-    }
-    @GetMapping
-    private Page<OrderDTO> getAll(@RequestParam Integer page, @RequestParam Integer pageSize) {
-        return orderService.getAll(page, pageSize);
-    }
-    @GetMapping("pricemonth")
-    public Integer totalPriceMonth(@RequestParam Integer year, @RequestParam Integer month) {
-        return orderService.totalPriceInMonth(year, month);
+        return createSuccessResponse("Create order", orderRequest);
     }
 
-    @GetMapping("/price-store")
-    public Page<TotalStoreResponse> getTotalPriceStore(@RequestParam Integer page,
-                                                       @RequestParam Integer pageSize) {
-        return orderService.calculateTotalPriceStore(page, pageSize);
+    @GetMapping
+    public ResponseEntity<?> getAllOrderByUserId(@RequestParam RoleName roleName, @RequestParam Integer pageNo, @RequestParam Integer pageSize){
+        return createSuccessResponse("Get all order", orderService.getAllOrderByUserId(roleName,pageNo, pageSize));
     }
 }
 
