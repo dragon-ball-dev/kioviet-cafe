@@ -31,5 +31,20 @@ public class OrderController extends BaseController {
                                                  @RequestParam Integer pageSize) {
         return createSuccessResponse("Get all order", orderService.getAllOrderByUserId(userId, storeId, supplyId, pageNo, pageSize));
     }
+
+    @GetMapping("/invoice")
+    public ResponseEntity<?> getAllOrderNotYetPrinter(@RequestParam(required = false) Long userId,
+                                                 @RequestParam(required = false) Boolean isPrinter,
+                                                 @RequestParam Integer pageNo,
+                                                 @RequestParam Integer pageSize) {
+        return createSuccessResponse("Get all order", orderService.getAllOrderNotYetPrinter(userId, isPrinter, pageNo, pageSize));
+    }
+
+    @PutMapping("/update-status-printer")
+    public ResponseEntity<?> updatePrinter() {
+        orderService.updateStatusPrinter();
+        return createSuccessResponse("Update status");
+    }
+
 }
 

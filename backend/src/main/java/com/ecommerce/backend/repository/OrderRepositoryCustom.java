@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface OrderRepositoryCustom {
     Page<Order> searchingByUserId(Long userId, Integer storeId, Integer supplyId, Pageable pageable);
+
+    Page<Order> searchingByUserId(Long userId, Boolean isPrinter, Pageable pageable);
 }

@@ -90,7 +90,7 @@ function Cart(props) {
                 .catch((error) => {
                     console.log(error.error);
                 });
-            history('/sell-product');
+                window.open('/invoice', '_blank');
         } else {
             createPayment(orderRequest)
                 .then((response) => {

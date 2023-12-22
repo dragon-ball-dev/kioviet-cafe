@@ -48,4 +48,27 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         return BaseRepository.getPagedNativeQuery(em,selectQuery, strCountQuery, params, pageable, Order.class);
     }
+
+    @Override
+    public Page<Order> searchingByUserId(Long userId, Boolean isPrinter, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append( " from kiotviet.`order` o  left join order_item oi on o.id = oi.order_id  where 1=1 ");
+
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(userId)) {
+            strQuery.append(" and o.user_id = :userId  ");
+            params.put("userId", userId);
+        }
+
+        if (Objects.nonNull(isPrinter)) {
+            strQuery.append("  and o.is_printer = :isPrinter   ");
+            params.put("isPrinter", 0);
+        }
+
+        String selectQuery = "select * " + strQuery + " group by oi.order_id   ";
+        String strCountQuery = "SELECT COUNT(DISTINCT o.id)" + strQuery + " group by oi.order_id ";
+
+
+        return BaseRepository.getPagedNativeQuery(em,selectQuery, strCountQuery, params, pageable, Order.class);
+    }
 }

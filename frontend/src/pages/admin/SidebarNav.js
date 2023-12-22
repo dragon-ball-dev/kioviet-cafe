@@ -13,7 +13,7 @@ const SidebarNav = () => {
         </NavLink>
       </li>
       <li className="sidebar-item">
-        <NavLink to="/dashboard" className="sidebar-link">
+        <NavLink to="/report" className="sidebar-link">
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Báo cáo</span>
         </NavLink>
       </li>

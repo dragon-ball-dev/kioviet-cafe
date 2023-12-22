@@ -171,6 +171,17 @@ export function  updateCartItemQuantity(cart) {
     });
 }
 
+export function  updateStatusPrinter() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/order/update-status-printer",
+        method: 'PUT'
+    });
+}
+
 export function addStore(store) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -421,6 +432,17 @@ export function getAllOrder(pageNo, pageSize, userId, storeId, supplyId) {
 
     return request({
         url: API_BASE_URL + "/order?pageNo="+pageNo+"&pageSize="+pageSize+"&userId="+userId+"&storeId="+storeId+"&supplyId="+supplyId,
+        method: 'GET'
+    });
+}
+
+export function getAllOrderIsPrinter(pageNo, pageSize, userId, isPrinter) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/order/invoice?pageNo="+pageNo+"&pageSize="+pageSize+"&userId="+userId+"&isPrinter="+isPrinter,
         method: 'GET'
     });
 }

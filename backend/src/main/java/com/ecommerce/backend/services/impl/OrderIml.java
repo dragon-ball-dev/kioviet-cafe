@@ -87,6 +87,20 @@ public class OrderIml extends BaseService implements OrderService {
         return mapperUtils.convertToResponsePage(orderRepository.searchingByUserId(userId, storeId, supplyId, pageable), OrderResponse.class, pageable);
     }
 
+    @Override
+    public Page<OrderResponse> getAllOrderNotYetPrinter(Long userId, Boolean isPrinter, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return mapperUtils.convertToResponsePage(orderRepository.searchingByUserId(getUserId(), false, pageable), OrderResponse.class, pageable);
+    }
+
+    @Override
+    public void updateStatusPrinter() {
+        Order order = orderRepository.findByUserAndIsPrinter(getUserId()).orElseThrow(() -> new BadRequestException("Không tồn tại đơn hàng"));
+        order.setIsPrinter(true);
+        orderRepository.save(order);
+    }
+
 
     private User getUser(){
         return userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Người dùng không tồn tại."));

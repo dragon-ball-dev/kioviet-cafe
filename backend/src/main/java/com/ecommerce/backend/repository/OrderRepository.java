@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer>, OrderRepositoryCustom {
     @Query(value = "select sum(o.total_price) from orderbill o " +
@@ -19,4 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, OrderRep
     Integer calculateTotalPriceStore(@Param("storeId") Integer storeId);
 
     Page<Order> findAllByUser(User user, Pageable pageable);
+
+    @Query(value = "select * from kiotviet.`order` o where o.user_id = :userId and o.is_printer = 0", nativeQuery = true)
+    Optional<Order> findByUserAndIsPrinter(Long userId);
 }

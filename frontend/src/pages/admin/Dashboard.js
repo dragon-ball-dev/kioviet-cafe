@@ -16,50 +16,46 @@ const DashboardAdmin = (props) => {
   const [number, setNumber] = useState();
   const [price, setPrice] = useState();
 
-//   useEffect(() => {
-//     fetchData();
-//     priceMonth();
-// }, []);
+  //   useEffect(() => {
+  //     fetchData();
+  //     priceMonth();
+  // }, []);
 
-const fetchData = () => {
+  const fetchData = () => {
     getCountProduct().then(response => {
-        setNumber(response.count)
+      setNumber(response.count)
 
     }).catch(
-        error => {
-            toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
-        }
+      error => {
+        toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+      }
     )
 
-}
+  }
 
-const priceMonth = () => {
-  getPriceMonth().then(response => {
-    setPrice(response)
+  const priceMonth = () => {
+    getPriceMonth().then(response => {
+      setPrice(response)
 
-}).catch(
-    error => {
+    }).catch(
+      error => {
         toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
-    }
-)
-}
+      }
+    )
+  }
 
   useScript("../../assets/js/app.js");
-    if (!authenticated) {
-      return <Navigate
-        to={{
-          pathname: "/",
-          state: { from: location }
-        }} />;
-    }
+  if (!authenticated) {
+    return <Navigate
+      to={{
+        pathname: "/",
+        state: { from: location }
+      }} />;
+  }
 
-  const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490,1890, 2390, 3490];
+  const uData = [0, 0, 0, 0, 0, 0, 200000];
+  const pData = [0, 0, 0, 0, 0, 0, 0];
   const xLabels = [
-    'Tháng 1',
-    'Tháng 2',
-    'Tháng 3',
-    'Tháng 4',
-    'Tháng 5',
     'Tháng 6',
     'Tháng 7',
     'Tháng 8',
@@ -82,9 +78,10 @@ const priceMonth = () => {
       <div className="main">
         <Nav onLogout={onLogout} currentUser={currentUser} />
 
-        {/* <main style={{ margin: "20px 20px 20px 20px" }}>
-          <div className="container-fluid p-0">
-            <h3><strong>✨</strong> Thông kê</h3>
+        <main style={{ margin: "20px 20px 20px 20px" }}>
+          <div class="container-fluid p-0">
+
+            <h1 class="h3 mb-3"><strong>Phân tích </strong> Dashboard</h1>
 
             <div class="row">
               <div class="col-xl-6 col-xxl-5 d-flex">
@@ -95,32 +92,38 @@ const priceMonth = () => {
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Cửa Hàng</h5>
+                              <h5 class="card-title">Khách hàng</h5>
                             </div>
 
                             <div class="col-auto">
                               <div class="stat text-primary">
-                                <i class="align-middle" data-feather="truck"></i>
                               </div>
                             </div>
                           </div>
                           <h1 class="mt-1 mb-3">2</h1>
+                          <div class="mb-0">
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
+                            <span class="text-muted">Tuần trước</span>
+                          </div>
                         </div>
                       </div>
                       <div class="card">
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Nhân Viên</h5>
+                              <h5 class="card-title">Sản phẩm</h5>
                             </div>
 
                             <div class="col-auto">
                               <div class="stat text-primary">
-                                <i class="align-middle" data-feather="users"></i>
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">7</h1>
+                          <h1 class="mt-1 mb-3">8</h1>
+                          <div class="mb-0">
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
+                            <span class="text-muted">Tuần trước</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -129,32 +132,38 @@ const priceMonth = () => {
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Sản Phẩm</h5>
+                              <h5 class="card-title">Doanh số</h5>
                             </div>
 
                             <div class="col-auto">
                               <div class="stat text-primary">
-                                <i class="align-middle" data-feather="dollar-sign"></i>
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">{number}</h1>
+                          <h1 class="mt-1 mb-3">200,000 đ</h1>
+                          <div class="mb-0">
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
+                            <span class="text-muted">Tuần trước</span>
+                          </div>
                         </div>
                       </div>
                       <div class="card">
                         <div class="card-body">
                           <div class="row">
                             <div class="col mt-0">
-                              <h5 class="card-title">Doanh Thu</h5>
+                              <h5 class="card-title">Đơn bán</h5>
                             </div>
 
                             <div class="col-auto">
                               <div class="stat text-primary">
-                                <i class="align-middle" data-feather="shopping-cart"></i>
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">{price} VNĐ</h1>
+                          <h1 class="mt-1 mb-3">3</h1>
+                          <div class="mb-0">
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
+                            <span class="text-muted">Tuần trước</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -166,68 +175,61 @@ const priceMonth = () => {
                 <div class="card flex-fill w-100">
                   <div class="card-header">
 
-                    <h5 class="card-title mb-0">Doanh Thu (Tháng)</h5>
+                    <h5 class="card-title mb-0">Doanh số theo các tháng</h5>
                   </div>
                   <div class="card-body py-3">
-
-                    <BarChart
-                      xAxis={[
-                        {
-                          id: 'barCategories',
-                          data: xLabels,
-                          scaleType: 'band',
-                        },
-                      ]}
-                      series={[
-                        {
-                          data:  uData,
-                        },
-                      ]}
-                      width={800}
-                      height={300}
-                    />
-
+                    <div class="chart chart-sm">
+                      <BarChart
+                        width={500}
+                        height={300}
+                        series={[
+                          { data: pData, label: 'Cầu Giấy', id: 'pvId' },
+                          { data: uData, label: 'Hoàn Kiếm', id: 'uvId' },
+                        ]}
+                        xAxis={[{ data: xLabels, scaleType: 'band' }]}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-12 col-md-6 ">
-                <div class="card">
+              <div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">
+                <div class="card flex-fill w-100">
                   <div class="card-header">
 
-                    <h5 class="card-title mb-0">Sản phẩm bán nhiều</h5>
+                    <h5 class="card-title mb-0"></h5>
                   </div>
                   <div class="card-body d-flex">
-                    <div class="align-self-center">
-                      <PieChart
-                        series={[
-                          {
-                            data: [
-                              { id: 0, value: 10, label: 'Cafe Nâu Đa' },
-                              { id: 1, value: 15, label: 'Cafe Đen' },
-                              { id: 2, value: 20, label: 'Cafe Sữa' },
-                            ],
-                          },
-                        ]}
-                        width={400}
-                        height={200}
-                      />
+                    <div class="align-self-center w-100">
+                      <div class="py-3">
+                        <div class="chart chart-xs">
+                          <PieChart
+                            series={[
+                              {
+                                data: [
+                                  { id: 0, value: 1, label: 'Cầu Giấy' },
+                                  { id: 1, value: 1, label: 'Hoàn Kiếm' },
+
+                                ],
+                              },
+                            ]}
+                            width={400}
+                            height={200}
+                          />                        
+                          </div>
+                      </div>
 
                       <table class="table mb-0">
                         <tbody>
                           <tr>
-                            <td>Cafe Nâu Đa</td>
-                            <td class="text-end">10</td>
+                            <td>Cửa hàng khu vực Cầu Giấy</td>
+                            <td class="text-end">1 (Nhân viên)</td>
                           </tr>
                           <tr>
-                            <td>Cafe Đen</td>
-                            <td class="text-end">15</td>
-                          </tr>
-                          <tr>
-                            <td>Cafe Sữa</td>
-                            <td class="text-end">20</td>
+                            <td>Cửa hàng khu vực Hoàn Kiếm</td>
+                            <td class="text-end">1 (Nhân viên)</td>
                           </tr>
                         </tbody>
                       </table>
@@ -235,11 +237,49 @@ const priceMonth = () => {
                   </div>
                 </div>
               </div>
+              <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
+                <div class="card flex-fill w-100">
+                  <div class="card-header">
+
+                    <h5 class="card-title mb-0">Khách hàng</h5>
+                  </div>
+                  <div class="card-body px-4">
+                    <LineChart
+                      xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                      series={[
+                        {
+                          data: [0, 0, 0, 1, 1, 0],
+                          area: true,
+                        },
+                      ]}
+                      width={1000}
+                      height={400}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-xxl-3 d-flex order-1 order-xxl-1">
+                <div class="card flex-fill">
+                  <div class="card-header">
+
+                    <h5 class="card-title mb-0">Lịch làm việc</h5>
+                  </div>
+                  <div class="card-body d-flex">
+                    <div class="align-self-center w-100">
+                      <div class="chart">
+                        <iframe src="https://calendar.google.com/calendar/embed?title=Put%20your%20Title%20here&amp;showCalendars=0&amp;height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;src=8d3fc8l9g04n7r9im45fsn08ak%40group.calendar.google.com&amp;color=%238D6F47&amp;ctz=America%2FNew_York" width="440" height="400" frameborder="0" scrolling="no"></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
-        </main> */}
+        </main>
       </div>
     </div>
+
   )
 }
 

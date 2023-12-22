@@ -47,6 +47,9 @@ public class Order {
 
     private Long paymentId;
 
+    @JoinColumn(name = "is_printer")
+    private Boolean isPrinter;
+
     public Order(LocalDateTime orderDate, Integer totalPrice, Store store, User user, Customer customer, Long paymentId) {
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
@@ -54,5 +57,6 @@ public class Order {
         this.user = user;
         this.customer = customer;
         this.paymentId = paymentId;
+        this.isPrinter = false;
     }
 }
