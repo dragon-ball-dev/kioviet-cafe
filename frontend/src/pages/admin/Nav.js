@@ -19,8 +19,8 @@ const Nav = (props) => {
             <button type="button" className="btn btn-info"><a className="dropdown-item" href="/cart">Giỏ Hàng</a></button>&nbsp;
             <button type="button" className="btn btn-info"><a className="dropdown-item" onClick={onLogout}>Đăng xuất</a></button>
 
-            <div className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-              <img src="../../assets/img/avatars/avatar-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span className="text-dark">{currentUser === null ? "" : currentUser.name}</span>
+            <div className="nav-link d-none d-sm-inline-block" >
+              <img src="../../assets/img/avatars/avatar-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" /><a href="/profile" style={{textDecoration: "none"}}><span className="text-dark">{currentUser === null ? "" : currentUser.name}</span></a> 
             </div>
           </li>
         </ul>

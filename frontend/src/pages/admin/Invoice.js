@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import useScript from '../../components/useScripts';
 
 const Invoice = (props) => {
-    const { authenticated, roleName, location, currentUser, onLogout } = props;
+    const { authenticated, role, location, currentUser, onLogout } = props;
 
     const componentRef = useRef();
 
@@ -57,7 +57,7 @@ const Invoice = (props) => {
                     <a className="sidebar-brand" href="index.html">
                         <span className="align-middle">Kioviet Cafe</span>
                     </a>
-                    <SidebarNav />
+                    <SidebarNav role={role} />
                 </div>
             </nav>
 

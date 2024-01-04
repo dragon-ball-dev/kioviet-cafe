@@ -12,7 +12,7 @@ const EditCustomer = (props) => {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [discount, setDiscount] = useState('');
-    const { authenticated, currentUser, onLogout } = props;
+    const { authenticated, currentUser, onLogout , role} = props;
 
     useEffect(() => {
         fetchData();
@@ -78,7 +78,7 @@ const EditCustomer = (props) => {
                     <a className="sidebar-brand" href="index.html">
                         <span className="align-middle">Kioviet Cafe</span>
                     </a>
-                    <SidebarNav />
+                    <SidebarNav role={role} />
                 </div>
             </nav>
 

@@ -7,7 +7,7 @@ import Nav from './Nav';
 import { useEffect } from 'react';
 
 const AddEmployee = (props) => {
-    const { authenticated, currentUser, location, onLogout } = props;
+    const { authenticated, currentUser, role, onLogout } = props;
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -15,7 +15,7 @@ const AddEmployee = (props) => {
     const [address, setAddress] = useState('');
     const [storeId, setStoreId] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role] = useState('ROLE_USER');
+    const [roleEnum] = useState('ROLE_USER');
     const [tableData, setTableData] = useState([]);
 
     const validatePhone = (phone) => {
@@ -28,7 +28,7 @@ const AddEmployee = (props) => {
         event.preventDefault();
         console.log("Number", confirmPassword.length);
         if (password === confirmPassword) {
-            const signUpRequest = { name, email, phone, address, password, confirmPassword, role };
+            const signUpRequest = { name, email, phone, address, password, confirmPassword, roleEnum };
             signup(signUpRequest)
                 .then(response => {
                     toast.success("Thêm tài khoản nhân viên thành công.");
@@ -87,7 +87,7 @@ const AddEmployee = (props) => {
                     <a className="sidebar-brand" href="index.html">
                         <span className="align-middle">Kioviet Cafe</span>
                     </a>
-                    <SidebarNav />
+                    <SidebarNav role={role} />
                 </div>
             </nav>
 

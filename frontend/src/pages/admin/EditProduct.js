@@ -49,7 +49,7 @@ const EditProduct = (props) => {
     }
 
 
-    const { authenticated, currentUser, location, onLogout } = props;
+    const { authenticated, currentUser, role, onLogout } = props;
 
     const handleFileChange = (event) => {
         setProductData(prevState => ({
@@ -117,7 +117,7 @@ const EditProduct = (props) => {
                     <a className="sidebar-brand" href="index.html">
                         <span className="align-middle">Kioviet Cafe</span>
                     </a>
-                    <SidebarNav />
+                    <SidebarNav role={role} />
                 </div>
             </nav>
 

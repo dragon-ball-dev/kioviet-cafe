@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 const DashboardAdmin = (props) => {
-  const { authenticated, roleName, location, currentUser, onLogout } = props;
+  const { authenticated, role, location, currentUser, onLogout } = props;
 
 
   const [number, setNumber] = useState();
@@ -71,7 +71,7 @@ const DashboardAdmin = (props) => {
           <a className="sidebar-brand" href="index.html">
             <span className="align-middle">Kioviet Cafe</span>
           </a>
-          <SidebarNav />
+          <SidebarNav role={role} />
         </div>
       </nav>
 
@@ -198,8 +198,6 @@ const DashboardAdmin = (props) => {
               <div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">
                 <div class="card flex-fill w-100">
                   <div class="card-header">
-
-                    <h5 class="card-title mb-0"></h5>
                   </div>
                   <div class="card-body d-flex">
                     <div class="align-self-center w-100">
@@ -234,27 +232,6 @@ const DashboardAdmin = (props) => {
                         </tbody>
                       </table>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
-                <div class="card flex-fill w-100">
-                  <div class="card-header">
-
-                    <h5 class="card-title mb-0">Khách hàng</h5>
-                  </div>
-                  <div class="card-body px-4">
-                    <LineChart
-                      xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                      series={[
-                        {
-                          data: [0, 0, 0, 1, 1, 0],
-                          area: true,
-                        },
-                      ]}
-                      width={1000}
-                      height={400}
-                    />
                   </div>
                 </div>
               </div>

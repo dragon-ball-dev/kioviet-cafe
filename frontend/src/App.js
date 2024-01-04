@@ -40,6 +40,8 @@ import AddStock from './pages/admin/AddStock';
 import OrderManager from './pages/admin/OrderManagement';
 import Report from './pages/admin/Report';
 import Invoice from './pages/admin/Invoice';
+import MoveStock from './pages/admin/MoveStock';
+import Profile from './pages/admin/Profile';
 
 
 function App() {
@@ -112,37 +114,40 @@ function App() {
           <Route exact path="/forgot-password" element={<ForgotPassword authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/reset-password/:email" element={<ResetPassword />} />
           <Route exact path="/success-comfirmed/:email" element={<SuccessConfirmed />} />
-          <Route exact path="/dashboard" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/category" element={<CategoryManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/store" element={<StoreManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/customer" element={<CustomerManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/supply" element={<SupplyManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/product" element={<ProductManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/stock" element={<StockManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/employee" element={<EmployeeManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/sell-product" element={<SellProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/cart" element={<Cart authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/report" element={<Report authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/order" element={<OrderManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/invoice" element={<Invoice authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/dashboard" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} role={role}/>} />
+          <Route exact path="/category" element={<CategoryManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} role={role}/>} />
+          <Route exact path="/store" element={<StoreManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} role={role}/>} />
+          <Route exact path="/customer" element={<CustomerManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} role={role}/>} />
+          <Route exact path="/supply" element={<SupplyManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} role={role}/>} />
+          <Route exact path="/product" element={<ProductManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} role={role}/>} />
+          <Route exact path="/stock" element={<StockManager authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
+          <Route exact path="/employee" element={<EmployeeManager authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/sell-product" element={<SellProduct authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/cart" element={<Cart authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/report" element={<Report authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/order" element={<OrderManager authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/invoice" element={<Invoice authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/move-stock" element={<MoveStock authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
+          <Route exact path="/profile" element={<Profile authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
 
-          <Route exact path="/add-store" element={<AddStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-customer" element={<AddCustomer authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-category" element={<AddCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-supply" element={<AddSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-product" element={<AddProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-employee" element={<AddEmployee authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-inventory/:id" element={<AddInventory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/add-stock" element={<AddStock authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
 
-          <Route exact path="/edit-customer/:id" element={<EditCustomer authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/edit-store/:id" element={<EditStore authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/edit-category/:id" element={<EditCategory authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/edit-supply/:id" element={<EditSupply authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/edit-product/:id" element={<EditProduct authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-store" element={<AddStore authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-customer" element={<AddCustomer authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-category" element={<AddCategory authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-supply" element={<AddSupply authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-product" element={<AddProduct authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-employee" element={<AddEmployee authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-inventory/:id" element={<AddInventory authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/add-stock" element={<AddStock authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
 
-          <Route exact path="/checkout" element={<Checkout authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/checkout-on" element={<CheckoutOn authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/edit-customer/:id" element={<EditCustomer authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/edit-store/:id" element={<EditStore authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/edit-category/:id" element={<EditCategory authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/edit-supply/:id" element={<EditSupply authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/edit-product/:id" element={<EditProduct authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+
+          <Route exact path="/checkout" element={<Checkout authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/checkout-on" element={<CheckoutOn authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
 
         </Routes>
       </Router>

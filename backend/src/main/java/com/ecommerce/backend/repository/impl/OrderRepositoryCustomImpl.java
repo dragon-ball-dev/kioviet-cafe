@@ -35,15 +35,15 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         if (Objects.nonNull(storeId)) {
             strQuery.append("  and o.store_id = :storeId   ");
-            params.put("store", storeId);
+            params.put("storeId", storeId);
         }
 
         if (Objects.nonNull(supplyId)) {
             strQuery.append(" and oi.supply_id = :supplyId  ");
             params.put("supplyId", supplyId);
         }
-        String selectQuery = "select * " + strQuery + " group by oi.supply_id ";
-        String strCountQuery = "SELECT COUNT(DISTINCT o.id)" + strQuery + " group by oi.supply_id ";
+        String selectQuery = "select * " + strQuery + " group by o.id  ";
+        String strCountQuery = "SELECT COUNT(DISTINCT o.id)" + strQuery + " group by o.id  ";
 
 
         return BaseRepository.getPagedNativeQuery(em,selectQuery, strCountQuery, params, pageable, Order.class);

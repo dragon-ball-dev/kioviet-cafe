@@ -10,7 +10,7 @@ const AddSupply = (props) => {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [email, setEmail] = useState('');
-    const { authenticated, currentUser, onLogout } = props;
+    const { authenticated, currentUser, onLogout , role} = props;
 
     const handleInputChange = (event) => {
         const target = event.target;
@@ -69,7 +69,7 @@ const AddSupply = (props) => {
                     <a className="sidebar-brand" href="index.html">
                         <span className="align-middle">Kioviet Cafe</span>
                     </a>
-                    <SidebarNav />
+                    <SidebarNav role={role} />
                 </div>
             </nav>
 

@@ -1,6 +1,7 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.controller.base.BaseController;
+import com.ecommerce.backend.domain.payload.request.ConvertStockRequest;
 import com.ecommerce.backend.domain.payload.request.StockRequest;
 import com.ecommerce.backend.services.StockService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,11 @@ public class StockController extends BaseController {
     @GetMapping("/search-product-by-store")
     private ResponseEntity<?> getAllStockByStoreName(@RequestParam Integer pageNo, @RequestParam Integer pageSize, Long storeId){
         return createSuccessResponse(stockService.getAllStockByStore(pageNo, pageSize, storeId));
+    }
+
+    @PostMapping("/convert-stock")
+    private ResponseEntity<?> convertToStock(@RequestBody ConvertStockRequest convertStockRequest){
+        return createSuccessResponse(stockService.convertToStock(convertStockRequest));
     }
 
 }

@@ -2,6 +2,8 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.models.Product;
 import com.ecommerce.backend.domain.models.Stock;
+import com.ecommerce.backend.domain.payload.request.ConvertStockRequest;
+import com.ecommerce.backend.domain.payload.request.ProductSentRequest;
 import com.ecommerce.backend.domain.payload.request.StockRequest;
 import com.ecommerce.backend.domain.payload.response.StockResponse;
 import com.ecommerce.backend.exception.BadRequestException;
@@ -17,6 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -74,6 +79,54 @@ public class StockServiceImpl implements StockService {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         return mapperUtils.convertToResponsePage(stockRepository.searchingStockByStoreId(storeId, pageable), StockResponse.class, pageable);
+    }
+
+    @Override
+    public String convertToStock(ConvertStockRequest convertStockRequest) {
+        if (convertStockRequest.getStoreSentId().equals(convertStockRequest.getStoreReceiverId())) {
+            throw new BadRequestException("Vui lòng chọn kho của cửa hàng bạn muốn chuyển!");
+        }
+        List<Stock> stockSent = stockRepository.findAllByStore(storeRepository.findById(convertStockRequest.getStoreSentId()).get());
+        List<Stock> stockReceiver = stockRepository.findAllByStore(storeRepository.findById(convertStockRequest.getStoreReceiverId()).get());
+
+        List<ProductSentRequest> productSent = convertStockRequest.getProductSent();
+
+        // Tạo Map chứa thông tin Stock với khóa là productId
+        Map<Integer, Stock> stockSentMap = new HashMap<>();
+        for (Stock stock : stockSent) {
+            stockSentMap.put(stock.getProduct().getId(), stock);
+        }
+
+        Map<Integer, Stock> stockReceiverMap = new HashMap<>();
+        for (Stock stock : stockReceiver) {
+            stockReceiverMap.put(stock.getProduct().getId(), stock);
+        }
+
+        // Trừ số lượng trong stockSent và cộng số lượng trong stockReceiver dựa trên danh sách productSent
+        for (ProductSentRequest product : productSent) {
+            int productId = product.getProductId();
+            double quantity = product.getQuantity();
+
+            // Trừ số lượng trong stockSent
+            Stock sentStock = stockSentMap.get(productId);
+            if (sentStock != null) {
+                double currentQuantity = sentStock.getQuantity();
+                sentStock.setQuantity(currentQuantity - quantity); // Trừ đi quantity
+            }
+
+            // Cộng số lượng trong stockReceiver
+            Stock receiverStock = stockReceiverMap.get(productId);
+            if (receiverStock != null) {
+                double currentQuantity = receiverStock.getQuantity();
+                receiverStock.setQuantity(currentQuantity + quantity); // Cộng thêm quantity
+            }
+        }
+
+        // Lưu các thay đổi vào cơ sở dữ liệu (nếu cần)
+        stockRepository.saveAll(stockSentMap.values());
+        stockRepository.saveAll(stockReceiverMap.values());
+
+        return "Xác nhận chuyển hàng thành công, bên kho sẽ nhận được email.";
     }
 
 

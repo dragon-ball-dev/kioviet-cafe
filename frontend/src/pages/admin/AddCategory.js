@@ -58,7 +58,7 @@ const AddCategory = (props) => {
                 <a className="sidebar-brand" href="index.html">
                     <span className="align-middle">Kioviet Cafe</span>
                 </a>
-                <SidebarNav />
+                <SidebarNav role={role} />
             </div>
         </nav>
 

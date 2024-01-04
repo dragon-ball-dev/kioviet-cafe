@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 const Report = (props) => {
-  const { authenticated, roleName, location, currentUser, onLogout } = props;
+  const { authenticated, role, location, currentUser, onLogout } = props;
 
 
   const [number, setNumber] = useState();
@@ -75,7 +75,7 @@ const Report = (props) => {
           <a className="sidebar-brand" href="index.html">
             <span className="align-middle">Kioviet Cafe</span>
           </a>
-          <SidebarNav />
+          <SidebarNav role={role} />
         </div>
       </nav>
 
@@ -171,30 +171,12 @@ const Report = (props) => {
 										<tbody>
 											<tr>
 												<th scope="row">1</th>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-											</tr>
-											<tr>
-												<th scope="row">2</th>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-											</tr>
-											<tr>
-												<th scope="row">3</th>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
-												<td>Cell</td>
+												<td>Hoàng Thùy Linh</td>
+												<td>0987654321</td>
+												<td>8 (h)</td>
+												<td>200.000 (VND)</td>
+												<td>1</td>
+												<td>{1*200000} (VND)</td>
 											</tr>
 										</tbody>
 									</table>
