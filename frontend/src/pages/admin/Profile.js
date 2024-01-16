@@ -76,7 +76,7 @@ const Profile = (props) => {
             <nav id="sidebar" className="sidebar js-sidebar">
                 <div className="sidebar-content js-simplebar">
                     <a className="sidebar-brand" href="index.html">
-                        <span className="align-middle">RENTALER PRO</span>
+                        <span className="align-middle">Kioviet Cafe</span>
                     </a>
                     <SidebarNav role={role}/>
                 </div>

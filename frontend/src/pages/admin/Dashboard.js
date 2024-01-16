@@ -53,16 +53,16 @@ const DashboardAdmin = (props) => {
       }} />;
   }
 
-  const uData = [0, 0, 0, 0, 0, 0, 200000];
-  const pData = [0, 0, 0, 0, 0, 0, 0];
+  const uData = [0, 0, 0, 0, 0, 200000, 100000];
+  const pData = [0, 0, 0, 0, 0, 0, 100000];
   const xLabels = [
-    'Tháng 6',
-    'Tháng 7',
-    'Tháng 8',
-    'Tháng 9',
-    'Tháng 10',
-    'Tháng 11',
-    'Tháng 12',
+    'T7',
+    'T8',
+    'T9',
+    'T10',
+    'T11',
+    'T12',
+    'T1',
   ];
   return (
     <div className="wrapper">
@@ -140,7 +140,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">200,000 đ</h1>
+                          <h1 class="mt-1 mb-3">400,000 đ</h1>
                           <div class="mb-0">
                             <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
                             <span class="text-muted">Tuần trước</span>
@@ -244,7 +244,7 @@ const DashboardAdmin = (props) => {
                   <div class="card-body d-flex">
                     <div class="align-self-center w-100">
                       <div class="chart">
-                        <iframe src="https://calendar.google.com/calendar/embed?title=Put%20your%20Title%20here&amp;showCalendars=0&amp;height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;src=8d3fc8l9g04n7r9im45fsn08ak%40group.calendar.google.com&amp;color=%238D6F47&amp;ctz=America%2FNew_York" width="440" height="400" frameborder="0" scrolling="no"></iframe>
+                      <iframe src="https://calendar.google.com/calendar/embed?src=classroom114340045882805619780%40group.calendar.google.com&ctz=Asia%2FHo_Chi_Minh" style={{border:"solid 1px #777"}} width="440" height="600" frameborder="0" scrolling="no"></iframe>
                       </div>
                     </div>
                   </div>

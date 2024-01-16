@@ -217,9 +217,9 @@ function Cart(props) {
                                             onChange={(e) => setPaymentMethod(e.target.value)}
                                         >
                                             <option value="">--Chọn phương thanh toán--</option>
-                                            <option value="1">Tiền mặt</option>
-                                            <option value="2">Thanh toán Vnpay</option>
-                                            <option value="3">Quẹt thẻ</option>
+                                            <option value={1}>Tiền mặt</option>
+                                            <option value={2}>Thanh toán Vnpay</option>
+                                            <option value={3}>Quẹt thẻ</option>
                                         </select>
                                     </div>
                                 </div>

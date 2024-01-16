@@ -65,6 +65,11 @@ const SidebarNav = ({ role }) => {
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý khách hàng</span>
         </NavLink>
       </li>
+      <li className="sidebar-item">
+        <NavLink to="/chat" className="sidebar-link">
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Tin nhắn (4)</span>
+        </NavLink>
+      </li>
     </ul>
   )
 }

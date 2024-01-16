@@ -42,6 +42,7 @@ import Report from './pages/admin/Report';
 import Invoice from './pages/admin/Invoice';
 import MoveStock from './pages/admin/MoveStock';
 import Profile from './pages/admin/Profile';
+import Chat from './pages/admin/Chat';
 
 
 function App() {
@@ -129,6 +130,7 @@ function App() {
           <Route exact path="/invoice" element={<Invoice authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           <Route exact path="/move-stock" element={<MoveStock authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
           <Route exact path="/profile" element={<Profile authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
+          <Route exact path="/chat" element={<Chat authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
 
 
           <Route exact path="/add-store" element={<AddStore authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
