@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addOrderItem, addToCart, getAllCategory, getAllCustomer, getAllProduct, getAllStockByStoreName, getAllStore } from "../../services/fetch/ApiUtils";
+import { addOrderItem, addToCart, getAllCategory, getAllCustomer, getAllProduct, getAllStockByStoreName, getAllStore, moveStock } from "../../services/fetch/ApiUtils";
 import SidebarNav from "./SidebarNav";
 import Nav from "./Nav";
 import Pagination from "./Pagnation";
 import useScript from "../../components/useScripts";
+
+
 
 function MoveStock(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -85,7 +87,7 @@ function MoveStock(props) {
 
     const [selectedProducts, setSelectedProducts] = useState([]);
 
-    const handleAddToCart = (productId, productName,supplyName, storeId, supplyId, customerId, quantity) => {
+    const handleAddToCart = (productId, productName, supplyName, storeId, supplyId, customerId, quantity) => {
         // Kiểm tra xem sản phẩm đã được chọn trước đó chưa
         const existingProduct = selectedProducts.find(product => product.productId === productId && product.supplyId === supplyId);
 
@@ -121,9 +123,12 @@ function MoveStock(props) {
     const handleQuantityChange = (productId, newQuantity) => {
         const updatedProducts = selectedProducts.map(product => {
             if (product.productId === productId) {
+                // Kiểm tra và chỉnh sửa giá trị số lượng mới
+                const updatedQuantity = newQuantity !== product.quantity ? newQuantity : product.quantity;
+
                 return {
                     ...product,
-                    quantity: newQuantity,
+                    quantity: updatedQuantity,
                 };
             }
             return product;
@@ -141,6 +146,19 @@ function MoveStock(props) {
         }));
     };
 
+    const handleMoveStock = () => {
+        if (productData.storeId === productData.storeReceiverId) {
+            toast.error("Hai kho hàng bị trùng lặp. Vui lòng chọn kho hàng khác nhau.")
+        } else {
+            moveStock({ storeSentId: productData.storeId, storeReceiverId: productData.storeReceiverId, productSent: selectedProducts }).then(response => {
+                toast.success("Chuyển kho hàng thành công")
+            }).catch(
+                error => {
+                    toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+                }
+            )
+        }
+    }
 
     // if (!props.authenticated) {
     //     return <Navigate
@@ -242,7 +260,7 @@ function MoveStock(props) {
                                                     <td className="dtr-control sorting_1" tabindex="0">{item?.product.totalQuantity}</td>
                                                     <td className="dtr-control sorting_1" tabindex="0">{item?.supply.name}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-primary" onClick={() => handleAddToCart(item?.product?.id,item?.product.name,item?.supply.name, storeId, item?.supply.id, customerId, quantity)}>Chọn sản phẩm +</a>
+                                                        <a href="#" class="btn btn-primary" onClick={() => handleAddToCart(item?.product?.id, item?.product.name, item?.supply.name, storeId, item?.supply.id, customerId, quantity)}>Chọn sản phẩm +</a>
                                                     </td>
 
                                                 </tr>
@@ -261,8 +279,8 @@ function MoveStock(props) {
                     </div>
 
                     {/* Hiển thị danh sách sản phẩm đã chọn */}
-                    <h5 style={{ marginLeft: "20px"}}><b>Sản phẩm đã chọn:</b></h5>
-                    <table id="datatables-buttons" className="table table-striped dataTable no-footer dtr-inline" style={{ margin: "20px 20px 20px 20px"}} aria-describedby="datatables-buttons_info">
+                    <h5 style={{ marginLeft: "20px" }}><b>Sản phẩm đã chọn:</b></h5>
+                    <table id="datatables-buttons" className="table table-striped dataTable no-footer dtr-inline" style={{ margin: "20px 20px 20px 20px" }} aria-describedby="datatables-buttons_info">
                         <thead>
                             <tr>
                                 <th>Tên sản phẩm</th>
@@ -286,8 +304,8 @@ function MoveStock(props) {
                             ))}
                         </tbody>
                     </table>
-                    <button class="btn btn-primary" style={{ margin: "20px 20px 20px 20px"}} onClick={""}>Xác nhận chuyển kho</button>
-                    
+                    <button class="btn btn-primary" style={{ margin: "20px 20px 20px 20px" }} onClick={handleMoveStock}>Xác nhận chuyển kho</button>
+
                 </div>
             </div>
         </>

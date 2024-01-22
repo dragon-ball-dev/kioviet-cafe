@@ -302,6 +302,18 @@ export function addSupply(supply) {
     });
 }
 
+export function moveStock(stock) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock/convert-stock",
+        method: 'POST',
+        body: JSON.stringify(stock)
+    });
+}
+
 export function editSupply(id,supply) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
