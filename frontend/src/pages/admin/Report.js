@@ -115,6 +115,12 @@ const Report = (props) => {
 											<td class="d-none d-md-table-cell">0 đ</td>
 
 										</tr>
+										<tr>
+											<td>Cửa hàng khu vực Phùng Khoang</td>
+											<td>914-939-2458</td>
+											<td class="d-none d-md-table-cell">200,000 đ</td>
+
+										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -142,7 +148,7 @@ const Report = (props) => {
 										<tr class="table-primary">
 											<td>Công ty cổ phẩn Cao Nguyên</td>
 											<td>19001891</td>
-											<td class="d-none d-md-table-cell">250 (SP)</td>
+											<td class="d-none d-md-table-cell">350 (SP)</td>
 										</tr>
 									</tbody>
 								</table>
@@ -175,6 +181,15 @@ const Report = (props) => {
 												<td>0987654321</td>
 												<td>8 (h)</td>
 												<td>200.000 (VND)</td>
+												<td>1</td>
+												<td>{1*200000} (VND)</td>
+											</tr>
+											<tr>
+												<th scope="row">1</th>
+												<td>Đỗ Mạnh Tùng</td>
+												<td>0987654321</td>
+												<td>8 (h)</td>
+												<td>0 (VND)</td>
 												<td>1</td>
 												<td>{1*200000} (VND)</td>
 											</tr>

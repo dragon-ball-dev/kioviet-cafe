@@ -100,7 +100,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">2</h1>
+                          <h1 class="mt-1 mb-3">3</h1>
                           <div class="mb-0">
                             <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
                             <span class="text-muted">Tuần trước</span>
@@ -159,7 +159,7 @@ const DashboardAdmin = (props) => {
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">3</h1>
+                          <h1 class="mt-1 mb-3">7</h1>
                           <div class="mb-0">
                             <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 100% </span>
                             <span class="text-muted">Tuần trước</span>
