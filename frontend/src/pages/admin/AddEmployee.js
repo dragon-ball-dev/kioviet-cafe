@@ -13,10 +13,21 @@ const AddEmployee = (props) => {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
-    const [storeId, setStoreId] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [roleEnum] = useState('ROLE_USER');
     const [tableData, setTableData] = useState([]);
+
+    const [productData, setProductData] = useState({
+        storeId: 0,
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setProductData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
     const validatePhone = (phone) => {
         const phoneRegex = /^\d{10}$/;
@@ -28,7 +39,7 @@ const AddEmployee = (props) => {
         event.preventDefault();
         console.log("Number", confirmPassword.length);
         if (password === confirmPassword) {
-            const signUpRequest = { name, email, phone, address, password, confirmPassword, roleEnum };
+            const signUpRequest = { name, email, phone, address, password, confirmPassword,role: roleEnum , storeId: productData.storeId};
             signup(signUpRequest)
                 .then(response => {
                     toast.success("Thêm tài khoản nhân viên thành công.");
@@ -71,13 +82,14 @@ const AddEmployee = (props) => {
         return (
             <Navigate
                 to={{
-                    pathname: '/',
+                    pathname: '/login-admin',
                     state: { from: props.location },
                 }}
             />
         );
     }
 
+    const { storeId } = productData;
     console.log(name);
 
     return (
@@ -166,7 +178,7 @@ const AddEmployee = (props) => {
                                         id="storeId"
                                         name="storeId"
                                         value={storeId}
-                                        onChange={(e) => setStoreId(e.target.value)}
+                                        onChange={handleInputChange}
                                     >
                                         <option value={0}>Chọn...</option>
                                         {tableData.map((item) => (

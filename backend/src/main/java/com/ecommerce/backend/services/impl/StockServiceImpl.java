@@ -14,21 +14,31 @@ import com.ecommerce.backend.repository.SupplyRepository;
 import com.ecommerce.backend.services.StockService;
 import com.ecommerce.backend.utils.MapperUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.ecommerce.backend.services.impl.AuthServiceImpl.readFileConfirmed;
 
 @Service
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final MapperUtils mapperUtils;
+    @Autowired
+    private JavaMailSender mailSender;
     private final SupplyRepository supplyRepository;
     private final StoreRepository storeRepository;
     private final ProductRepository productRepository;
@@ -82,7 +92,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public String convertToStock(ConvertStockRequest convertStockRequest) {
+    public String convertToStock(ConvertStockRequest convertStockRequest) throws MessagingException, IOException {
         if (convertStockRequest.getStoreSentId().equals(convertStockRequest.getStoreReceiverId())) {
             throw new BadRequestException("Vui lòng chọn kho của cửa hàng bạn muốn chuyển!");
         }
@@ -126,7 +136,28 @@ public class StockServiceImpl implements StockService {
         stockRepository.saveAll(stockSentMap.values());
         stockRepository.saveAll(stockReceiverMap.values());
 
+        sendEmailConfirmed("", "Kiên Bui");
+
         return "Xác nhận chuyển hàng thành công, bên kho sẽ nhận được email.";
+    }
+
+
+    public void sendEmailConfirmed(String email, String name) throws MessagingException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+        message.setFrom(new InternetAddress("khanhhn.hoang@gmail.com"));
+        message.setRecipients(MimeMessage.RecipientType.TO, "kienb1230@gmail.com");
+        message.setSubject("Chú ý sản phẩm sẽ được chuyển đến kho hàng.");
+
+        // Read the HTML template into a String variable
+        String htmlTemplate = readFileConfirmed("confirm-email.html");
+
+        htmlTemplate = htmlTemplate.replace("NAME", name);
+        htmlTemplate = htmlTemplate.replace("EMAIL", "kienb1230@gmail.com");
+
+        // Set the email's content to be the HTML template
+        message.setContent(htmlTemplate, "text/html; charset=utf-8");
+
+        mailSender.send(message);
     }
 
 

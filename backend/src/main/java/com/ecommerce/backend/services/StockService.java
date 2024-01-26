@@ -5,6 +5,9 @@ import com.ecommerce.backend.domain.payload.request.StockRequest;
 import com.ecommerce.backend.domain.payload.response.StockResponse;
 import org.springframework.data.domain.Page;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 public interface StockService {
     StockRequest addProductInStore(StockRequest stockRequest);
 
@@ -16,5 +19,5 @@ public interface StockService {
 
     Page<StockResponse> getAllStockByStore(Integer pageNo, Integer pageSize, Long storeId);
 
-    String convertToStock(ConvertStockRequest convertStockRequest);
+    String convertToStock(ConvertStockRequest convertStockRequest) throws MessagingException, IOException;
 }

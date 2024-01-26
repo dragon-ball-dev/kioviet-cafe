@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/stock")
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class StockController extends BaseController {
     }
 
     @PostMapping("/convert-stock")
-    private ResponseEntity<?> convertToStock(@RequestBody ConvertStockRequest convertStockRequest){
+    private ResponseEntity<?> convertToStock(@RequestBody ConvertStockRequest convertStockRequest) throws MessagingException, IOException {
         return createSuccessResponse(stockService.convertToStock(convertStockRequest));
     }
 
