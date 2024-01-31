@@ -38,6 +38,11 @@ public class StockController extends BaseController {
         return createSuccessResponse(stockService.getAllStock(pageNo, pageSize, keyword));
     }
 
+    @GetMapping("/{id}")
+    private ResponseEntity<?> getStock(@PathVariable Long id){
+        return createSuccessResponse(stockService.getById(id));
+    }
+
     @GetMapping("/search-product-by-store")
     private ResponseEntity<?> getAllStockByStoreName(@RequestParam Integer pageNo, @RequestParam Integer pageSize, Long storeId){
         return createSuccessResponse(stockService.getAllStockByStore(pageNo, pageSize, storeId));

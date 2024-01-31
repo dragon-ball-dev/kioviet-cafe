@@ -70,6 +70,11 @@ const SidebarNav = ({ role }) => {
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Tin nhắn (4)</span>
         </NavLink>
       </li>
+      <li className="sidebar-item">
+        <NavLink to="/change-password" className="sidebar-link">
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Đổi mật khẩu</span>
+        </NavLink>
+      </li>
     </ul>
   )
 }

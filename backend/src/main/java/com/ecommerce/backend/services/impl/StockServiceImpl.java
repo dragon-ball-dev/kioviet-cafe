@@ -141,6 +141,11 @@ public class StockServiceImpl implements StockService {
         return "Xác nhận chuyển hàng thành công, bên kho sẽ nhận được email.";
     }
 
+    @Override
+    public StockResponse getById(Long id) {
+        return mapperUtils.convertToResponse(stockRepository.findById(id).get(), StockResponse.class);
+    }
+
 
     public void sendEmailConfirmed(String email, String name) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();

@@ -159,6 +159,18 @@ export function editCategory(id,category) {
     });
 }
 
+export function editStock(id,category) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock/"+id,
+        method: 'PUT',
+        body: JSON.stringify(category)
+    });
+}
+
 export function  updateCartItemQuantity(cart) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -521,6 +533,17 @@ export function getProductById(id) {
 
     return request({
         url: API_BASE_URL + "/product/"+id,
+        method: 'GET'
+    });
+}
+
+export function getStockById(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stock/"+id,
         method: 'GET'
     });
 }

@@ -20,4 +20,6 @@ public interface StockService {
     Page<StockResponse> getAllStockByStore(Integer pageNo, Integer pageSize, Long storeId);
 
     String convertToStock(ConvertStockRequest convertStockRequest) throws MessagingException, IOException;
+
+    StockResponse getById(Long id);
 }

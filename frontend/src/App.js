@@ -43,6 +43,8 @@ import Invoice from './pages/admin/Invoice';
 import MoveStock from './pages/admin/MoveStock';
 import Profile from './pages/admin/Profile';
 import Chat from './pages/admin/Chat';
+import ChangePassword from './pages/admin/ChangePassword';
+import EditStock from './pages/admin/EditStock';
 
 
 function App() {
@@ -131,6 +133,7 @@ function App() {
           <Route exact path="/move-stock" element={<MoveStock authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
           <Route exact path="/profile" element={<Profile authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}  role={role} />}/>
           <Route exact path="/chat" element={<Chat authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/change-password" element={<ChangePassword authenticated={authenticated} exit={exitLogoutChangePassword} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
 
 
           <Route exact path="/add-store" element={<AddStore authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
@@ -147,6 +150,7 @@ function App() {
           <Route exact path="/edit-category/:id" element={<EditCategory authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-supply/:id" element={<EditSupply authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/edit-product/:id" element={<EditProduct authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/edit-stock/:id" element={<EditStock authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
 
           <Route exact path="/checkout" element={<Checkout authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/checkout-on" element={<CheckoutOn authenticated={authenticated} role={role} currentUser={currentUser} onLogout={handleLogout} />} />
